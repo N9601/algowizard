@@ -1,6 +1,6 @@
 "use client";
 
-/* eslint-disable react-hooks/set-state-in-effect */
+
 
 import { useEffect, useRef, useState } from "react";
 import { StepController } from "../../../../src/lib/engine/controller";
@@ -42,12 +42,16 @@ export default function TopologicalSortPage() {
   }, [adjacencyList, speed]);
 
   const togglePlay = () => {
-    if (!controllerRef.current) return;
-    isPlaying
-      ? controllerRef.current.pause()
-      : controllerRef.current.play();
-    setIsPlaying(!isPlaying);
-  };
+  if (!controllerRef.current) return;
+
+  if (isPlaying) {
+    controllerRef.current.pause();
+  } else {
+    controllerRef.current.play();
+  }
+
+  setIsPlaying(!isPlaying);
+};
 
   return (
     <>
