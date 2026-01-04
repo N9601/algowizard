@@ -51,7 +51,7 @@ export default function GraphPage() {
             description="Linearly orders nodes such that for every directed edge (u, v), node u comes before v."
             difficulty="Hard"
             tag="Graph"
-            href="/visualizer/graph/topological-sort"
+            href="/visualizer/graph/topological"
           />
 
           <AlgoCard
