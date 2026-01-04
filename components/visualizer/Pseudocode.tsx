@@ -18,7 +18,11 @@ export type AlgorithmType =
   | "binary"
 
   // Graph
-  | "dfs";
+  | "dfs"
+  | "bfs"
+  | "dijkstra"
+  | "topological"
+  | "bellman-ford";
 
 interface PseudocodeProps {
   algorithm: AlgorithmType;
@@ -155,6 +159,71 @@ const PSEUDOCODE: Record<AlgorithmType, string[]> = {
     "  end while",
     "end procedure",
   ],
+
+  bfs: [
+    "procedure BFS(G, start)",
+    "  queue ← [start]",
+    "  visited ← {start}",
+    "  while queue not empty do",
+    "    node ← dequeue(queue)",
+    "    for each neighbor of node do",
+    "      if neighbor not visited then",
+    "        mark neighbor visited",
+    "        enqueue(neighbor)",
+    "      end if",
+    "    end for",
+    "  end while",
+    "end procedure",
+  ],
+
+  dijkstra: [
+    "procedure Dijkstra(G, start)",
+    "  for each vertex v in G do",
+    "    dist[v] ← ∞",
+    "  dist[start] ← 0",
+    "  priorityQueue ← all vertices",
+    "  while priorityQueue not empty do",
+    "    u ← vertex with min dist",
+    "    for each neighbor v of u do",
+    "      if dist[u] + weight(u,v) < dist[v] then",
+    "        dist[v] ← dist[u] + weight(u,v)",
+    "      end if",
+    "    end for",
+    "  end while",
+    "end procedure",
+  ],
+
+  topological: [
+    "procedure TopologicalSort(G)",
+    "  compute in-degree of each node",
+    "  queue ← all nodes with in-degree 0",
+    "  while queue not empty do",
+    "    node ← dequeue(queue)",
+    "    output node",
+    "    for each neighbor of node do",
+    "      decrease in-degree",
+    "      if in-degree becomes 0 then",
+    "        enqueue(neighbor)",
+    "      end if",
+    "    end for",
+    "  end while",
+    "end procedure",
+  ],
+
+  "bellman-ford": [
+    "procedure BellmanFord(G, start)",
+    "  for each vertex v in G do",
+    "    dist[v] ← ∞",
+    "  dist[start] ← 0",
+    "  repeat |V| - 1 times",
+    "    for each edge (u, v) do",
+    "      if dist[u] + weight(u,v) < dist[v] then",
+    "        dist[v] ← dist[u] + weight(u,v)",
+    "      end if",
+    "    end for",
+    "  end repeat",
+    "end procedure",
+  ],
 };
 
 /* ================================
@@ -176,3 +245,5 @@ export default function Pseudocode({ algorithm }: PseudocodeProps) {
     </div>
   );
 }
+
+

@@ -85,6 +85,10 @@ export interface AlgorithmController<TStep> {
 export interface GraphStep {
   activeNode?: number;
   visited?: number[];
-  stack?: number[];
+
+  // traversal internals (optional, algorithm-specific)
+  stack?: number[]; // DFS
+  queue?: number[]; // BFS
+
   done?: boolean;
 }
