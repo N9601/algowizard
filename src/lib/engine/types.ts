@@ -86,12 +86,17 @@ export interface GraphStep {
   activeNode?: number;
   visited?: number[];
 
-  // traversal internals
-  stack?: number[];   // DFS
-  queue?: number[];   // BFS / Topo
+  // DFS
+  stack?: number[];
 
-  // topo-specific
+  // BFS / Topological
+  queue?: number[];
+
+  // Topological sort (Kahn)
   inDegree?: Record<number, number>;
+
+  // Dijkstra
+  distances?: Record<number, number>;
 
   done?: boolean;
 }
