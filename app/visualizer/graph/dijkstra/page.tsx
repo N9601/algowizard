@@ -60,11 +60,15 @@ export default function DijkstraPage() {
     return () => controllerRef.current?.pause();
   }, [speed]);
 
-  const togglePlay = () => {
+ const togglePlay = () => {
     if (!controllerRef.current) return;
-    isPlaying
-      ? controllerRef.current.pause()
-      : controllerRef.current.play();
+
+    if (isPlaying) {
+      controllerRef.current.pause();
+    } else {
+      controllerRef.current.play();
+    }
+
     setIsPlaying(!isPlaying);
   };
 
