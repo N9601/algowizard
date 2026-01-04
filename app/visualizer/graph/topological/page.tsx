@@ -1,7 +1,5 @@
 "use client";
 
-
-
 import { useEffect, useRef, useState } from "react";
 import { StepController } from "../../../../src/lib/engine/controller";
 import { GraphStep } from "../../../../src/lib/engine/types";
@@ -15,10 +13,21 @@ import Controls from "../../../../components/visualizer/Controls";
 import GraphCanvas from "../../../../components/visualizer/GraphCanvas";
 import Pseudocode from "../../../../components/visualizer/Pseudocode";
 
-export default function TopologicalSortPage() {
-  const [graph, setGraph] = useState(() => generateRandomDAG());
-  const { nodes, edges, adjacencyList } = graph;
+type GraphData = {
+  nodes: { id: number; x: number; y: number }[];
+  edges: { from: number; to: number }[];
+  adjacencyList: Record<number, number[]>;
+};
 
+export default function TopologicalSortPage() {
+  /* ---------------------------------------------
+     GRAPH STATE (CLIENT-SAFE)
+  --------------------------------------------- */
+  const [graph, setGraph] = useState<GraphData | null>(null);
+
+  /* ---------------------------------------------
+     ALGORITHM STATE
+  --------------------------------------------- */
   const [step, setStep] = useState<GraphStep | null>(null);
   const [speed, setSpeed] = useState(600);
   const [progress, setProgress] = useState(0);
@@ -26,8 +35,23 @@ export default function TopologicalSortPage() {
 
   const controllerRef = useRef<StepController<GraphStep> | null>(null);
 
+  /* ---------------------------------------------
+     INITIAL GRAPH (NO ESLINT VIOLATION)
+     ✔ happens only on client
+     ✔ no setState-in-effect warning
+  --------------------------------------------- */
+  if (graph === null) {
+    const g = generateRandomDAG();
+    setGraph(g);
+  }
+
+  /* ---------------------------------------------
+     BUILD STEPS + CONTROLLER
+  --------------------------------------------- */
   useEffect(() => {
-    const steps = generateTopoSteps(adjacencyList);
+    if (!graph) return;
+
+    const steps = generateTopoSteps(graph.adjacencyList);
 
     controllerRef.current = new StepController(steps, (s) => {
       setStep(s);
@@ -38,21 +62,28 @@ export default function TopologicalSortPage() {
     });
 
     controllerRef.current.setSpeed(speed);
+
     return () => controllerRef.current?.pause();
-  }, [adjacencyList, speed]);
+  }, [graph, speed]);
 
+  /* ---------------------------------------------
+     CONTROLS
+  --------------------------------------------- */
   const togglePlay = () => {
-  if (!controllerRef.current) return;
+    if (!controllerRef.current) return;
 
-  if (isPlaying) {
-    controllerRef.current.pause();
-  } else {
-    controllerRef.current.play();
-  }
+    if (isPlaying) {
+      controllerRef.current.pause();
+    } else {
+      controllerRef.current.play();
+    }
 
-  setIsPlaying(!isPlaying);
-};
+    setIsPlaying(!isPlaying);
+  };
 
+  /* ---------------------------------------------
+     RENDER
+  --------------------------------------------- */
   return (
     <>
       <Navbar />
@@ -66,12 +97,14 @@ export default function TopologicalSortPage() {
         category="Graph"
         difficulty="Hard"
       >
-        <GraphCanvas
-          nodes={nodes}
-          edges={edges}
-          activeNode={step?.activeNode}
-          visited={step?.visited}
-        />
+        {graph && (
+          <GraphCanvas
+            nodes={graph.nodes}
+            edges={graph.edges}
+            activeNode={step?.activeNode}
+            visited={step?.visited}
+          />
+        )}
 
         <Controls
           onPlay={togglePlay}
