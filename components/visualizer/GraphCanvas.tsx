@@ -20,7 +20,13 @@ export default function GraphCanvas({
   };
 
   return (
-    <svg viewBox="0 0 500 300" className="w-full h-72">
+    // 🔹 keep original visual size
+    // 🔹 add extra bottom space via viewBox
+    <svg
+      viewBox="0 0 500 340" // was 300 → +40px buffer
+      className="w-full h-72"
+      preserveAspectRatio="xMidYMin meet"
+    >
       {/* edges */}
       {edges.map((e, i) => {
         const from = nodes.find((n) => n.id === e.from)!;

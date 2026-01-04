@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { StepController } from "../../../../src/lib/engine/controller";
 import { GraphStep } from "../../../../src/lib/engine/types";
 import { generateDFSSteps } from "../../../../src/lib/engine/algorithms/dfs";
+import { generateTree } from "../../../../src/lib/engine/graph/treeGenerator";
 
 import Navbar from "../../../../components/visualizer/Navbar";
 import AlgorithmBackground from "../../../../components/visualizer/AlgorithmBackground";
@@ -13,30 +14,10 @@ import Controls from "../../../../components/visualizer/Controls";
 import GraphCanvas from "../../../../components/visualizer/GraphCanvas";
 import Pseudocode from "../../../../components/visualizer/Pseudocode";
 
-const nodes = [
-  { id: 1, x: 80, y: 60 },
-  { id: 2, x: 200, y: 40 },
-  { id: 3, x: 320, y: 60 },
-  { id: 4, x: 140, y: 160 },
-  { id: 5, x: 260, y: 160 },
-];
-
-const edges = [
-  { from: 1, to: 2 },
-  { from: 2, to: 3 },
-  { from: 1, to: 4 },
-  { from: 4, to: 5 },
-];
-
-const adjacencyList = {
-  1: [2, 4],
-  2: [3],
-  3: [],
-  4: [5],
-  5: [],
-};
-
 export default function DFSPage() {
+  const [graph, setGraph] = useState<ReturnType<typeof generateTree> | null>(
+    null
+  );
   const [step, setStep] = useState<GraphStep | null>(null);
   const [speed, setSpeed] = useState(600);
   const [progress, setProgress] = useState(0);
@@ -44,8 +25,16 @@ export default function DFSPage() {
 
   const controllerRef = useRef<StepController<GraphStep> | null>(null);
 
+  // 🔹 Generate tree ONLY on client (fixes hydration)
   useEffect(() => {
-    const steps = generateDFSSteps(adjacencyList, 1);
+    setGraph(generateTree());
+  }, []);
+
+  // 🔹 Rebuild DFS steps when graph or speed changes
+  useEffect(() => {
+    if (!graph) return;
+
+    const steps = generateDFSSteps(graph.adjacencyList, 0);
 
     controllerRef.current = new StepController(steps, (s) => {
       setStep(s);
@@ -56,16 +45,21 @@ export default function DFSPage() {
     });
 
     controllerRef.current.setSpeed(speed);
+
     return () => controllerRef.current?.pause();
-  }, [speed]);
+  }, [graph, speed]);
 
   const togglePlay = () => {
     if (!controllerRef.current) return;
+
     isPlaying
       ? controllerRef.current.pause()
       : controllerRef.current.play();
+
     setIsPlaying(!isPlaying);
   };
+
+  if (!graph) return null; // prevents SSR mismatch
 
   return (
     <>
@@ -81,8 +75,8 @@ export default function DFSPage() {
         difficulty="Medium"
       >
         <GraphCanvas
-          nodes={nodes}
-          edges={edges}
+          nodes={graph.nodes}
+          edges={graph.edges}
           activeNode={step?.activeNode}
           visited={step?.visited}
         />
@@ -96,7 +90,13 @@ export default function DFSPage() {
             setProgress(0);
             setIsPlaying(false);
           }}
-          onNew={() => controllerRef.current?.reset()}
+          onNew={() => {
+            controllerRef.current?.reset();
+            setGraph(generateTree());
+            setStep(null);
+            setProgress(0);
+            setIsPlaying(false);
+          }}
           speed={speed}
           onSpeedChange={setSpeed}
           progress={progress}
