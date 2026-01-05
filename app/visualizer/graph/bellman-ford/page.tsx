@@ -5,6 +5,7 @@ import { StepController } from "../../../../src/lib/engine/controller";
 import { GraphStep } from "../../../../src/lib/engine/types";
 import { generateBellmanFordSteps } from "../../../../src/lib/engine/algorithms/bellmanFord";
 import { generateWeightedGraph } from "../../../../src/lib/engine/graph/weightedGraphGenerator";
+import { WeightedGraph } from "../../../../src/lib/engine/graph/types";
 
 import Navbar from "../../../../components/visualizer/Navbar";
 import AlgorithmBackground from "../../../../components/visualizer/AlgorithmBackground";
@@ -14,7 +15,10 @@ import GraphCanvas from "../../../../components/visualizer/GraphCanvas";
 import Pseudocode from "../../../../components/visualizer/Pseudocode";
 
 export default function BellmanFordPage() {
-  const [graph, setGraph] = useState<any>(null);
+  const [graph, setGraph] = useState<WeightedGraph>(() =>
+    generateWeightedGraph()
+  );
+
   const [step, setStep] = useState<GraphStep | null>(null);
   const [speed, setSpeed] = useState(600);
   const [progress, setProgress] = useState(0);
@@ -23,15 +27,10 @@ export default function BellmanFordPage() {
   const controllerRef = useRef<StepController<GraphStep> | null>(null);
 
   useEffect(() => {
-    setGraph(generateWeightedGraph());
-  }, []);
-
-  useEffect(() => {
-    if (!graph) return;
-
     const steps = generateBellmanFordSteps(
-      graph.adjacencyList,
-      graph.start
+      graph.nodes.map((n) => n.id), // ✅ nodes
+      graph.edges,                  // ✅ edges
+      graph.start                   // ✅ source
     );
 
     controllerRef.current = new StepController(steps, (s) => {
@@ -61,21 +60,19 @@ export default function BellmanFordPage() {
 
       <AlgorithmLayout
         title="Bellman–Ford Algorithm"
-        description="Shortest paths with negative edge support."
+        description="Shortest paths with negative edge weights."
         time="O(VE)"
         space="O(V)"
         category="Graph"
         difficulty="Hard"
       >
-        {graph && (
-          <GraphCanvas
-            nodes={graph.nodes}
-            edges={graph.edges}
-            activeNode={step?.activeNode}
-            visited={step?.visited}
-            distances={step?.distances}
-          />
-        )}
+        <GraphCanvas
+          nodes={graph.nodes}
+          edges={graph.edges}
+          activeNode={step?.activeNode}
+          visited={step?.visited}
+          distances={step?.distances}
+        />
 
         <Controls
           onPlay={togglePlay}
