@@ -66,11 +66,15 @@ export default function BellmanFordPage() {
         <ColorLegend />
 
         <Controls
+        
           onPlay={() => {
-            isPlaying
-              ? controllerRef.current?.pause()
-              : controllerRef.current?.play();
-            setIsPlaying(!isPlaying);
+  if (!controllerRef.current) return;
+
+  if (isPlaying) {
+    controllerRef.current.pause();
+  } else {
+    controllerRef.current.play();
+  }
           }}
           onStep={() => controllerRef.current?.stepForward()}
           onReset={() => {

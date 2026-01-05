@@ -43,12 +43,16 @@ export default function DijkstraPage() {
   }, [graph, speed]);
 
   const togglePlay = () => {
-    if (!controllerRef.current) return;
-    isPlaying
-      ? controllerRef.current.pause()
-      : controllerRef.current.play();
-    setIsPlaying(!isPlaying);
-  };
+  if (!controllerRef.current) return;
+
+  if (isPlaying) {
+    controllerRef.current.pause();
+  } else {
+    controllerRef.current.play();
+  }
+
+  setIsPlaying(!isPlaying);
+};
 
   return (
     <>
