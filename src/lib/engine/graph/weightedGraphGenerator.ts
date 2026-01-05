@@ -1,3 +1,5 @@
+// src/lib/engine/graph/weightedGraphGenerator.ts
+
 export type WeightedGraph = {
   nodes: { id: number; x: number; y: number }[];
   edges: { from: number; to: number; weight: number }[];
@@ -5,32 +7,27 @@ export type WeightedGraph = {
   start: number;
 };
 
-export function generateWeightedGraph(
-  nodeCount = 6
-): WeightedGraph {
-  const nodes = Array.from({ length: nodeCount }, (_, i) => ({
-    id: i,
-    x: 80 + i * 70,
-    y: 120 + (i % 2) * 80,
-  }));
+export function generateWeightedGraph(): WeightedGraph {
+  const nodes = [
+    { id: 0, x: 100, y: 120 },
+    { id: 1, x: 200, y: 60 },
+    { id: 2, x: 200, y: 180 },
+    { id: 3, x: 320, y: 60 },
+    { id: 4, x: 320, y: 180 },
+  ];
 
-  const adjacencyList: WeightedGraph["adjacencyList"] = {};
-  const edges: WeightedGraph["edges"] = [];
+  const edges = [
+    { from: 0, to: 1, weight: 5 },
+    { from: 0, to: 2, weight: 7 },
+    { from: 1, to: 3, weight: 6 },
+    { from: 2, to: 4, weight: 9 },
+    { from: 3, to: 4, weight: 3 },
+  ];
 
-  nodes.forEach((n) => (adjacencyList[n.id] = []));
+  const adjacencyList: Record<number, { to: number; weight: number }[]> = {};
 
-  for (let i = 0; i < nodeCount - 1; i++) {
-    const weight = Math.floor(Math.random() * 9) + 1;
-
-    adjacencyList[i].push({ to: i + 1, weight });
-    edges.push({ from: i, to: i + 1, weight });
-
-    if (Math.random() > 0.5 && i + 2 < nodeCount) {
-      const w2 = Math.floor(Math.random() * 9) + 1;
-      adjacencyList[i].push({ to: i + 2, weight: w2 });
-      edges.push({ from: i, to: i + 2, weight: w2 });
-    }
-  }
+  for (const n of nodes) adjacencyList[n.id] = [];
+  for (const e of edges) adjacencyList[e.from].push({ to: e.to, weight: e.weight });
 
   return {
     nodes,

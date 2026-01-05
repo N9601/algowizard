@@ -13,8 +13,9 @@ import Controls from "../../../../components/visualizer/Controls";
 import GraphCanvas from "../../../../components/visualizer/GraphCanvas";
 import Pseudocode from "../../../../components/visualizer/Pseudocode";
 
+const graph = generateWeightedGraph(); // ✅ STATIC, SSR SAFE
+
 export default function DijkstraPage() {
-  const [graph, setGraph] = useState(() => generateWeightedGraph());
   const [step, setStep] = useState<GraphStep | null>(null);
   const [speed, setSpeed] = useState(600);
   const [progress, setProgress] = useState(0);
@@ -25,7 +26,7 @@ export default function DijkstraPage() {
   useEffect(() => {
     const steps = generateDijkstraSteps(graph.adjacencyList, graph.start);
 
-    controllerRef.current = new StepController(steps, (s) => {
+    controllerRef.current = new StepController(steps, s => {
       setStep(s);
       setProgress(
         controllerRef.current!.currentStepIndex /
@@ -35,15 +36,13 @@ export default function DijkstraPage() {
 
     controllerRef.current.setSpeed(speed);
     return () => controllerRef.current?.pause();
-  }, [graph, speed]);
+  }, [speed]);
 
   const togglePlay = () => {
     if (!controllerRef.current) return;
-
     isPlaying
       ? controllerRef.current.pause()
       : controllerRef.current.play();
-
     setIsPlaying(!isPlaying);
   };
 
@@ -54,7 +53,7 @@ export default function DijkstraPage() {
 
       <AlgorithmLayout
         title="Dijkstra’s Algorithm"
-        description="Finds the shortest path from a source node to all other nodes in a weighted graph with non-negative weights."
+        description="Shortest paths from a source node in a weighted graph."
         time="O(V²)"
         space="O(V)"
         category="Graph"
@@ -69,28 +68,25 @@ export default function DijkstraPage() {
         />
 
         <Controls
-          onPlay={togglePlay}
-          onStep={() => {
-            controllerRef.current?.stepForward();
-          }}
-          onReset={() => {
-            controllerRef.current?.reset();
-            setStep(null);
-            setProgress(0);
-            setIsPlaying(false);
-          }}
-          onNew={() => {
-            controllerRef.current?.reset();
-            setStep(null);
-            setProgress(0);
-            setIsPlaying(false);
-            setGraph(generateWeightedGraph());
-          }}
-          speed={speed}
-          onSpeedChange={setSpeed}
-          progress={progress}
-          isPlaying={isPlaying}
-        />
+  onPlay={togglePlay}
+  onStep={() => controllerRef.current?.stepForward()}
+  onReset={() => {
+    controllerRef.current?.reset();
+    setStep(null);
+    setProgress(0);
+    setIsPlaying(false);
+  }}
+  onNew={() => {
+    controllerRef.current?.reset();
+    setStep(null);
+    setProgress(0);
+    setIsPlaying(false);
+  }}
+  speed={speed}
+  onSpeedChange={setSpeed}
+  progress={progress}
+  isPlaying={isPlaying}
+/>
 
         <Pseudocode algorithm="dijkstra" />
       </AlgorithmLayout>
