@@ -22,64 +22,16 @@ export type AlgorithmType =
   | "heap"
   // Searching
   | "linear"
-  | "binary";
+  | "binary"
+  // Graph
+  | "dijkstra"
+  | "bellman-ford"
+  | "bfs"
+  | "dfs"
+  | "topological";
 
 /* ================================
-   SORTING STEP
-================================ */
-
-export interface SortingStep {
-  array: number[];
-
-  comparing?: [number, number];
-  swapping?: [number, number];
-  sortedIndices?: number[];
-  activeRange?: [number, number];
-}
-
-/* ================================
-   SEARCH STEP
-================================ */
-
-export interface SearchStep {
-  array: number[];
-
-  // Linear / Binary
-  currentIndex?: number;
-
-  // Binary search window
-  low?: number;
-  high?: number;
-
-  // Found
-  foundIndex?: number;
-
-  // ❌ NOT FOUND (NEW)
-  notFound?: boolean;
-
-  // End of algorithm
-  done?: boolean;
-}
-
-/* ================================
-   GENERIC CONTROLLER
-================================ */
-
-export interface AlgorithmController<TStep> {
-  status: AlgorithmStatus;
-  steps: TStep[];
-  currentStepIndex: number;
-  speed: number;
-
-  play(): void;
-  pause(): void;
-  stepForward(): void;
-  reset(): void;
-  setSpeed(speed: number): void;
-}
-
-/* ================================
-   GRAPH STEP
+   GRAPH STEP (FIXED)
 ================================ */
 
 export interface GraphStep {
@@ -92,11 +44,17 @@ export interface GraphStep {
   // BFS / Topological
   queue?: number[];
 
-  // Topological sort (Kahn)
+  // Topological sort
   inDegree?: Record<number, number>;
 
-  // Dijkstra
+  // Shortest paths
   distances?: Record<number, number>;
+
+  // Dijkstra
+  priorityQueue?: { node: number; priority: number }[];
+
+  // ✅ Bellman-Ford
+  negativeCycleNodes?: number[];
 
   done?: boolean;
 }

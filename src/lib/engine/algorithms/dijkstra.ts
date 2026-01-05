@@ -1,57 +1,61 @@
 import { GraphStep } from "../types";
 
-type WeightedAdjList = Record<number, { to: number; weight: number }[]>;
+type AdjList = Record<number, { to: number; weight: number }[]>;
 
 export function generateDijkstraSteps(
-  graph: WeightedAdjList,
+  graph: AdjList,
   start: number
 ): GraphStep[] {
   const steps: GraphStep[] = [];
 
   const distances: Record<number, number> = {};
   const visited = new Set<number>();
-  const nodes = Object.keys(graph).map(Number);
 
-  nodes.forEach((n) => (distances[n] = Infinity));
+  // ✅ const fixes ESLint prefer-const
+  const pq: { node: number; priority: number }[] = [];
+
+  for (const node in graph) {
+    distances[+node] = Infinity;
+  }
+
   distances[start] = 0;
+  pq.push({ node: start, priority: 0 });
 
-  while (visited.size < nodes.length) {
-    let current: number | null = null;
-    let min = Infinity;
+  while (pq.length > 0) {
+    pq.sort((a, b) => a.priority - b.priority);
+    const current = pq.shift();
+    if (!current) break;
 
-    for (const n of nodes) {
-      if (!visited.has(n) && distances[n] < min) {
-        min = distances[n];
-        current = n;
-      }
-    }
+    const node = current.node;
 
-    if (current === null) break;
-
-    visited.add(current);
+    if (visited.has(node)) continue;
+    visited.add(node);
 
     steps.push({
-      activeNode: current,
-      visited: Array.from(visited),
+      activeNode: node,
+      visited: [...visited],
       distances: { ...distances },
+      priorityQueue: [...pq],
     });
 
-    for (const edge of graph[current]) {
-      const alt = distances[current] + edge.weight;
+    for (const edge of graph[node]) {
+      const alt = distances[node] + edge.weight;
+
       if (alt < distances[edge.to]) {
         distances[edge.to] = alt;
+        pq.push({ node: edge.to, priority: alt });
 
         steps.push({
           activeNode: edge.to,
-          visited: Array.from(visited),
+          visited: [...visited],
           distances: { ...distances },
+          priorityQueue: [...pq],
         });
       }
     }
   }
 
   steps.push({
-    visited: Array.from(visited),
     distances: { ...distances },
     done: true,
   });

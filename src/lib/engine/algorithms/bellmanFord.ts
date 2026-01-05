@@ -1,50 +1,53 @@
 import { GraphStep } from "../types";
 
-type Edge = {
-  from: number;
-  to: number;
-  weight: number;
-};
+type Edge = { from: number; to: number; weight: number };
 
 export function generateBellmanFordSteps(
-  nodes: number[],
   edges: Edge[],
-  source: number
+  nodes: number[],
+  start: number
 ): GraphStep[] {
   const steps: GraphStep[] = [];
+  const dist: Record<number, number> = {};
 
-  const distances: Record<number, number> = {};
-  nodes.forEach((n) => (distances[n] = Infinity));
-  distances[source] = 0;
+  for (const n of nodes) dist[n] = Infinity;
+  dist[start] = 0;
 
-  // Initial state
-  steps.push({
-    activeNode: source,
-    distances: { ...distances },
-  });
-
-  // Relax edges |V| - 1 times
+  // Relax edges |V|-1 times
   for (let i = 0; i < nodes.length - 1; i++) {
-    for (const { from, to, weight } of edges) {
-      if (
-        distances[from] !== Infinity &&
-        distances[from] + weight < distances[to]
-      ) {
-        distances[to] = distances[from] + weight;
+    for (const e of edges) {
+      if (dist[e.from] + e.weight < dist[e.to]) {
+        dist[e.to] = dist[e.from] + e.weight;
 
         steps.push({
-          activeNode: to,
-          distances: { ...distances },
+          activeNode: e.to,
+          distances: { ...dist },
         });
       }
     }
   }
 
-  // Final step
-  steps.push({
-    distances: { ...distances },
-    done: true,
-  });
+  // Detect negative cycle
+  const cycleNodes = new Set<number>();
+  for (const e of edges) {
+    if (dist[e.from] + e.weight < dist[e.to]) {
+      cycleNodes.add(e.from);
+      cycleNodes.add(e.to);
+    }
+  }
+
+  if (cycleNodes.size > 0) {
+    steps.push({
+      negativeCycleNodes: [...cycleNodes],
+      distances: { ...dist },
+      done: true,
+    });
+  } else {
+    steps.push({
+      distances: { ...dist },
+      done: true,
+    });
+  }
 
   return steps;
 }
