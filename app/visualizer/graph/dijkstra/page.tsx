@@ -7,11 +7,12 @@ import { generateDijkstraSteps } from "../../../../src/lib/engine/algorithms/dij
 import { generateWeightedGraph } from "../../../../src/lib/engine/graph/weightedGraphGenerator";
 
 import Navbar from "../../../../components/visualizer/Navbar";
+import AlgorithmBackground from "../../../../components/visualizer/AlgorithmBackground";
 import AlgorithmLayout from "../../../../components/visualizer/AlgorithmLayout";
 import GraphCanvas from "../../../../components/visualizer/GraphCanvas";
 import Controls from "../../../../components/visualizer/Controls";
+import Pseudocode from "../../../../components/visualizer/Pseudocode";
 import ColorLegend from "../../../../components/visualizer/ColorLegend";
-import PriorityQueue from "../../../../components/visualizer/PriorityQueue";
 
 export default function DijkstraPage() {
   const [graph, setGraph] = useState(() => generateWeightedGraph());
@@ -37,34 +38,43 @@ export default function DijkstraPage() {
     });
 
     controllerRef.current.setSpeed(speed);
+
     return () => controllerRef.current?.pause();
   }, [graph, speed]);
+
+  const togglePlay = () => {
+    if (!controllerRef.current) return;
+    isPlaying
+      ? controllerRef.current.pause()
+      : controllerRef.current.play();
+    setIsPlaying(!isPlaying);
+  };
 
   return (
     <>
       <Navbar />
+      <AlgorithmBackground variant="graph" />
+
       <AlgorithmLayout
         title="Dijkstra’s Algorithm"
-        description="Shortest paths from a source node in a weighted graph."
+        description="Finds shortest paths from a source node in a weighted graph."
         time="O(V²)"
         space="O(V)"
         category="Graph"
         difficulty="Hard"
       >
-        <div className="flex gap-6">
-          <GraphCanvas nodes={graph.nodes} edges={graph.edges} {...step} />
-          <PriorityQueue queue={step?.priorityQueue ?? []} />
-        </div>
+        <GraphCanvas
+          nodes={graph.nodes}
+          edges={graph.edges}
+          activeNode={step?.activeNode}
+          visited={step?.visited}
+          distances={step?.distances}
+        />
 
         <ColorLegend />
 
         <Controls
-          onPlay={() => {
-            isPlaying
-              ? controllerRef.current?.pause()
-              : controllerRef.current?.play();
-            setIsPlaying(!isPlaying);
-          }}
+          onPlay={togglePlay}
           onStep={() => controllerRef.current?.stepForward()}
           onReset={() => {
             controllerRef.current?.reset();
@@ -73,8 +83,24 @@ export default function DijkstraPage() {
             setIsPlaying(false);
           }}
           onNew={() => {
-            controllerRef.current?.reset();
-            setGraph(generateWeightedGraph());
+            const newGraph = generateWeightedGraph();
+
+            const steps = generateDijkstraSteps(
+              newGraph.adjacencyList,
+              newGraph.start
+            );
+
+            controllerRef.current = new StepController(steps, (s) => {
+              setStep(s);
+              setProgress(
+                controllerRef.current!.currentStepIndex /
+                  controllerRef.current!.steps.length
+              );
+            });
+
+            controllerRef.current.setSpeed(speed);
+
+            setGraph(newGraph);
             setStep(null);
             setProgress(0);
             setIsPlaying(false);
@@ -84,6 +110,9 @@ export default function DijkstraPage() {
           progress={progress}
           isPlaying={isPlaying}
         />
+
+        {/* ✅ THIS IS WHAT WAS MISSING */}
+        <Pseudocode algorithm="dijkstra" />
       </AlgorithmLayout>
     </>
   );

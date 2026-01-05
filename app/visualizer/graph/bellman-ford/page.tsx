@@ -1,17 +1,18 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-
-import { GraphStep } from "../../../../src/lib/engine/types";
 import { StepController } from "../../../../src/lib/engine/controller";
+import { GraphStep } from "../../../../src/lib/engine/types";
 import { generateBellmanFordSteps } from "../../../../src/lib/engine/algorithms/bellmanFord";
 import { generateWeightedGraph } from "../../../../src/lib/engine/graph/weightedGraphGenerator";
 
 import Navbar from "../../../../components/visualizer/Navbar";
+import AlgorithmBackground from "../../../../components/visualizer/AlgorithmBackground";
 import AlgorithmLayout from "../../../../components/visualizer/AlgorithmLayout";
 import GraphCanvas from "../../../../components/visualizer/GraphCanvas";
 import Controls from "../../../../components/visualizer/Controls";
 import ColorLegend from "../../../../components/visualizer/ColorLegend";
+import Pseudocode from "../../../../components/visualizer/Pseudocode";
 
 export default function BellmanFordPage() {
   const [graph, setGraph] = useState(() => generateWeightedGraph());
@@ -25,11 +26,11 @@ export default function BellmanFordPage() {
   useEffect(() => {
     const steps = generateBellmanFordSteps(
       graph.edges,
-      graph.nodes.map((n) => n.id),
+      graph.nodes.map(n => n.id),
       graph.start
     );
 
-    controllerRef.current = new StepController(steps, (s) => {
+    controllerRef.current = new StepController(steps, s => {
       setStep(s);
       setProgress(
         controllerRef.current!.currentStepIndex /
@@ -44,11 +45,12 @@ export default function BellmanFordPage() {
   return (
     <>
       <Navbar />
+      <AlgorithmBackground variant="graph" />
 
       <AlgorithmLayout
         title="Bellman–Ford Algorithm"
-        description="Shortest paths with negative edge support"
-        time="O(VE)"
+        description="Finds shortest paths and detects negative cycles."
+        time="O(V·E)"
         space="O(V)"
         category="Graph"
         difficulty="Hard"
@@ -56,17 +58,18 @@ export default function BellmanFordPage() {
         <GraphCanvas
           nodes={graph.nodes}
           edges={graph.edges}
-          {...step}
+          activeNode={step?.activeNode}
+          visited={step?.visited}
+          distances={step?.distances}
         />
 
         <ColorLegend />
 
         <Controls
           onPlay={() => {
-            if (!controllerRef.current) return;
             isPlaying
-              ? controllerRef.current.pause()
-              : controllerRef.current.play();
+              ? controllerRef.current?.pause()
+              : controllerRef.current?.play();
             setIsPlaying(!isPlaying);
           }}
           onStep={() => controllerRef.current?.stepForward()}
@@ -77,8 +80,8 @@ export default function BellmanFordPage() {
             setIsPlaying(false);
           }}
           onNew={() => {
-            controllerRef.current?.reset();
-            setGraph(generateWeightedGraph());
+            const g = generateWeightedGraph();
+            setGraph(g);
             setStep(null);
             setProgress(0);
             setIsPlaying(false);
@@ -88,6 +91,8 @@ export default function BellmanFordPage() {
           progress={progress}
           isPlaying={isPlaying}
         />
+
+        <Pseudocode algorithm="bellman-ford" />
       </AlgorithmLayout>
     </>
   );

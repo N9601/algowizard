@@ -10,11 +10,11 @@ export function generateBellmanFordSteps(
   const steps: GraphStep[] = [];
   const dist: Record<number, number> = {};
 
-  for (const n of nodes) dist[n] = Infinity;
+  nodes.forEach(n => (dist[n] = Infinity));
   dist[start] = 0;
 
   // Relax edges |V|-1 times
-  for (let i = 0; i < nodes.length - 1; i++) {
+  for (let i = 1; i < nodes.length; i++) {
     for (const e of edges) {
       if (dist[e.from] + e.weight < dist[e.to]) {
         dist[e.to] = dist[e.from] + e.weight;
@@ -27,27 +27,19 @@ export function generateBellmanFordSteps(
     }
   }
 
-  // Detect negative cycle
-  const cycleNodes = new Set<number>();
+  // 🚨 NEGATIVE CYCLE DETECTION
   for (const e of edges) {
     if (dist[e.from] + e.weight < dist[e.to]) {
-      cycleNodes.add(e.from);
-      cycleNodes.add(e.to);
+      steps.push({
+        activeNode: e.to,
+        distances: { ...dist },
+        visited: [e.from, e.to], // flash cycle nodes
+        done: true,
+      });
+      return steps;
     }
   }
 
-  if (cycleNodes.size > 0) {
-    steps.push({
-      negativeCycleNodes: [...cycleNodes],
-      distances: { ...dist },
-      done: true,
-    });
-  } else {
-    steps.push({
-      distances: { ...dist },
-      done: true,
-    });
-  }
-
+  steps.push({ distances: { ...dist }, done: true });
   return steps;
 }
