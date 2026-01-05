@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { StepController } from "../../../../src/lib/engine/controller";
 import { GraphStep } from "../../../../src/lib/engine/types";
 import { generateDijkstraSteps } from "../../../../src/lib/engine/algorithms/dijkstra";
+import { generateWeightedGraph } from "../../../../src/lib/engine/graph/weightedGraphGenerator";
 
 import Navbar from "../../../../components/visualizer/Navbar";
 import AlgorithmBackground from "../../../../components/visualizer/AlgorithmBackground";
@@ -12,32 +13,8 @@ import Controls from "../../../../components/visualizer/Controls";
 import GraphCanvas from "../../../../components/visualizer/GraphCanvas";
 import Pseudocode from "../../../../components/visualizer/Pseudocode";
 
-/* ---------- Static weighted graph (for now) ---------- */
-const nodes = [
-  { id: 0, x: 100, y: 80 },
-  { id: 1, x: 250, y: 50 },
-  { id: 2, x: 400, y: 80 },
-  { id: 3, x: 200, y: 200 },
-  { id: 4, x: 350, y: 200 },
-];
-
-const edges = [
-  { from: 0, to: 1 },
-  { from: 1, to: 2 },
-  { from: 0, to: 3 },
-  { from: 3, to: 4 },
-  { from: 4, to: 2 },
-];
-
-const weightedGraph = {
-  0: [{ to: 1, weight: 2 }, { to: 3, weight: 1 }],
-  1: [{ to: 2, weight: 3 }],
-  2: [],
-  3: [{ to: 4, weight: 2 }],
-  4: [{ to: 2, weight: 1 }],
-};
-
 export default function DijkstraPage() {
+  const [graph, setGraph] = useState(() => generateWeightedGraph());
   const [step, setStep] = useState<GraphStep | null>(null);
   const [speed, setSpeed] = useState(600);
   const [progress, setProgress] = useState(0);
@@ -46,7 +23,7 @@ export default function DijkstraPage() {
   const controllerRef = useRef<StepController<GraphStep> | null>(null);
 
   useEffect(() => {
-    const steps = generateDijkstraSteps(weightedGraph, 0);
+    const steps = generateDijkstraSteps(graph.adjacencyList, graph.start);
 
     controllerRef.current = new StepController(steps, (s) => {
       setStep(s);
@@ -58,16 +35,14 @@ export default function DijkstraPage() {
 
     controllerRef.current.setSpeed(speed);
     return () => controllerRef.current?.pause();
-  }, [speed]);
+  }, [graph, speed]);
 
- const togglePlay = () => {
+  const togglePlay = () => {
     if (!controllerRef.current) return;
 
-    if (isPlaying) {
-      controllerRef.current.pause();
-    } else {
-      controllerRef.current.play();
-    }
+    isPlaying
+      ? controllerRef.current.pause()
+      : controllerRef.current.play();
 
     setIsPlaying(!isPlaying);
   };
@@ -79,22 +54,25 @@ export default function DijkstraPage() {
 
       <AlgorithmLayout
         title="Dijkstra’s Algorithm"
-        description="Finds the shortest paths from a source node to all other nodes in a weighted graph."
+        description="Finds the shortest path from a source node to all other nodes in a weighted graph with non-negative weights."
         time="O(V²)"
         space="O(V)"
         category="Graph"
         difficulty="Hard"
       >
         <GraphCanvas
-          nodes={nodes}
-          edges={edges}
+          nodes={graph.nodes}
+          edges={graph.edges}
           activeNode={step?.activeNode}
           visited={step?.visited}
+          distances={step?.distances}
         />
 
         <Controls
           onPlay={togglePlay}
-          onStep={() => controllerRef.current?.stepForward()}
+          onStep={() => {
+            controllerRef.current?.stepForward();
+          }}
           onReset={() => {
             controllerRef.current?.reset();
             setStep(null);
@@ -106,6 +84,7 @@ export default function DijkstraPage() {
             setStep(null);
             setProgress(0);
             setIsPlaying(false);
+            setGraph(generateWeightedGraph());
           }}
           speed={speed}
           onSpeedChange={setSpeed}
