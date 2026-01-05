@@ -13,16 +13,16 @@ type Edge = {
 };
 
 interface GraphCanvasProps {
-  nodes: Node[];
-  edges: Edge[];
+  nodes?: Node[];
+  edges?: Edge[];
   activeNode?: number;
   visited?: number[];
   distances?: Record<number, number>;
 }
 
 export default function GraphCanvas({
-  nodes,
-  edges,
+  nodes = [],
+  edges = [],
   activeNode,
   visited = [],
   distances,
@@ -34,7 +34,10 @@ export default function GraphCanvas({
   };
 
   return (
-    <div className="bg-gradient-to-b from-slate-900 to-slate-950 rounded-xl p-6">
+    <div
+      className="bg-gradient-to-b from-slate-900 to-slate-950 rounded-xl p-6"
+      suppressHydrationWarning
+    >
       <svg viewBox="0 0 500 340" className="w-full h-72">
         {/* edges */}
         {edges.map((e, i) => {
@@ -55,9 +58,9 @@ export default function GraphCanvas({
               {e.weight !== undefined && (
                 <text
                   x={(from.x + to.x) / 2}
-                  y={(from.y + to.y) / 2 - 6}
+                  y={(from.y + to.y) / 2 - 5}
+                  fill="#e5e7eb"
                   fontSize="11"
-                  fill="#cbd5f5"
                   textAnchor="middle"
                 >
                   {e.weight}
@@ -73,29 +76,14 @@ export default function GraphCanvas({
             <circle cx={n.x} cy={n.y} r={18} fill={getColor(n.id)} />
             <text
               x={n.x}
-              y={n.y + 5}
+              y={n.y + 4}
               textAnchor="middle"
               fontSize="12"
               fill="white"
               fontWeight="bold"
             >
-              {n.id}
+              {distances?.[n.id] ?? n.id}
             </text>
-
-            {/* distance label */}
-            {distances && (
-              <text
-                x={n.x}
-                y={n.y - 24}
-                textAnchor="middle"
-                fontSize="11"
-                fill="#facc15"
-              >
-                {distances[n.id] === Infinity
-                  ? "∞"
-                  : distances[n.id]}
-              </text>
-            )}
           </g>
         ))}
       </svg>
