@@ -1,95 +1,104 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { StepController } from "../../../../src/lib/engine/controller";
-import { GraphStep } from "../../../../src/lib/engine/types";
-import { generateDijkstraSteps } from "../../../../src/lib/engine/algorithms/dijkstra";
-import { generateWeightedGraph } from "../../../../src/lib/engine/graph/weightedGraphGenerator";
+type Node = {
+  id: number;
+  x: number;
+  y: number;
+};
 
-import Navbar from "../../../../components/visualizer/Navbar";
-import AlgorithmBackground from "../../../../components/visualizer/AlgorithmBackground";
-import AlgorithmLayout from "../../../../components/visualizer/AlgorithmLayout";
-import Controls from "../../../../components/visualizer/Controls";
-import GraphCanvas from "../../../../components/visualizer/GraphCanvas";
-import Pseudocode from "../../../../components/visualizer/Pseudocode";
+type Edge = {
+  from: number;
+  to: number;
+  weight?: number;
+};
 
-const graph = generateWeightedGraph(); // ✅ STATIC, SSR SAFE
+interface GraphCanvasProps {
+  nodes: Node[];
+  edges: Edge[];
+  activeNode?: number;
+  visited?: number[];
+  distances?: Record<number, number>;
+}
 
-export default function DijkstraPage() {
-  const [step, setStep] = useState<GraphStep | null>(null);
-  const [speed, setSpeed] = useState(600);
-  const [progress, setProgress] = useState(0);
-  const [isPlaying, setIsPlaying] = useState(false);
-
-  const controllerRef = useRef<StepController<GraphStep> | null>(null);
-
-  useEffect(() => {
-    const steps = generateDijkstraSteps(graph.adjacencyList, graph.start);
-
-    controllerRef.current = new StepController(steps, s => {
-      setStep(s);
-      setProgress(
-        controllerRef.current!.currentStepIndex /
-          controllerRef.current!.steps.length
-      );
-    });
-
-    controllerRef.current.setSpeed(speed);
-    return () => controllerRef.current?.pause();
-  }, [speed]);
-
-  const togglePlay = () => {
-    if (!controllerRef.current) return;
-    isPlaying
-      ? controllerRef.current.pause()
-      : controllerRef.current.play();
-    setIsPlaying(!isPlaying);
+export default function GraphCanvas({
+  nodes,
+  edges,
+  activeNode,
+  visited = [],
+  distances,
+}: GraphCanvasProps) {
+  const getColor = (id: number) => {
+    if (id === activeNode) return "#22c55e";
+    if (visited.includes(id)) return "#3b82f6";
+    return "#60a5fa";
   };
 
   return (
-    <>
-      <Navbar />
-      <AlgorithmBackground variant="graph" />
+    <div className="bg-gradient-to-b from-slate-900 to-slate-950 rounded-xl p-6">
+      <svg viewBox="0 0 500 340" className="w-full h-72">
+        {/* edges */}
+        {edges.map((e, i) => {
+          const from = nodes.find((n) => n.id === e.from);
+          const to = nodes.find((n) => n.id === e.to);
+          if (!from || !to) return null;
 
-      <AlgorithmLayout
-        title="Dijkstra’s Algorithm"
-        description="Shortest paths from a source node in a weighted graph."
-        time="O(V²)"
-        space="O(V)"
-        category="Graph"
-        difficulty="Hard"
-      >
-        <GraphCanvas
-          nodes={graph.nodes}
-          edges={graph.edges}
-          activeNode={step?.activeNode}
-          visited={step?.visited}
-          distances={step?.distances}
-        />
+          return (
+            <g key={i}>
+              <line
+                x1={from.x}
+                y1={from.y}
+                x2={to.x}
+                y2={to.y}
+                stroke="#64748b"
+                strokeWidth="2"
+              />
+              {e.weight !== undefined && (
+                <text
+                  x={(from.x + to.x) / 2}
+                  y={(from.y + to.y) / 2 - 6}
+                  fontSize="11"
+                  fill="#cbd5f5"
+                  textAnchor="middle"
+                >
+                  {e.weight}
+                </text>
+              )}
+            </g>
+          );
+        })}
 
-        <Controls
-  onPlay={togglePlay}
-  onStep={() => controllerRef.current?.stepForward()}
-  onReset={() => {
-    controllerRef.current?.reset();
-    setStep(null);
-    setProgress(0);
-    setIsPlaying(false);
-  }}
-  onNew={() => {
-    controllerRef.current?.reset();
-    setStep(null);
-    setProgress(0);
-    setIsPlaying(false);
-  }}
-  speed={speed}
-  onSpeedChange={setSpeed}
-  progress={progress}
-  isPlaying={isPlaying}
-/>
+        {/* nodes */}
+        {nodes.map((n) => (
+          <g key={n.id}>
+            <circle cx={n.x} cy={n.y} r={18} fill={getColor(n.id)} />
+            <text
+              x={n.x}
+              y={n.y + 5}
+              textAnchor="middle"
+              fontSize="12"
+              fill="white"
+              fontWeight="bold"
+            >
+              {n.id}
+            </text>
 
-        <Pseudocode algorithm="dijkstra" />
-      </AlgorithmLayout>
-    </>
+            {/* distance label */}
+            {distances && (
+              <text
+                x={n.x}
+                y={n.y - 24}
+                textAnchor="middle"
+                fontSize="11"
+                fill="#facc15"
+              >
+                {distances[n.id] === Infinity
+                  ? "∞"
+                  : distances[n.id]}
+              </text>
+            )}
+          </g>
+        ))}
+      </svg>
+    </div>
   );
 }

@@ -1,7 +1,16 @@
 "use client";
 
-type Node = { id: number; x: number; y: number };
-type Edge = { from: number; to: number; weight?: number };
+type Node = {
+  id: number;
+  x: number;
+  y: number;
+};
+
+type Edge = {
+  from: number;
+  to: number;
+  weight?: number;
+};
 
 interface GraphCanvasProps {
   nodes: Node[];
@@ -26,11 +35,13 @@ export default function GraphCanvas({
 
   return (
     <div className="bg-gradient-to-b from-slate-900 to-slate-950 rounded-xl p-6">
-      <svg viewBox="0 0 500 300" className="w-full h-72">
+      <svg viewBox="0 0 500 340" className="w-full h-72">
         {/* edges */}
         {edges.map((e, i) => {
-          const from = nodes.find(n => n.id === e.from)!;
-          const to = nodes.find(n => n.id === e.to)!;
+          const from = nodes.find((n) => n.id === e.from);
+          const to = nodes.find((n) => n.id === e.to);
+          if (!from || !to) return null;
+
           return (
             <g key={i}>
               <line
@@ -44,9 +55,10 @@ export default function GraphCanvas({
               {e.weight !== undefined && (
                 <text
                   x={(from.x + to.x) / 2}
-                  y={(from.y + to.y) / 2 - 5}
-                  fill="white"
+                  y={(from.y + to.y) / 2 - 6}
                   fontSize="11"
+                  fill="#cbd5f5"
+                  textAnchor="middle"
                 >
                   {e.weight}
                 </text>
@@ -56,21 +68,34 @@ export default function GraphCanvas({
         })}
 
         {/* nodes */}
-        {nodes.map(n => (
+        {nodes.map((n) => (
           <g key={n.id}>
             <circle cx={n.x} cy={n.y} r={18} fill={getColor(n.id)} />
             <text
               x={n.x}
-              y={n.y + 4}
+              y={n.y + 5}
               textAnchor="middle"
               fontSize="12"
               fill="white"
               fontWeight="bold"
             >
-              {distances?.[n.id] === Infinity
-                ? "∞"
-                : distances?.[n.id] ?? n.id}
+              {n.id}
             </text>
+
+            {/* distance label */}
+            {distances && (
+              <text
+                x={n.x}
+                y={n.y - 24}
+                textAnchor="middle"
+                fontSize="11"
+                fill="#facc15"
+              >
+                {distances[n.id] === Infinity
+                  ? "∞"
+                  : distances[n.id]}
+              </text>
+            )}
           </g>
         ))}
       </svg>
