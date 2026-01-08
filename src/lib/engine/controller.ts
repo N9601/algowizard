@@ -47,6 +47,14 @@ export class StepController<TStep>
     }
   }
 
+  // ✅ ADD THIS — enables previous step
+  stepBackward() {
+    if (this.currentStepIndex > 0) {
+      this.currentStepIndex--;
+      this.onUpdate(this.steps[this.currentStepIndex]);
+    }
+  }
+
   reset() {
     this.pause();
     this.currentStepIndex = 0;

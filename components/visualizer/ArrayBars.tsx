@@ -14,6 +14,7 @@ interface ArrayBarsProps {
   foundIndex?: number;
   low?: number;
   high?: number;
+  notFound?: boolean;
 }
 
 export default function ArrayBars({

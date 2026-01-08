@@ -116,7 +116,7 @@ export default function LinearSearchPage() {
           array={step?.array ?? array}
           currentIndex={step?.currentIndex}
           foundIndex={step?.foundIndex}
-          notFound={step?.notFound}
+          
         />
 
         {/* Not found message */}

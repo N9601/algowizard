@@ -98,7 +98,7 @@ export default function BinarySearchPage() {
           foundIndex={step?.foundIndex}
           low={step?.low}
           high={step?.high}
-          notFound={step?.notFound}
+          
         />
 
         {step?.notFound && (

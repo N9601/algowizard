@@ -24,6 +24,11 @@ export default function BellmanFordPage() {
   const controllerRef = useRef<StepController<GraphStep> | null>(null);
 
   useEffect(() => {
+    // Clean up old controller
+    if (controllerRef.current) {
+      controllerRef.current.pause();
+    }
+
     const steps = generateBellmanFordSteps(
       graph.edges,
       graph.nodes.map(n => n.id),
@@ -41,6 +46,52 @@ export default function BellmanFordPage() {
     controllerRef.current.setSpeed(speed);
     return () => controllerRef.current?.pause();
   }, [graph, speed]);
+
+  const togglePlay = () => {
+    if (!controllerRef.current) return;
+
+    if (isPlaying) {
+      controllerRef.current.pause();
+    } else {
+      controllerRef.current.play();
+    }
+
+    setIsPlaying(!isPlaying);
+  };
+
+  const handleNew = () => {
+    // Stop current playback
+    if (controllerRef.current) {
+      controllerRef.current.pause();
+    }
+
+    // Generate new graph
+    const newGraph = generateWeightedGraph();
+
+    // Generate new steps
+    const steps = generateBellmanFordSteps(
+      newGraph.edges,
+      newGraph.nodes.map(n => n.id),
+      newGraph.start
+    );
+
+    // Create NEW controller
+    controllerRef.current = new StepController(steps, s => {
+      setStep(s);
+      setProgress(
+        controllerRef.current!.currentStepIndex /
+          controllerRef.current!.steps.length
+      );
+    });
+
+    controllerRef.current.setSpeed(speed);
+
+    // Update graph state (triggers useEffect)
+    setGraph(newGraph);
+    setStep(null);
+    setProgress(0);
+    setIsPlaying(false);
+  };
 
   return (
     <>
@@ -61,21 +112,13 @@ export default function BellmanFordPage() {
           activeNode={step?.activeNode}
           visited={step?.visited}
           distances={step?.distances}
+          negativeCycleNodes={step?.negativeCycleNodes}
         />
 
         <ColorLegend />
 
         <Controls
-        
-          onPlay={() => {
-  if (!controllerRef.current) return;
-
-  if (isPlaying) {
-    controllerRef.current.pause();
-  } else {
-    controllerRef.current.play();
-  }
-          }}
+          onPlay={togglePlay}
           onStep={() => controllerRef.current?.stepForward()}
           onReset={() => {
             controllerRef.current?.reset();
@@ -83,13 +126,7 @@ export default function BellmanFordPage() {
             setProgress(0);
             setIsPlaying(false);
           }}
-          onNew={() => {
-            const g = generateWeightedGraph();
-            setGraph(g);
-            setStep(null);
-            setProgress(0);
-            setIsPlaying(false);
-          }}
+          onNew={handleNew}
           speed={speed}
           onSpeedChange={setSpeed}
           progress={progress}
