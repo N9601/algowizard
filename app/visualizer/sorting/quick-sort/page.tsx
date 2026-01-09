@@ -77,7 +77,8 @@ export default function QuickSortPage() {
 
         <Controls
           onPlay={togglePlay}
-          onStep={() => controller.current?.stepForward()}
+            onStepForward={() => controller.current?.stepForward()}
+  onStepBack={() => controller.current?.stepBackward()}
           onReset={() => {
             controller.current?.reset();
             setStep(null);

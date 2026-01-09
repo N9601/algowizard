@@ -85,7 +85,8 @@ export default function DFSPage() {
 
         <Controls
           onPlay={togglePlay}
-          onStep={() => controllerRef.current?.stepForward()}
+            onStepForward={() => controllerRef.current?.stepForward()}
+  onStepBack={() => controllerRef.current?.stepBackward()}
           onReset={() => {
             controllerRef.current?.reset();
             setStep(null);

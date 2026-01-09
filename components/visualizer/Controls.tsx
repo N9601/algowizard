@@ -1,6 +1,7 @@
 interface ControlsProps {
   onPlay: () => void;
-  onStep: () => void;
+  onStepForward: () => void;
+  onStepBack: () => void;
   onReset: () => void;
   onNew: () => void;
   speed: number;
@@ -11,7 +12,8 @@ interface ControlsProps {
 
 export default function Controls({
   onPlay,
-  onStep,
+  onStepForward,
+  onStepBack,
   onReset,
   onNew,
   speed,
@@ -31,9 +33,9 @@ export default function Controls({
       <div className="relative z-10 flex items-center justify-between">
         {/* Step Back */}
         <button
-          onClick={onStep}
+          onClick={onStepBack}
           className="w-11 h-11 rounded-full bg-slate-800 hover:bg-slate-700 text-blue-400 flex items-center justify-center transition"
-          title="Step"
+          title="Previous Step"
         >
           ◀
         </button>
@@ -45,7 +47,7 @@ export default function Controls({
             ${
               isPlaying
                 ? "bg-gradient-to-r from-red-500 to-rose-500 shadow-red-500/30 hover:scale-105"
-                : "bg-gradient-to-r from-emerald-500 to-green-500 shadow-emeraldald-500/30 hover:scale-105"
+                : "bg-gradient-to-r from-emerald-500 to-green-500 shadow-emerald-500/30 hover:scale-105"
             }
           `}
         >
@@ -54,9 +56,9 @@ export default function Controls({
 
         {/* Step Forward */}
         <button
-          onClick={onStep}
+          onClick={onStepForward}
           className="w-11 h-11 rounded-full bg-slate-800 hover:bg-slate-700 text-blue-400 flex items-center justify-center transition"
-          title="Step"
+          title="Next Step"
         >
           ▶
         </button>

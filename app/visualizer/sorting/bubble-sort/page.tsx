@@ -104,7 +104,8 @@ export default function BubbleSortPage() {
 
         <Controls
           onPlay={handlePlayPause}
-          onStep={() => controllerRef.current?.stepForward()}
+           onStepForward={() => controllerRef.current?.stepForward()}
+  onStepBack={() => controllerRef.current?.stepBackward()}
           onReset={() => {
             controllerRef.current?.reset();
             setCurrentStep(null);
