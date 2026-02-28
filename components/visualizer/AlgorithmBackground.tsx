@@ -2,7 +2,12 @@
 
 import { useEffect, useRef } from "react"
 
-type Variant = "landing" | "sorting" | "searching" | "graph"
+type Variant =
+  | "landing"
+  | "sorting"
+  | "searching"
+  | "graph"
+  | "datastructure"
 
 export default function AlgorithmBackground({ variant }: { variant: Variant }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -12,8 +17,8 @@ export default function AlgorithmBackground({ variant }: { variant: Variant }) {
     if (!canvas) return
 
     const ctx = canvas.getContext("2d")!
-    let w = canvas.width = window.innerWidth
-    let h = canvas.height = window.innerHeight
+    let w = (canvas.width = window.innerWidth)
+    let h = (canvas.height = window.innerHeight)
 
     let mouseX = w / 2
     let mouseY = h / 2
@@ -29,11 +34,14 @@ export default function AlgorithmBackground({ variant }: { variant: Variant }) {
       variant === "graph" ? 70 :
       variant === "sorting" ? 45 :
       variant === "searching" ? 30 :
+      variant === "datastructure" ? 55 :
       50
 
     const nodes = Array.from({ length: count }).map((_, i) => ({
       x: Math.random() * w,
-      y: variant === "sorting" ? (i / count) * h : Math.random() * h,
+      y: variant === "sorting"
+        ? (i / count) * h
+        : Math.random() * h,
       vx: (Math.random() - 0.5) * 0.3,
       vy: (Math.random() - 0.5) * 0.3,
     }))
@@ -46,12 +54,14 @@ export default function AlgorithmBackground({ variant }: { variant: Variant }) {
       const gy = (mouseY / h - 0.5) * 40
 
       ctx.strokeStyle = "rgba(255,255,255,0.04)"
+
       for (let x = 0; x < w; x += 60) {
         ctx.beginPath()
         ctx.moveTo(x + gx, 0)
         ctx.lineTo(x + gx, h)
         ctx.stroke()
       }
+
       for (let y = 0; y < h; y += 60) {
         ctx.beginPath()
         ctx.moveTo(0, y + gy)
@@ -81,6 +91,7 @@ export default function AlgorithmBackground({ variant }: { variant: Variant }) {
           const max =
             variant === "searching" ? 80 :
             variant === "sorting" ? 110 :
+            variant === "datastructure" ? 130 :
             150
 
           if (dist < max) {

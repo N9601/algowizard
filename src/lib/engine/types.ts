@@ -30,7 +30,10 @@ export type AlgorithmType =
   | "bfs"
   | "topological"
   | "dijkstra"
-  | "bellman-ford";
+  | "bellman-ford"
+
+  // Data Structures
+  | "stack";
 
 /* ================================
    SORTING STEP
@@ -94,6 +97,25 @@ export interface GraphStep {
   // Bellman-Ford
   negativeCycleNodes?: number[];
 
+  done?: boolean;
+}
+
+/* ================================
+   STACK TYPES
+================================ */
+
+// Operations used by generator
+export type StackOperation =
+  | { type: "push"; value: string }
+  | { type: "pop" }
+  | { type: "reset" };
+
+// Step emitted by engine
+export interface StackStep {
+  stack: string[];
+  operation: "push" | "pop" | "reset";
+  value?: string;
+  message?: string;
   done?: boolean;
 }
 

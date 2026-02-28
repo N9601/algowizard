@@ -1,6 +1,6 @@
 import Navbar from "components/visualizer/Navbar";
 import AlgoCard from "components/visualizer/AlgoCard";
-import Link from "next/link"
+import Link from "next/link";
 
 export default function HomePage() {
   return (
@@ -8,17 +8,17 @@ export default function HomePage() {
       <Navbar />
 
       {/* ================= HERO ================= */}
-<section className="py-24 bg-blue-500">
-  <div className="max-w-7xl mx-auto px-6">
-    <h1 className="text-5xl font-bold mb-4 text-white">
-      Algorithm Visualizer
-    </h1>
-    <p className="text-white/90 max-w-2xl text-lg">
-      Interactive visualizations designed to make algorithms easy to understand,
-      step by step.
-    </p>
-  </div>
-</section>
+      <section className="py-24 bg-blue-500">
+        <div className="max-w-7xl mx-auto px-6">
+          <h1 className="text-5xl font-bold mb-4 text-white">
+            Algorithm Visualizer
+          </h1>
+          <p className="text-white/90 max-w-2xl text-lg">
+            Interactive visualizations designed to make algorithms easy to understand,
+            step by step.
+          </p>
+        </div>
+      </section>
 
       {/* ================= CONTENT ================= */}
       <section>
@@ -29,12 +29,11 @@ export default function HomePage() {
             <div className="flex items-center justify-between mb-10">
               <h2 className="text-3xl font-bold">Sorting Algorithms</h2>
               <Link
-  href="/visualizer/sorting"
-  className="btn-primary text-sm"
->
-  View All
-</Link>
-
+                href="/visualizer/sorting"
+                className="btn-primary text-sm"
+              >
+                View All
+              </Link>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -67,12 +66,11 @@ export default function HomePage() {
             <div className="flex items-center justify-between mb-10">
               <h2 className="text-3xl font-bold">Searching Algorithms</h2>
               <Link
-  href="/visualizer/searching"
-  className="btn-primary text-sm"
->
-  View All
-</Link>
-
+                href="/visualizer/searching"
+                className="btn-primary text-sm"
+              >
+                View All
+              </Link>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -98,12 +96,11 @@ export default function HomePage() {
             <div className="flex items-center justify-between mb-10">
               <h2 className="text-3xl font-bold">Graph Algorithms</h2>
               <Link
-  href="/visualizer/graph"
-  className="btn-primary text-sm"
->
-  View All
-</Link>
-
+                href="/visualizer/graph"
+                className="btn-primary text-sm"
+              >
+                View All
+              </Link>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -131,8 +128,45 @@ export default function HomePage() {
             </div>
           </div>
 
+          {/* -------- Data Structures -------- */}
+          <div>
+            <div className="flex items-center justify-between mb-10">
+              <h2 className="text-3xl font-bold">Data Structures</h2>
+              <Link
+                href="/visualizer/datastructures"
+                className="btn-primary text-sm"
+              >
+                View All
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              <AlgoCard
+                title="Stack"
+                description="Linear data structure following LIFO (Last In, First Out) principle."
+                difficulty="Easy"
+                tag="Data Structure"
+                href="/visualizer/datastructures/stack"
+              />
+              <AlgoCard
+                title="Queue"
+                description="Linear data structure following FIFO (First In, First Out) principle."
+                difficulty="Easy"
+                tag="Data Structure"
+                href="#"
+              />
+              <AlgoCard
+                title="Linked List"
+                description="Dynamic linear data structure with nodes connected via pointers."
+                difficulty="Medium"
+                tag="Data Structure"
+                href="#"
+              />
+            </div>
+          </div>
+
         </div>
       </section>
     </div>
-  )
+  );
 }
