@@ -153,3 +153,41 @@ export interface QueueStep {
   message?: string;
   done?: boolean;
 }
+
+/* ================================
+   LINKED LIST TYPES
+================================ */
+
+export type LinkedListOperation =
+  | { type: "insert"; value: string }
+  | { type: "delete" }
+  | { type: "reset" };
+
+export interface LinkedListStep {
+  list: string[];
+  operation: "insert" | "delete" | "reset";
+  value?: string;
+  message?: string;
+  done?: boolean;
+}
+
+/* ================================
+   BINARY TREE TYPES
+================================ */
+
+export type BinaryTreeOperation =
+  | { type: "insert"; value: number }
+  | { type: "reset" };
+
+export interface BinaryTreeNode {
+  value: number;
+  left?: BinaryTreeNode | null;
+  right?: BinaryTreeNode | null;
+}
+
+export interface BinaryTreeStep {
+  nodes: BinaryTreeNode[];
+  active?: number;
+  message?: string;
+  done?: boolean;
+}
