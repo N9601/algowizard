@@ -136,3 +136,20 @@ export interface AlgorithmController<TStep> {
   reset(): void;
   setSpeed(speed: number): void;
 }
+
+/* ================================
+   QUEUE TYPES
+================================ */
+
+export type QueueOperation =
+  | { type: "enqueue"; value: string }
+  | { type: "dequeue" }
+  | { type: "reset" };
+
+export interface QueueStep {
+  queue: string[];
+  operation: "enqueue" | "dequeue" | "reset";
+  value?: string;
+  message?: string;
+  done?: boolean;
+}
