@@ -1,60 +1,51 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-
-import { StepController } from "src/lib/engine/controller";
+import { StepController } from "../../../../src/lib/engine/controller";
 
 import {
-  generateBinaryTreeInsertSteps,
-  BinaryTreeInsertStep,
-} from "src/lib/engine/algorithms/binaryTreeInsert";
+  generateHeapInsertSteps,
+  HeapStep,
+} from "../../../../src/lib/engine/algorithms/heapInsertSteps";
 
-import Navbar from "components/visualizer/Navbar";
-import AlgorithmBackground from "components/visualizer/AlgorithmBackground";
-import AlgorithmLayout from "components/visualizer/AlgorithmLayout";
-import Controls from "components/visualizer/Controls";
-import GraphCanvas from "components/visualizer/GraphCanvas";
+import Navbar from "../../../../components/visualizer/Navbar";
+import AlgorithmBackground from "../../../../components/visualizer/AlgorithmBackground";
+import AlgorithmLayout from "../../../../components/visualizer/AlgorithmLayout";
+import Controls from "../../../../components/visualizer/Controls";
+import GraphCanvas from "../../../../components/visualizer/GraphCanvas";
 
-export default function BinaryTreePage() {
+export default function HeapPage() {
+  const values = [7, 3, 10, 1, 5, 8, 12];
 
-  const values = [0,1,4,2,3,5,6];
+  const steps = generateHeapInsertSteps(values);
 
-  const steps = generateBinaryTreeInsertSteps(values);
-
-  const [step, setStep] = useState<BinaryTreeInsertStep | null>(steps[0]);
+  const [step, setStep] = useState<HeapStep | null>(steps[0]);
   const [speed, setSpeed] = useState(600);
   const [progress, setProgress] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  const controllerRef = useRef<StepController<BinaryTreeInsertStep> | null>(null);
+  const controllerRef = useRef<StepController<HeapStep> | null>(null);
 
   useEffect(() => {
-
-    controllerRef.current = new StepController(steps, (s: BinaryTreeInsertStep) => {
-
+    controllerRef.current = new StepController(steps, (s) => {
       setStep(s);
 
       setProgress(
         controllerRef.current!.currentStepIndex /
-        controllerRef.current!.steps.length
+          controllerRef.current!.steps.length
       );
-
     });
 
     controllerRef.current.setSpeed(speed);
 
     return () => controllerRef.current?.pause();
-
   }, [speed, steps]);
 
   const togglePlay = () => {
-
     if (!controllerRef.current) return;
 
-    if (isPlaying)
-      controllerRef.current.pause();
-    else
-      controllerRef.current.play();
+    if (isPlaying) controllerRef.current.pause();
+    else controllerRef.current.play();
 
     setIsPlaying(!isPlaying);
   };
@@ -65,14 +56,13 @@ export default function BinaryTreePage() {
       <AlgorithmBackground variant="datastructure" />
 
       <AlgorithmLayout
-        title="Binary Tree"
-        description="Nodes are inserted level-by-level to build a binary tree."
-        time="O(n)"
+        title="Min Heap"
+        description="A binary tree where the parent node is always smaller than its children."
+        time="O(log n)"
         space="O(n)"
         category="Data Structure"
         difficulty="Medium"
       >
-
         <GraphCanvas
           nodes={step?.nodes ?? []}
           edges={step?.edges ?? []}
@@ -100,7 +90,6 @@ export default function BinaryTreePage() {
           progress={progress}
           isPlaying={isPlaying}
         />
-
       </AlgorithmLayout>
     </>
   );

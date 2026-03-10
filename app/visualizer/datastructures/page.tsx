@@ -1,5 +1,3 @@
-// app/visualizer/datastructures/page.tsx
-
 import Navbar from "components/visualizer/Navbar";
 import AlgoCard from "components/visualizer/AlgoCard";
 
@@ -9,6 +7,7 @@ export default function DataStructuresPage() {
       <Navbar />
 
       <main className="max-w-7xl mx-auto px-6 py-20">
+
         {/* Header */}
         <div className="mb-14 max-w-4xl">
           <h1 className="text-4xl font-bold mb-4">
@@ -16,10 +15,10 @@ export default function DataStructuresPage() {
           </h1>
 
           <p className="text-white/70 leading-relaxed">
-            Data structures organize and store data efficiently so that
-            operations such as insertion, deletion, searching, and traversal
-            can be performed effectively. Understanding data structures is
-            essential for designing efficient algorithms.
+            Data structures are fundamental ways of organizing and storing data
+            so it can be accessed and modified efficiently. Understanding how
+            they work is essential for building efficient algorithms and
+            scalable systems.
           </p>
         </div>
 
@@ -28,7 +27,7 @@ export default function DataStructuresPage() {
 
           <AlgoCard
             title="Stack"
-            description="A linear data structure following Last In First Out (LIFO)."
+            description="A Last-In First-Out (LIFO) structure where elements are added and removed from the top."
             difficulty="Easy"
             tag="Data Structure"
             href="/visualizer/datastructures/stack"
@@ -36,7 +35,7 @@ export default function DataStructuresPage() {
 
           <AlgoCard
             title="Queue"
-            description="A linear structure following First In First Out (FIFO)."
+            description="A First-In First-Out (FIFO) structure where elements are processed in order."
             difficulty="Easy"
             tag="Data Structure"
             href="/visualizer/datastructures/queue"
@@ -44,7 +43,7 @@ export default function DataStructuresPage() {
 
           <AlgoCard
             title="Linked List"
-            description="Nodes connected using references."
+            description="A linear data structure where elements are connected using pointers."
             difficulty="Medium"
             tag="Data Structure"
             href="/visualizer/datastructures/linked-list"
@@ -52,7 +51,7 @@ export default function DataStructuresPage() {
 
           <AlgoCard
             title="Binary Tree"
-            description="Hierarchical structure with parent-child nodes."
+            description="A hierarchical structure where each node can have up to two children."
             difficulty="Medium"
             tag="Data Structure"
             href="/visualizer/datastructures/tree"
@@ -60,8 +59,8 @@ export default function DataStructuresPage() {
 
           <AlgoCard
             title="Heap"
-            description="Tree-based structure used in priority queues."
-            difficulty="Hard"
+            description="A specialized binary tree used to implement priority queues efficiently."
+            difficulty="Medium"
             tag="Data Structure"
             href="/visualizer/datastructures/heap"
           />
