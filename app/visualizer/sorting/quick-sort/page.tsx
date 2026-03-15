@@ -94,6 +94,7 @@ export default function QuickSortPage() {
         space="O(log n)"
         category="Sorting"
         difficulty="Medium"
+        progressPercent={Math.round(progress * 100)}
         actions={
           <div className="space-y-3">
             <SaveVisualizationButton

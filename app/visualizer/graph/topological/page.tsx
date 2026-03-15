@@ -120,6 +120,7 @@ export default function TopologicalSortPage() {
         space="O(V)"
         category="Graph"
         difficulty="Hard"
+        progressPercent={Math.round(progress * 100)}
         actions={
           <div className="space-y-3">
             <SaveVisualizationButton

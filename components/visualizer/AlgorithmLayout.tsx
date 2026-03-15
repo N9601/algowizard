@@ -1,8 +1,9 @@
 "use client";
 
-import { ReactNode, useEffect } from "react";
+import { ReactNode, useEffect, useMemo, useRef } from "react";
 import { usePathname } from "next/navigation";
 
+import { hasSupabaseEnv } from "src/lib/supabase/env";
 import { useChatbotPageContext } from "../chatbot/ChatbotProvider";
 import VideoWheel from "./VideoWheel";
 
@@ -13,9 +14,19 @@ interface AlgorithmLayoutProps {
   space: string;
   category: string;
   difficulty: string;
+  progressPercent?: number;
   actions?: ReactNode;
   children: ReactNode;
 }
+
+type ProgressTopicType =
+  | "sorting"
+  | "searching"
+  | "graph"
+  | "data-structure"
+  | "algorithm";
+
+const isSupabaseConfigured = hasSupabaseEnv();
 
 export default function AlgorithmLayout({
   title,
@@ -24,11 +35,14 @@ export default function AlgorithmLayout({
   space,
   category,
   difficulty,
+  progressPercent = 0,
   actions,
   children,
 }: AlgorithmLayoutProps) {
   const pathname = usePathname();
   const { setPageContext, clearPageContext } = useChatbotPageContext();
+  const lastSyncedProgressRef = useRef<number | null>(null);
+  const topicType = useMemo(() => inferTopicType(category), [category]);
 
   useEffect(() => {
     setPageContext({
@@ -53,6 +67,34 @@ export default function AlgorithmLayout({
     time,
     title,
   ]);
+
+  useEffect(() => {
+    if (!isSupabaseConfigured || !topicType) {
+      return;
+    }
+
+    const normalizedProgress = normalizeProgress(progressPercent);
+
+    if (lastSyncedProgressRef.current === normalizedProgress) {
+      return;
+    }
+
+    lastSyncedProgressRef.current = normalizedProgress;
+
+    void fetch("/api/progress", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        topicSlug: pathname,
+        topicType,
+        percentComplete: normalizedProgress,
+      }),
+    }).catch(() => {
+      // Silent no-op: progress syncing should never block the learning UI.
+    });
+  }, [pathname, progressPercent, title, topicType]);
 
   return (
     <div className="relative z-10 mx-auto max-w-7xl space-y-8 px-6 py-10">
@@ -87,6 +129,33 @@ export default function AlgorithmLayout({
       <VideoWheel title={title} category={category} />
     </div>
   );
+}
+
+function inferTopicType(category: string): ProgressTopicType | null {
+  switch (category.toLowerCase()) {
+    case "sorting":
+      return "sorting";
+    case "searching":
+      return "searching";
+    case "graph":
+      return "graph";
+    case "data structure":
+      return "data-structure";
+    default:
+      return "algorithm";
+  }
+}
+
+function normalizeProgress(progressPercent: number) {
+  if (!Number.isFinite(progressPercent) || progressPercent <= 0) {
+    return 10;
+  }
+
+  if (progressPercent >= 100) {
+    return 100;
+  }
+
+  return Math.min(100, Math.max(10, Math.ceil(progressPercent / 10) * 10));
 }
 
 function Meta({ label, value }: { label: string; value: string }) {

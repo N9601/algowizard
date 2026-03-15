@@ -78,6 +78,7 @@ export default function LinkedListPage() {
         space="O(n)"
         category="Data Structure"
         difficulty="Medium"
+        progressPercent={Math.round(progress * 100)}
       >
 
         {/* Linked List Visualization */}

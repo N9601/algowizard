@@ -17,6 +17,7 @@ type AccountResponse = {
   };
   profile: Profile | null;
   savedCount: number;
+  progressCount: number;
 };
 
 const isSupabaseConfigured = hasSupabaseEnv();
@@ -217,33 +218,44 @@ export default function AuthNav() {
         >
           <div className="overflow-hidden rounded-[1.35rem] border border-white/10 bg-[#071019]/96 p-2 shadow-[0_24px_70px_rgba(0,0,0,0.3)] backdrop-blur-xl">
             <div className="space-y-1">
-            <Link
-              href="/saved"
-              onClick={() => setMenuOpen(false)}
-              className="flex items-center justify-between rounded-[1rem] px-4 py-3 text-sm text-white/74 transition hover:bg-white/[0.06] hover:text-white"
-            >
-              <span>Saved states</span>
-              <span className="rounded-full border border-white/10 bg-white/[0.04] px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/58">
-                {account.savedCount}
-              </span>
-            </Link>
+              <Link
+                href="/progress"
+                onClick={() => setMenuOpen(false)}
+                className="flex items-center justify-between rounded-[1rem] px-4 py-3 text-sm text-white/74 transition hover:bg-white/[0.06] hover:text-white"
+              >
+                <span>Progress</span>
+                <span className="rounded-full border border-white/10 bg-white/[0.04] px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/58">
+                  {account.progressCount}
+                </span>
+              </Link>
 
-            <button
-              type="button"
-              onClick={async () => {
-                cancelCloseMenu();
-                setMenuOpen(false);
-                const supabase = createClient();
-                await supabase.auth.signOut();
-                router.push("/visualizer");
-                router.refresh();
-              }}
-              className="flex w-full items-center justify-between rounded-[1rem] px-4 py-3 text-left text-sm text-white/68 transition hover:bg-white/[0.06] hover:text-white"
-            >
-              <span>Sign out</span>
-              <span className="text-white/32">↗</span>
-            </button>
-          </div>
+              <Link
+                href="/saved"
+                onClick={() => setMenuOpen(false)}
+                className="flex items-center justify-between rounded-[1rem] px-4 py-3 text-sm text-white/74 transition hover:bg-white/[0.06] hover:text-white"
+              >
+                <span>Saved states</span>
+                <span className="rounded-full border border-white/10 bg-white/[0.04] px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-white/58">
+                  {account.savedCount}
+                </span>
+              </Link>
+
+              <button
+                type="button"
+                onClick={async () => {
+                  cancelCloseMenu();
+                  setMenuOpen(false);
+                  const supabase = createClient();
+                  await supabase.auth.signOut();
+                  router.push("/visualizer");
+                  router.refresh();
+                }}
+                className="flex w-full items-center justify-between rounded-[1rem] px-4 py-3 text-left text-sm text-white/68 transition hover:bg-white/[0.06] hover:text-white"
+              >
+                <span>Sign out</span>
+                <span className="text-white/32">↗</span>
+              </button>
+            </div>
           </div>
         </div>
       ) : null}

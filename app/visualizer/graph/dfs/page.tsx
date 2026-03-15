@@ -99,6 +99,7 @@ export default function DFSPage() {
         space="O(V)"
         category="Graph"
         difficulty="Medium"
+        progressPercent={Math.round(progress * 100)}
         actions={
           <div className="space-y-3">
             <SaveVisualizationButton

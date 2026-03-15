@@ -56,9 +56,22 @@ export async function GET() {
     );
   }
 
+  const { count: progressCount, error: progressCountError } = await supabase
+    .from("learning_progress")
+    .select("*", { count: "exact", head: true })
+    .eq("user_id", user.id);
+
+  if (progressCountError) {
+    return NextResponse.json(
+      { error: progressCountError.message },
+      { status: 500 }
+    );
+  }
+
   return NextResponse.json({
     user,
     profile,
     savedCount: savedCount ?? 0,
+    progressCount: progressCount ?? 0,
   });
 }

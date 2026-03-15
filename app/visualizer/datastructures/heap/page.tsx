@@ -65,6 +65,7 @@ export default function HeapPage() {
         space="O(n)"
         category="Data Structure"
         difficulty="Medium"
+        progressPercent={Math.round(progress * 100)}
       >
         <GraphCanvas
           nodes={step?.nodes ?? []}

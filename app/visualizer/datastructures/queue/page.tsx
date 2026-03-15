@@ -70,6 +70,7 @@ export default function QueuePage() {
         space="O(n)"
         category="Data Structure"
         difficulty="Easy"
+        progressPercent={Math.round(progress * 100)}
       >
         {/* Queue Visualization */}
         <div className="flex justify-center">

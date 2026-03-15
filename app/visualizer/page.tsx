@@ -44,6 +44,10 @@ const features = [
     copy: "Watch two sorting algorithms process the same array with synchronized playback and narration.",
   },
   {
+    title: "See study momentum",
+    copy: "Track what you started, what you finished, and which topics are worth revisiting next.",
+  },
+  {
     title: "Resume exact states",
     copy: "Save a visualizer setup and reopen the same configuration later instead of starting over.",
   },
@@ -98,6 +102,14 @@ export default async function HomePage() {
                 >
                   Open compare mode
                 </Link>
+                {isLoggedIn ? (
+                  <Link
+                    href="/progress"
+                    className="rounded-full border border-white/10 bg-white/[0.04] px-6 py-3 text-sm font-medium text-white/74 transition hover:bg-white/[0.08] hover:text-white"
+                  >
+                    Open progress dashboard
+                  </Link>
+                ) : null}
                 <Link
                   href="/saved"
                   className="rounded-full border border-white/10 bg-white/[0.04] px-6 py-3 text-sm font-medium text-white/74 transition hover:bg-white/[0.08] hover:text-white"

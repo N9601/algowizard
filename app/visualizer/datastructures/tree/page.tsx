@@ -73,6 +73,7 @@ export default function BinaryTreePage() {
         space="O(n)"
         category="Data Structure"
         difficulty="Medium"
+        progressPercent={Math.round(progress * 100)}
       >
 
         <GraphCanvas

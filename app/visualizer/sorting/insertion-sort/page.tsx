@@ -94,6 +94,7 @@ export default function InsertionSortPage() {
         space="O(1)"
         category="Sorting"
         difficulty="Easy"
+        progressPercent={Math.round(progress * 100)}
         actions={
           <div className="space-y-3">
             <SaveVisualizationButton
