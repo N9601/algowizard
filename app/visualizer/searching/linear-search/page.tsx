@@ -12,6 +12,9 @@ import AlgorithmLayout from "../../../../components/visualizer/AlgorithmLayout";
 import ArrayBars from "../../../../components/visualizer/ArrayBars";
 import Controls from "../../../../components/visualizer/Controls";
 import Pseudocode from "../../../../components/visualizer/Pseudocode";
+import SaveVisualizationButton from "components/visualizer/SaveVisualizationButton";
+import { describeSearchStep } from "src/lib/education/stepNarration";
+import { useSavedVisualization } from "src/lib/saved-visualizations/useSavedVisualization";
 
 /* ======================
    Helpers
@@ -21,6 +24,12 @@ function randomArray(size = 15) {
     Math.floor(Math.random() * 100) + 1
   );
 }
+
+type SavedLinearSearchState = {
+  array: number[];
+  target: number;
+  speed: number;
+};
 
 export default function LinearSearchPage() {
   const [mounted, setMounted] = useState(false);
@@ -33,6 +42,21 @@ export default function LinearSearchPage() {
 
   const controllerRef = useRef<StepController<SearchStep> | null>(null);
   const initializedRef = useRef(false);
+
+  const savedState = useSavedVisualization<SavedLinearSearchState>({
+    expectedRoute: "/visualizer/searching/linear-search",
+    applyState: (saved) => {
+      if (!saved.array?.length) return;
+      controllerRef.current?.pause();
+      controllerRef.current?.reset();
+      setArray(saved.array);
+      setTarget(saved.target);
+      setSpeed(saved.speed ?? 500);
+      setStep(null);
+      setProgress(0);
+      setIsPlaying(false);
+    },
+  });
 
   /* ======================
      Hydration guard
@@ -69,9 +93,13 @@ export default function LinearSearchPage() {
       );
     });
 
-    controllerRef.current.setSpeed(speed);
     return () => controllerRef.current?.pause();
-  }, [array, target, speed]);
+  }, [array, target]);
+
+  useEffect(() => {
+    if (!controllerRef.current) return;
+    controllerRef.current.setSpeed(speed);
+  }, [speed]);
 
   /* ======================
      Play / Pause
@@ -99,6 +127,31 @@ export default function LinearSearchPage() {
         space="O(1)"
         category="Searching"
         difficulty="Easy"
+        actions={
+          <div className="space-y-3">
+            <SaveVisualizationButton
+              title="Linear Search State"
+              algorithmSlug="linear-search"
+              route="/visualizer/searching/linear-search"
+              disabled={array.length === 0}
+              getPayload={() => ({
+                array,
+                target,
+                speed,
+              })}
+            />
+            {savedState.loadedTitle ? (
+              <div className="rounded-2xl border border-emerald-400/20 bg-emerald-500/10 p-4 text-sm text-emerald-100">
+                Loaded saved state: {savedState.loadedTitle}
+              </div>
+            ) : null}
+            {savedState.loadError ? (
+              <div className="rounded-2xl border border-red-400/20 bg-red-500/10 p-4 text-sm text-red-100">
+                {savedState.loadError}
+              </div>
+            ) : null}
+          </div>
+        }
       >
         {/* Target */}
         <div className="mb-4 flex items-center gap-4">
@@ -131,6 +184,7 @@ export default function LinearSearchPage() {
           onPlay={togglePlay}
             onStepForward={() => controllerRef.current?.stepForward()}
   onStepBack={() => controllerRef.current?.stepBackward()}
+          statusText={describeSearchStep("linear", step, array, target)}
           onReset={() => {
             controllerRef.current?.reset();
             setStep(null);

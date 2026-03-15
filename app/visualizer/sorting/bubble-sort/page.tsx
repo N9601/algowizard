@@ -13,6 +13,9 @@ import Controls from "../../../../components/visualizer/Controls";
 import ColorLegend from "../../../../components/visualizer/ColorLegend";
 import Pseudocode from "../../../../components/visualizer/Pseudocode";
 import Navbar from "../../../../components/visualizer/Navbar";
+import SaveVisualizationButton from "components/visualizer/SaveVisualizationButton";
+import { describeSortingStep } from "src/lib/education/stepNarration";
+import { useSavedVisualization } from "src/lib/saved-visualizations/useSavedVisualization";
 
 
 function generateRandomArray(size = 15) {
@@ -20,6 +23,11 @@ function generateRandomArray(size = 15) {
     Math.floor(Math.random() * 100) + 1
   );
 }
+
+type SavedBubbleSortState = {
+  array: number[];
+  speed: number;
+};
 
 export default function BubbleSortPage() {
   const [array, setArray] = useState<number[]>([]);
@@ -30,6 +38,20 @@ export default function BubbleSortPage() {
 
   const controllerRef = useRef<StepController<SortingStep> | null>(null);
   const initializedRef = useRef(false);
+
+  const savedState = useSavedVisualization<SavedBubbleSortState>({
+    expectedRoute: "/visualizer/sorting/bubble-sort",
+    applyState: (saved) => {
+      if (!saved.array?.length) return;
+      controllerRef.current?.pause();
+      controllerRef.current?.reset();
+      setArray(saved.array);
+      setSpeed(saved.speed ?? 500);
+      setCurrentStep(null);
+      setProgress(0);
+      setIsPlaying(false);
+    },
+  });
 
   // Client-only array init (SSR safe)
   useEffect(() => {
@@ -57,10 +79,8 @@ export default function BubbleSortPage() {
       );
     });
 
-    controllerRef.current.setSpeed(speed);
-
     return () => controllerRef.current?.pause();
-  }, [array, speed]);
+  }, [array]);
 
   // Keep speed synced
   useEffect(() => {
@@ -94,6 +114,30 @@ export default function BubbleSortPage() {
         space="O(1)"
         category="Sorting"
         difficulty="Easy"
+        actions={
+          <div className="space-y-3">
+            <SaveVisualizationButton
+              title="Bubble Sort State"
+              algorithmSlug="bubble-sort"
+              route="/visualizer/sorting/bubble-sort"
+              disabled={array.length === 0}
+              getPayload={() => ({
+                array,
+                speed,
+              })}
+            />
+            {savedState.loadedTitle ? (
+              <div className="rounded-2xl border border-emerald-400/20 bg-emerald-500/10 p-4 text-sm text-emerald-100">
+                Loaded saved state: {savedState.loadedTitle}
+              </div>
+            ) : null}
+            {savedState.loadError ? (
+              <div className="rounded-2xl border border-red-400/20 bg-red-500/10 p-4 text-sm text-red-100">
+                {savedState.loadError}
+              </div>
+            ) : null}
+          </div>
+        }
       >
         <ArrayBars
           array={currentStep?.array ?? array}
@@ -106,6 +150,7 @@ export default function BubbleSortPage() {
           onPlay={handlePlayPause}
            onStepForward={() => controllerRef.current?.stepForward()}
   onStepBack={() => controllerRef.current?.stepBackward()}
+          statusText={describeSortingStep("bubble", currentStep, array)}
           onReset={() => {
             controllerRef.current?.reset();
             setCurrentStep(null);

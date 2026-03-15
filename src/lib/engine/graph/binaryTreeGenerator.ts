@@ -1,8 +1,8 @@
-import { GraphStep } from "../types";
+import { BinaryTreeInsertStep } from "../algorithms/binaryTreeInsert";
 
 export function generateBinaryTreeInsertSteps(values: number[]) {
 
-  const steps: GraphStep[] = [];
+  const steps: BinaryTreeInsertStep[] = [];
 
   const inserted: number[] = [];
 

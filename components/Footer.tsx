@@ -1,24 +1,27 @@
-export default function Footer() {
-  return (
-    <footer className="bg-white border-t border-gray-200">
-      <div className="max-w-7xl mx-auto px-6 py-6 flex items-center justify-between text-sm text-gray-500">
-        <span>© 2026 G Nandakishore Reddy</span>
+import Link from "next/link";
 
-        <div className="flex gap-6">
-          <a
-            href="/about"
-            className="hover:text-gray-700 transition"
-          >
+export default function Footer() {
+  const year = new Date().getFullYear();
+
+  return (
+    <footer className="border-t border-white/10 bg-[#050b14] text-white">
+      <div className="mx-auto flex max-w-7xl flex-col gap-4 px-6 py-8 text-[0.98rem] text-white/48 sm:flex-row sm:items-center sm:justify-between">
+        <span>&copy; {year} G Nandakishore Reddy</span>
+
+        <div className="flex items-center gap-8">
+          <Link href="/about" className="transition hover:text-white/78">
             About
-          </a>
+          </Link>
           <a
-            href="/portfolio"
-            className="hover:text-gray-700 transition"
+            href="https://github.com/N9601"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="transition hover:text-white/78"
           >
             Portfolio
           </a>
         </div>
       </div>
     </footer>
-  )
+  );
 }

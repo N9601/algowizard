@@ -14,6 +14,7 @@ import Navbar from "../../../../components/visualizer/Navbar";
 import AlgorithmBackground from "../../../../components/visualizer/AlgorithmBackground";
 import AlgorithmLayout from "../../../../components/visualizer/AlgorithmLayout";
 import Controls from "../../../../components/visualizer/Controls";
+import { describeLinkedListStep } from "src/lib/education/stepNarration";
 
 export default function LinkedListPage() {
 
@@ -44,10 +45,13 @@ export default function LinkedListPage() {
       );
     });
 
-    controllerRef.current.setSpeed(speed);
-
     return () => controllerRef.current?.pause();
 
+  }, []);
+
+  useEffect(() => {
+    if (!controllerRef.current) return;
+    controllerRef.current.setSpeed(speed);
   }, [speed]);
 
   const togglePlay = () => {
@@ -115,6 +119,7 @@ export default function LinkedListPage() {
           onPlay={togglePlay}
           onStepForward={() => controllerRef.current?.stepForward()}
           onStepBack={() => controllerRef.current?.stepBackward()}
+          statusText={describeLinkedListStep(step)}
           onReset={() => {
             controllerRef.current?.reset();
             setStep(null);

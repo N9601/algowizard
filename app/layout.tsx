@@ -1,4 +1,7 @@
 import "./globals.css";
+import Chatbot from "../components/chatbot/Chatbot";
+import { ChatbotProvider } from "../components/chatbot/ChatbotProvider";
+import Footer from "../components/Footer";
 
 export default function RootLayout({
   children,
@@ -7,10 +10,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="relative">
-        {children}
+      <body className="relative antialiased">
+        <ChatbotProvider>
+          {children}
+          <Footer />
+          <Chatbot />
+        </ChatbotProvider>
       </body>
     </html>
   );
 }
-

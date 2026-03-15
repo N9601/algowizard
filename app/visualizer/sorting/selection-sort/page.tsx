@@ -13,12 +13,20 @@ import Controls from "../../../../components/visualizer/Controls";
 import ColorLegend from "../../../../components/visualizer/ColorLegend";
 import Pseudocode from "../../../../components/visualizer/Pseudocode";
 import Navbar from "../../../../components/visualizer/Navbar";
+import SaveVisualizationButton from "components/visualizer/SaveVisualizationButton";
+import { describeSortingStep } from "src/lib/education/stepNarration";
+import { useSavedVisualization } from "src/lib/saved-visualizations/useSavedVisualization";
 
 function generateRandomArray(size = 15) {
   return Array.from({ length: size }, () =>
     Math.floor(Math.random() * 100) + 1
   );
 }
+
+type SavedSelectionSortState = {
+  array: number[];
+  speed: number;
+};
 
 export default function SelectionSortPage() {
   const [array, setArray] = useState<number[]>([]);
@@ -29,6 +37,20 @@ export default function SelectionSortPage() {
 
   const controllerRef = useRef<StepController<SortingStep> | null>(null);
   const initializedRef = useRef(false);
+
+  const savedState = useSavedVisualization<SavedSelectionSortState>({
+    expectedRoute: "/visualizer/sorting/selection-sort",
+    applyState: (saved) => {
+      if (!saved.array?.length) return;
+      controllerRef.current?.pause();
+      controllerRef.current?.reset();
+      setArray(saved.array);
+      setSpeed(saved.speed ?? 500);
+      setCurrentStep(null);
+      setProgress(0);
+      setIsPlaying(false);
+    },
+  });
 
   // Initialize array (client-only)
   useEffect(() => {
@@ -57,10 +79,8 @@ export default function SelectionSortPage() {
     );
   });
 
-  controllerRef.current.setSpeed(speed);
-
   return () => controllerRef.current?.pause();
-}, [array, speed]);
+}, [array]);
 
 
   // Sync speed
@@ -93,6 +113,30 @@ export default function SelectionSortPage() {
         space="O(1)"
         category="Sorting"
         difficulty="Easy"
+        actions={
+          <div className="space-y-3">
+            <SaveVisualizationButton
+              title="Selection Sort State"
+              algorithmSlug="selection-sort"
+              route="/visualizer/sorting/selection-sort"
+              disabled={array.length === 0}
+              getPayload={() => ({
+                array,
+                speed,
+              })}
+            />
+            {savedState.loadedTitle ? (
+              <div className="rounded-2xl border border-emerald-400/20 bg-emerald-500/10 p-4 text-sm text-emerald-100">
+                Loaded saved state: {savedState.loadedTitle}
+              </div>
+            ) : null}
+            {savedState.loadError ? (
+              <div className="rounded-2xl border border-red-400/20 bg-red-500/10 p-4 text-sm text-red-100">
+                {savedState.loadError}
+              </div>
+            ) : null}
+          </div>
+        }
       >
         <ArrayBars
           array={currentStep?.array ?? array}
@@ -105,6 +149,7 @@ export default function SelectionSortPage() {
           onPlay={handlePlayPause}
             onStepForward={() => controllerRef.current?.stepForward()}
   onStepBack={() => controllerRef.current?.stepBackward()}
+          statusText={describeSortingStep("selection", currentStep, array)}
           onReset={() => {
             controllerRef.current?.reset();
             setCurrentStep(null);

@@ -13,6 +13,14 @@ import AlgorithmLayout from "../../../../components/visualizer/AlgorithmLayout";
 import Controls from "../../../../components/visualizer/Controls";
 import GraphCanvas from "../../../../components/visualizer/GraphCanvas";
 import Pseudocode from "../../../../components/visualizer/Pseudocode";
+import SaveVisualizationButton from "components/visualizer/SaveVisualizationButton";
+import { describeGraphStep } from "src/lib/education/stepNarration";
+import { useSavedVisualization } from "src/lib/saved-visualizations/useSavedVisualization";
+
+type SavedBfsState = {
+  graph: ReturnType<typeof generateTree>;
+  speed: number;
+};
 
 export default function BFSPage() {
   const [graph, setGraph] = useState<ReturnType<typeof generateTree> | null>(
@@ -24,6 +32,19 @@ export default function BFSPage() {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const controllerRef = useRef<StepController<GraphStep> | null>(null);
+
+  const savedState = useSavedVisualization<SavedBfsState>({
+    expectedRoute: "/visualizer/graph/bfs",
+    applyState: (saved) => {
+      controllerRef.current?.pause();
+      controllerRef.current?.reset();
+      setGraph(saved.graph);
+      setSpeed(saved.speed ?? 600);
+      setStep(null);
+      setProgress(0);
+      setIsPlaying(false);
+    },
+  });
 
   // client-only graph generation
   useEffect(() => {
@@ -43,9 +64,13 @@ export default function BFSPage() {
       );
     });
 
-    controllerRef.current.setSpeed(speed);
     return () => controllerRef.current?.pause();
-  }, [graph, speed]);
+  }, [graph]);
+
+  useEffect(() => {
+    if (!controllerRef.current) return;
+    controllerRef.current.setSpeed(speed);
+  }, [speed]);
 
  const togglePlay = () => {
   if (!controllerRef.current) return;
@@ -73,6 +98,30 @@ export default function BFSPage() {
         space="O(V)"
         category="Graph"
         difficulty="Medium"
+        actions={
+          <div className="space-y-3">
+            <SaveVisualizationButton
+              title="Breadth-First Search State"
+              algorithmSlug="bfs"
+              route="/visualizer/graph/bfs"
+              disabled={!graph}
+              getPayload={() => ({
+                graph,
+                speed,
+              })}
+            />
+            {savedState.loadedTitle ? (
+              <div className="rounded-2xl border border-emerald-400/20 bg-emerald-500/10 p-4 text-sm text-emerald-100">
+                Loaded saved state: {savedState.loadedTitle}
+              </div>
+            ) : null}
+            {savedState.loadError ? (
+              <div className="rounded-2xl border border-red-400/20 bg-red-500/10 p-4 text-sm text-red-100">
+                {savedState.loadError}
+              </div>
+            ) : null}
+          </div>
+        }
       >
         <GraphCanvas
           nodes={graph.nodes}
@@ -85,6 +134,7 @@ export default function BFSPage() {
           onPlay={togglePlay}
             onStepForward={() => controllerRef.current?.stepForward()}
   onStepBack={() => controllerRef.current?.stepBackward()}
+          statusText={describeGraphStep("bfs", step)}
           onReset={() => {
             controllerRef.current?.reset();
             setStep(null);

@@ -13,6 +13,14 @@ import GraphCanvas from "../../../../components/visualizer/GraphCanvas";
 import Controls from "../../../../components/visualizer/Controls";
 import ColorLegend from "../../../../components/visualizer/ColorLegend";
 import Pseudocode from "../../../../components/visualizer/Pseudocode";
+import SaveVisualizationButton from "components/visualizer/SaveVisualizationButton";
+import { describeGraphStep } from "src/lib/education/stepNarration";
+import { useSavedVisualization } from "src/lib/saved-visualizations/useSavedVisualization";
+
+type SavedBellmanFordState = {
+  graph: ReturnType<typeof generateWeightedGraph>;
+  speed: number;
+};
 
 export default function BellmanFordPage() {
   const [graph, setGraph] = useState(() => generateWeightedGraph());
@@ -22,6 +30,19 @@ export default function BellmanFordPage() {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const controllerRef = useRef<StepController<GraphStep> | null>(null);
+
+  const savedState = useSavedVisualization<SavedBellmanFordState>({
+    expectedRoute: "/visualizer/graph/bellman-ford",
+    applyState: (saved) => {
+      controllerRef.current?.pause();
+      controllerRef.current?.reset();
+      setGraph(saved.graph);
+      setSpeed(saved.speed ?? 600);
+      setStep(null);
+      setProgress(0);
+      setIsPlaying(false);
+    },
+  });
 
   useEffect(() => {
     // Clean up old controller
@@ -43,9 +64,13 @@ export default function BellmanFordPage() {
       );
     });
 
-    controllerRef.current.setSpeed(speed);
     return () => controllerRef.current?.pause();
-  }, [graph, speed]);
+  }, [graph]);
+
+  useEffect(() => {
+    if (!controllerRef.current) return;
+    controllerRef.current.setSpeed(speed);
+  }, [speed]);
 
   const togglePlay = () => {
     if (!controllerRef.current) return;
@@ -105,6 +130,29 @@ export default function BellmanFordPage() {
         space="O(V)"
         category="Graph"
         difficulty="Hard"
+        actions={
+          <div className="space-y-3">
+            <SaveVisualizationButton
+              title="Bellman-Ford State"
+              algorithmSlug="bellman-ford"
+              route="/visualizer/graph/bellman-ford"
+              getPayload={() => ({
+                graph,
+                speed,
+              })}
+            />
+            {savedState.loadedTitle ? (
+              <div className="rounded-2xl border border-emerald-400/20 bg-emerald-500/10 p-4 text-sm text-emerald-100">
+                Loaded saved state: {savedState.loadedTitle}
+              </div>
+            ) : null}
+            {savedState.loadError ? (
+              <div className="rounded-2xl border border-red-400/20 bg-red-500/10 p-4 text-sm text-red-100">
+                {savedState.loadError}
+              </div>
+            ) : null}
+          </div>
+        }
       >
         <GraphCanvas
           nodes={graph.nodes}
@@ -121,6 +169,7 @@ export default function BellmanFordPage() {
           onPlay={togglePlay}
             onStepForward={() => controllerRef.current?.stepForward()}
   onStepBack={() => controllerRef.current?.stepBackward()}
+          statusText={describeGraphStep("bellman-ford", step)}
           onReset={() => {
             controllerRef.current?.reset();
             setStep(null);

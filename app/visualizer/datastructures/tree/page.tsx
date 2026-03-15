@@ -14,14 +14,13 @@ import AlgorithmBackground from "components/visualizer/AlgorithmBackground";
 import AlgorithmLayout from "components/visualizer/AlgorithmLayout";
 import Controls from "components/visualizer/Controls";
 import GraphCanvas from "components/visualizer/GraphCanvas";
+import { describeTreeStep } from "src/lib/education/stepNarration";
+
+const TREE_VALUES = [0, 1, 4, 2, 3, 5, 6];
+const TREE_STEPS = generateBinaryTreeInsertSteps(TREE_VALUES);
 
 export default function BinaryTreePage() {
-
-  const values = [0,1,4,2,3,5,6];
-
-  const steps = generateBinaryTreeInsertSteps(values);
-
-  const [step, setStep] = useState<BinaryTreeInsertStep | null>(steps[0]);
+  const [step, setStep] = useState<BinaryTreeInsertStep | null>(TREE_STEPS[0]);
   const [speed, setSpeed] = useState(600);
   const [progress, setProgress] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -30,7 +29,7 @@ export default function BinaryTreePage() {
 
   useEffect(() => {
 
-    controllerRef.current = new StepController(steps, (s: BinaryTreeInsertStep) => {
+    controllerRef.current = new StepController(TREE_STEPS, (s: BinaryTreeInsertStep) => {
 
       setStep(s);
 
@@ -41,11 +40,14 @@ export default function BinaryTreePage() {
 
     });
 
-    controllerRef.current.setSpeed(speed);
-
     return () => controllerRef.current?.pause();
 
-  }, [speed, steps]);
+  }, []);
+
+  useEffect(() => {
+    if (!controllerRef.current) return;
+    controllerRef.current.setSpeed(speed);
+  }, [speed]);
 
   const togglePlay = () => {
 
@@ -83,15 +85,16 @@ export default function BinaryTreePage() {
           onPlay={togglePlay}
           onStepForward={() => controllerRef.current?.stepForward()}
           onStepBack={() => controllerRef.current?.stepBackward()}
+          statusText={describeTreeStep(step)}
           onReset={() => {
             controllerRef.current?.reset();
-            setStep(steps[0]);
+            setStep(TREE_STEPS[0]);
             setProgress(0);
             setIsPlaying(false);
           }}
           onNew={() => {
             controllerRef.current?.reset();
-            setStep(steps[0]);
+            setStep(TREE_STEPS[0]);
             setProgress(0);
             setIsPlaying(false);
           }}

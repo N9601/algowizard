@@ -16,28 +16,47 @@ export class StepController<TStep>
     this.onUpdate = onUpdate;
   }
 
-  play() {
-    if (this.status === "running") return;
-    this.status = "running";
+  private advanceStep = () => {
+    if (this.currentStepIndex >= this.steps.length) {
+      this.stop("completed");
+      return;
+    }
 
-    this.interval = setInterval(() => {
-      if (this.currentStepIndex >= this.steps.length) {
-        this.pause();
-        this.status = "completed";
-        return;
-      }
+    this.onUpdate(this.steps[this.currentStepIndex]);
+    this.currentStepIndex++;
+  };
 
-      this.onUpdate(this.steps[this.currentStepIndex]);
-      this.currentStepIndex++;
-    }, this.speed);
+  private scheduleInterval() {
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
+
+    this.interval = setInterval(this.advanceStep, this.speed);
   }
 
-  pause() {
+  private stop(status: AlgorithmStatus) {
     if (this.interval) {
       clearInterval(this.interval);
       this.interval = null;
     }
-    this.status = "paused";
+
+    this.status = status;
+  }
+
+  play() {
+    if (this.status === "running") return;
+
+    if (this.currentStepIndex >= this.steps.length) {
+      this.status = "completed";
+      return;
+    }
+
+    this.status = "running";
+    this.scheduleInterval();
+  }
+
+  pause() {
+    this.stop("paused");
   }
 
   stepForward() {
@@ -56,16 +75,14 @@ export class StepController<TStep>
   }
 
   reset() {
-    this.pause();
+    this.stop("idle");
     this.currentStepIndex = 0;
-    this.status = "idle";
   }
 
   setSpeed(speed: number) {
     this.speed = speed;
     if (this.status === "running") {
-      this.pause();
-      this.play();
+      this.scheduleInterval();
     }
   }
 }

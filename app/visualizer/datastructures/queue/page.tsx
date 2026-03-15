@@ -10,6 +10,7 @@ import Navbar from "../../../../components/visualizer/Navbar";
 import AlgorithmBackground from "../../../../components/visualizer/AlgorithmBackground";
 import AlgorithmLayout from "../../../../components/visualizer/AlgorithmLayout";
 import Controls from "../../../../components/visualizer/Controls";
+import { describeQueueStep } from "src/lib/education/stepNarration";
 
 export default function QueuePage() {
   const [step, setStep] = useState<QueueStep | null>(null);
@@ -40,9 +41,12 @@ export default function QueuePage() {
       );
     });
 
-    controllerRef.current.setSpeed(speed);
-
     return () => controllerRef.current?.pause();
+  }, []);
+
+  useEffect(() => {
+    if (!controllerRef.current) return;
+    controllerRef.current.setSpeed(speed);
   }, [speed]);
 
   const togglePlay = () => {
@@ -110,6 +114,7 @@ export default function QueuePage() {
           onPlay={togglePlay}
           onStepForward={() => controllerRef.current?.stepForward()}
           onStepBack={() => controllerRef.current?.stepBackward()}
+          statusText={describeQueueStep(step)}
           onReset={() => {
             controllerRef.current?.reset();
             setStep(null);

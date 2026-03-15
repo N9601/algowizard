@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 type Props = {
   title: string
   description: string
@@ -20,47 +22,31 @@ export default function AlgoCard({
   tag,
 }: Props) {
   return (
-    <div
-  className="
-    bg-white/5 backdrop-blur-md
-    border border-white/10
-    rounded-xl p-6
-    flex flex-col justify-between
-    transition-all duration-400 ease-out
-    hover:-translate-y-0.5
-    hover:shadow-[0_16px_40px_rgba(0,0,0,0.35)]
-    hover:bg-white/10
-    hover:border-white/20
-  "
->
-      <div>
-        <div className="flex justify-between items-start">
-          <h3 className="text-lg font-semibold">{title}</h3>
-          <span
-            className={`text-xs px-2 py-1 rounded ${difficultyColor[difficulty]}`}
-          >
-            {difficulty}
-          </span>
+    <Link href={href} className="group block h-full">
+      <article className="flex h-full flex-col justify-between rounded-[1.75rem] border border-white/10 bg-white/[0.04] p-6 backdrop-blur-sm transition hover:-translate-y-1 hover:border-white/20 hover:bg-white/[0.06]">
+        <div>
+          <div className="flex items-start justify-between gap-4">
+            <h3 className="text-xl font-semibold text-white">{title}</h3>
+            <span
+              className={`rounded-full px-3 py-1 text-xs font-medium ${difficultyColor[difficulty]}`}
+            >
+              {difficulty}
+            </span>
+          </div>
+
+          <p className="mt-4 text-sm leading-6 text-white/60">{description}</p>
         </div>
 
-        <p className="mt-3 text-sm text-white/60">
-          {description}
-        </p>
-      </div>
-
-      <div className="flex justify-between items-center mt-6">
-        <span className="text-xs px-2 py-1 bg-blue-500/20 text-blue-400 rounded">
-          {tag}
-        </span>
-
-        <a
-  href={href}
-  className="btn-primary text-sm px-4 py-2"
->
-  Visualize →
-</a>
-
-      </div>
-    </div>
+        <div className="mt-8 flex items-center justify-between">
+          <span className="rounded-full border border-white/10 bg-white/[0.03] px-3 py-1 text-xs font-medium text-white/60">
+            {tag}
+          </span>
+          <span className="inline-flex items-center gap-2 text-sm font-medium text-white/72 transition group-hover:text-white">
+            Open
+            <span aria-hidden="true">→</span>
+          </span>
+        </div>
+      </article>
+    </Link>
   )
 }

@@ -8,6 +8,7 @@ interface ControlsProps {
   onSpeedChange: (value: number) => void;
   progress: number;
   isPlaying: boolean;
+  statusText?: string;
 }
 
 export default function Controls({
@@ -20,68 +21,74 @@ export default function Controls({
   onSpeedChange,
   progress,
   isPlaying,
+  statusText,
 }: ControlsProps) {
   // UI slider: 0 (slow) → 100 (fast)
   const uiSpeed = Math.round(((1000 - speed) / (1000 - 50)) * 100);
 
   return (
-    <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 border border-white/10 shadow-xl p-6 space-y-6">
-      {/* Glow accent */}
-      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_top,rgba(59,130,246,0.15),transparent_60%)]" />
-
-      {/* TOP ACTIONS */}
-      <div className="relative z-10 flex items-center justify-between">
-        {/* Step Back */}
+    <div className="rounded-[1.75rem] border border-white/10 bg-white/[0.035] p-6 backdrop-blur-sm">
+      <div className="flex flex-col gap-6">
+        {statusText ? (
+          <div className="rounded-[1.35rem] border border-white/10 bg-black/20 px-4 py-3">
+            <div className="text-[11px] font-semibold uppercase tracking-[0.18em] text-white/42">
+              Step narration
+            </div>
+            <p className="mt-2 text-sm leading-6 text-white/74">{statusText}</p>
+          </div>
+        ) : null}
+        <div className="flex items-center justify-between gap-3">
         <button
           onClick={onStepBack}
-          className="w-11 h-11 rounded-full bg-slate-800 hover:bg-slate-700 text-blue-400 flex items-center justify-center transition"
+          className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-black/20 text-white/78 transition hover:bg-white/[0.06]"
           title="Previous Step"
         >
           ◀
         </button>
 
-        {/* Play / Pause */}
         <button
           onClick={onPlay}
-          className={`px-8 py-3 rounded-full font-semibold text-white transition-all shadow-lg
+          className={`rounded-full px-7 py-3 text-sm font-semibold text-white transition
             ${
               isPlaying
-                ? "bg-gradient-to-r from-red-500 to-rose-500 shadow-red-500/30 hover:scale-105"
-                : "bg-gradient-to-r from-emerald-500 to-green-500 shadow-emerald-500/30 hover:scale-105"
+                ? "bg-white/12 hover:bg-white/18"
+                : "bg-blue-500 hover:bg-blue-400"
             }
           `}
         >
           {isPlaying ? "Pause" : "Play"}
         </button>
 
-        {/* Step Forward */}
         <button
           onClick={onStepForward}
-          className="w-11 h-11 rounded-full bg-slate-800 hover:bg-slate-700 text-blue-400 flex items-center justify-center transition"
+          className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-black/20 text-white/78 transition hover:bg-white/[0.06]"
           title="Next Step"
         >
           ▶
         </button>
       </div>
 
-      {/* PROGRESS */}
-      <div className="relative z-10 space-y-2">
-        <div className="flex justify-between text-xs text-gray-400">
+        <div className="space-y-2">
+          <div className="flex justify-between text-xs uppercase tracking-[0.2em] text-white/40">
           <span>Progress</span>
           <span>{Math.round(progress * 100)}%</span>
         </div>
 
-        <div className="h-2 rounded-full bg-slate-700 overflow-hidden">
+          <div className="h-2 overflow-hidden rounded-full bg-white/10">
           <div
-            className="h-2 rounded-full bg-gradient-to-r from-blue-500 to-cyan-400 transition-all"
+            className="h-2 rounded-full bg-blue-400 transition-all"
             style={{ width: `${progress * 100}%` }}
           />
         </div>
       </div>
 
-      {/* SPEED */}
-      <div className="relative z-10 space-y-2">
-        <div className="flex justify-between text-xs text-gray-400">
+        <div className="space-y-3">
+          <div className="flex justify-between text-xs uppercase tracking-[0.2em] text-white/40">
+            <span>Animation</span>
+            <span>{uiSpeed}%</span>
+          </div>
+
+          <div className="flex justify-between text-xs text-white/50">
           <span>Slow</span>
           <span>Fast</span>
         </div>
@@ -96,26 +103,26 @@ export default function Controls({
             const engineSpeed = 1000 - (ui / 100) * (1000 - 50);
             onSpeedChange(Math.round(engineSpeed));
           }}
-          className="w-full accent-blue-500 cursor-pointer"
+          className="w-full cursor-pointer accent-blue-400"
         />
       </div>
 
-      {/* BOTTOM ACTIONS */}
-      <div className="relative z-10 flex gap-4">
+        <div className="grid gap-3 sm:grid-cols-2">
         <button
           onClick={onReset}
-          className="flex-1 py-3 rounded-xl bg-slate-700 hover:bg-slate-600 text-gray-200 transition"
+          className="rounded-2xl border border-white/10 bg-black/20 py-3 text-sm font-medium text-white/78 transition hover:bg-white/[0.06]"
         >
           Reset
         </button>
 
         <button
           onClick={onNew}
-          className="flex-1 py-3 rounded-xl bg-gradient-to-r from-violet-500 to-purple-600 text-white shadow-md hover:scale-[1.02] transition"
+          className="rounded-2xl border border-white/10 bg-white/[0.06] py-3 text-sm font-medium text-white transition hover:bg-white/[0.1]"
         >
-          New Array
+          New Example
         </button>
       </div>
+    </div>
     </div>
   );
 }

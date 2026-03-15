@@ -13,13 +13,13 @@ import AlgorithmBackground from "../../../../components/visualizer/AlgorithmBack
 import AlgorithmLayout from "../../../../components/visualizer/AlgorithmLayout";
 import Controls from "../../../../components/visualizer/Controls";
 import GraphCanvas from "../../../../components/visualizer/GraphCanvas";
+import { describeHeapInsertStep } from "src/lib/education/stepNarration";
+
+const HEAP_VALUES = [7, 3, 10, 1, 5, 8, 12];
+const HEAP_STEPS = generateHeapInsertSteps(HEAP_VALUES);
 
 export default function HeapPage() {
-  const values = [7, 3, 10, 1, 5, 8, 12];
-
-  const steps = generateHeapInsertSteps(values);
-
-  const [step, setStep] = useState<HeapStep | null>(steps[0]);
+  const [step, setStep] = useState<HeapStep | null>(HEAP_STEPS[0]);
   const [speed, setSpeed] = useState(600);
   const [progress, setProgress] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -27,7 +27,7 @@ export default function HeapPage() {
   const controllerRef = useRef<StepController<HeapStep> | null>(null);
 
   useEffect(() => {
-    controllerRef.current = new StepController(steps, (s) => {
+    controllerRef.current = new StepController(HEAP_STEPS, (s) => {
       setStep(s);
 
       setProgress(
@@ -36,10 +36,13 @@ export default function HeapPage() {
       );
     });
 
-    controllerRef.current.setSpeed(speed);
-
     return () => controllerRef.current?.pause();
-  }, [speed, steps]);
+  }, []);
+
+  useEffect(() => {
+    if (!controllerRef.current) return;
+    controllerRef.current.setSpeed(speed);
+  }, [speed]);
 
   const togglePlay = () => {
     if (!controllerRef.current) return;
@@ -73,15 +76,16 @@ export default function HeapPage() {
           onPlay={togglePlay}
           onStepForward={() => controllerRef.current?.stepForward()}
           onStepBack={() => controllerRef.current?.stepBackward()}
+          statusText={describeHeapInsertStep(step)}
           onReset={() => {
             controllerRef.current?.reset();
-            setStep(steps[0]);
+            setStep(HEAP_STEPS[0]);
             setProgress(0);
             setIsPlaying(false);
           }}
           onNew={() => {
             controllerRef.current?.reset();
-            setStep(steps[0]);
+            setStep(HEAP_STEPS[0]);
             setProgress(0);
             setIsPlaying(false);
           }}
