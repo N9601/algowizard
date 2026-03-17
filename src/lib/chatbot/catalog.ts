@@ -435,6 +435,48 @@ export const KNOWLEDGE_BASE: KnowledgeEntry[] = [
     ],
     related: ["heap-sort", "binary-tree"],
   },
+  {
+    id: "a-star",
+    pathname: "/visualizer/pathfinding/a-star",
+    kind: "algorithm",
+    title: "A* Pathfinding",
+    category: "Graph",
+    difficulty: "Medium",
+    time: "O(E)",
+    space: "O(V)",
+    summary:
+      "A* finds a path by combining distance traveled with a heuristic to expand the most promising grid cell first.",
+    aliases: ["a star", "a*"],
+    whenToUse: [
+      "Use it for shortest paths on weighted or unweighted grids when a good heuristic is available.",
+    ],
+    watchOuts: [
+      "Needs an admissible heuristic to guarantee optimality.",
+      "Heuristic that overestimates can return non-optimal paths.",
+    ],
+    related: ["bfs-grid", "dijkstra"],
+  },
+  {
+    id: "bfs-grid",
+    pathname: "/visualizer/pathfinding/bfs",
+    kind: "algorithm",
+    title: "Breadth-First Search (Grid)",
+    category: "Graph",
+    difficulty: "Easy",
+    time: "O(E)",
+    space: "O(V)",
+    summary:
+      "BFS explores the grid level by level and returns the shortest unweighted path from start to goal.",
+    aliases: ["bfs pathfinding", "breadth first grid"],
+    whenToUse: [
+      "Use it for shortest paths on unweighted grids or when heuristics are not available.",
+    ],
+    watchOuts: [
+      "Explores broadly, so it can be slower than heuristic-guided search.",
+      "Walls and large open areas increase frontier size.",
+    ],
+    related: ["a-star", "dijkstra"],
+  },
 ];
 
 export const ROUTE_CONTEXT: Record<string, RouteContext> = {
@@ -521,6 +563,14 @@ export const ROUTE_CONTEXT: Record<string, RouteContext> = {
       "This section introduces foundational structures for storing, organizing, and traversing data efficiently.",
     category: "Data Structure",
     relatedTopics: ["Stack", "Queue", "Linked List", "Binary Tree", "Heap"],
+  },
+  "/visualizer/pathfinding": {
+    pageType: "section",
+    title: "Pathfinding",
+    description:
+      "This section shows how grid-based searches explore frontiers and reconstruct shortest paths.",
+    category: "Graph",
+    relatedTopics: ["A* Pathfinding", "Breadth-First Search"],
   },
 };
 

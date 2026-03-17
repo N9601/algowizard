@@ -101,6 +101,21 @@ export interface GraphStep {
 }
 
 /* ================================
+   PATHFINDING STEP
+================================ */
+
+export interface PathfindingStep {
+  current: [number, number] | null;
+  frontier: string[];
+  visited: string[];
+  path: string[];
+  walls: string[];
+  start: [number, number];
+  goal: [number, number];
+  found: boolean;
+}
+
+/* ================================
    STACK TYPES
 ================================ */
 

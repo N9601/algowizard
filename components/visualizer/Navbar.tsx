@@ -69,6 +69,7 @@ export default function Navbar() {
             {navItem("Compare", "/visualizer/compare")}
             {navItem("Sorting", "/visualizer/sorting")}
             {navItem("Searching", "/visualizer/searching")}
+            {navItem("Pathfinding", "/visualizer/pathfinding")}
             {navItem("Graph", "/visualizer/graph")}
             {navItem("Structures", "/visualizer/datastructures")}
           </div>
