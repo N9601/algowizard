@@ -53,6 +53,9 @@ export default function NeuralNetPage() {
   const [progress, setProgress] = useState(0);
   const [speed, setSpeed] = useState(500);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [narration, setNarration] = useState(
+    "Two-layer net classifies 2D points; watch the boundary shift as weights update."
+  );
 
   const controllerRef = useRef<StepController<NNState> | null>(null);
 
@@ -95,10 +98,17 @@ export default function NeuralNetPage() {
         controllerRef.current.currentStepIndex /
           controllerRef.current.steps.length
       );
+      const s =
+        controllerRef.current.steps[controllerRef.current.currentStepIndex];
+      if (s) {
+        setNarration(
+          `Step ${controllerRef.current.currentStepIndex + 1}: boundary adapts to ${points.length} points.`
+        );
+      }
     });
     controllerRef.current.setSpeed(speed);
     setTimeout(() => setIsPlaying(false), 0);
-  }, [states, speed]);
+  }, [states, speed, points.length]);
 
   useEffect(() => {
     if (!controllerRef.current) return;
@@ -114,6 +124,10 @@ export default function NeuralNetPage() {
 
   const current = states[stepIdx];
   const forwardPoints = current ? forward(current) : [];
+  const decisionImage = useMemo(
+    () => (current ? buildDecisionImage(current) : undefined),
+    [current]
+  );
 
   return (
     <>
@@ -194,6 +208,7 @@ export default function NeuralNetPage() {
             centroids={[]}
             width={WIDTH}
             height={HEIGHT}
+            decisionBoundary={decisionImage}
             onClick={(p) =>
               setPoints((prev) => [
                 ...prev,
@@ -202,7 +217,18 @@ export default function NeuralNetPage() {
             }
           />
           <div className="mt-2 text-xs text-white/60">
-            Click to add points. Labels are random on add; tweak LR and play training steps.
+            {narration} Click to add points (labels random). Adjust LR and play training to see the boundary move.
+          </div>
+          <div className="mt-3 flex flex-wrap gap-2 text-xs text-white/65">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-3 py-1">
+              <span className="h-3 w-3 rounded-sm bg-[#60a5fa]" /> Class 0
+            </span>
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-3 py-1">
+              <span className="h-3 w-3 rounded-sm bg-[#f472b6]" /> Class 1
+            </span>
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-3 py-1">
+              <span className="h-3 w-3 rounded-sm bg-white/70" /> Boundary heatmap (blue→pink)
+            </span>
           </div>
         </div>
 
@@ -232,4 +258,40 @@ export default function NeuralNetPage() {
       </AlgorithmLayout>
     </>
   );
+}
+
+function buildDecisionImage(state: NNState) {
+  if (typeof window === "undefined" || typeof ImageData === "undefined") {
+    return undefined;
+  }
+  const width = WIDTH;
+  const height = HEIGHT;
+  const imageData = new ImageData(width, height);
+  const data = imageData.data;
+
+  for (let y = 0; y < height; y++) {
+    for (let x = 0; x < width; x++) {
+      const prob = forward({
+        points: [{ x, y, label: 0 }],
+        weights1: state.weights1,
+        weights2: state.weights2,
+      })[0].prob;
+      const idx = (y * width + x) * 4;
+      const color = probToColor(prob);
+      data[idx] = color[0];
+      data[idx + 1] = color[1];
+      data[idx + 2] = color[2];
+      data[idx + 3] = 45; // low alpha for subtle heatmap
+    }
+  }
+
+  return imageData;
+}
+
+function probToColor(p: number): [number, number, number] {
+  // blue (class 0) to pink (class 1)
+  const r = Math.round(96 + p * 120);
+  const g = Math.round(160 - p * 70);
+  const b = Math.round(250 - p * 120);
+  return [r, g, b];
 }

@@ -162,7 +162,7 @@ export default function KMeansPage() {
           <ScatterCanvas
             points={(currentStep?.points ?? points).map((p) => ({
               ...p,
-              label: p.cluster,
+              label: (p as { cluster?: number }).cluster,
             }))}
             centroids={currentStep?.centroids}
             width={WIDTH}

@@ -25,6 +25,9 @@ export default function GradientDescentPage() {
   const [speed, setSpeed] = useState(450);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [narration, setNarration] = useState(
+    "Follow the point as it steps downhill on the loss surface."
+  );
 
   const controllerRef = useRef<StepController<GDStep> | null>(null);
   const initializedRef = useRef(false);
@@ -70,6 +73,13 @@ export default function GradientDescentPage() {
         setProgress(
           controllerRef.current.currentStepIndex /
             controllerRef.current.steps.length
+        );
+      }
+      if (s) {
+        setNarration(
+          `Iteration ${s.iteration}: move (${s.x.toFixed(2)}, ${s.y.toFixed(
+            2
+          )}) with loss ${s.z.toFixed(3)}.`
         );
       }
     });
@@ -169,6 +179,18 @@ export default function GradientDescentPage() {
           <LossViz current={step} />
           <div className="mt-2 text-xs text-white/60">
             Step {currentIndex + 1} / {steps.length || "-"} • LR {lr.toFixed(2)}
+          </div>
+          <div className="mt-2 text-xs text-white/65">{narration}</div>
+          <div className="mt-3 flex flex-wrap gap-2 text-xs text-white/65">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-3 py-1">
+              <span className="h-3 w-3 rounded-sm bg-pink-500" /> Current point
+            </span>
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-3 py-1">
+              <span className="h-3 w-3 rounded-sm bg-[hsl(220,80%,60%)]" /> Lower loss
+            </span>
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-3 py-1">
+              <span className="h-3 w-3 rounded-sm bg-[hsl(100,80%,60%)]" /> Higher loss
+            </span>
           </div>
         </div>
 
