@@ -36,6 +36,7 @@ export default function KMeansPage() {
   const [progress, setProgress] = useState(0);
   const [speed, setSpeed] = useState(400);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [currentStep, setCurrentStep] = useState<KMeansStep | null>(null);
 
   const controllerRef = useRef<StepController<KMeansStep> | null>(null);
 
@@ -49,6 +50,7 @@ export default function KMeansPage() {
       setSpeed(saved.speed ?? 400);
       setProgress(0);
       setIsPlaying(false);
+      setCurrentStep(null);
     },
   });
 
@@ -58,6 +60,7 @@ export default function KMeansPage() {
     if (!steps.length) return;
     controllerRef.current = new StepController(steps, () => {
       setCurrentIndex((i) => controllerRef.current?.currentStepIndex ?? i);
+      setCurrentStep(controllerRef.current?.steps[controllerRef.current.currentStepIndex] ?? null);
       if (controllerRef.current) {
         setProgress(
           controllerRef.current.currentStepIndex /
@@ -68,12 +71,21 @@ export default function KMeansPage() {
     controllerRef.current.setSpeed(speed);
     setTimeout(() => {
       setCurrentIndex(0);
+      setCurrentStep(steps[0] ?? null);
       setProgress(0);
       setIsPlaying(false);
     }, 0);
   }, [steps, speed]);
 
-  const currentStep = steps[currentIndex] ?? steps[0] ?? null;
+  const previousStep =
+    currentStep && currentIndex > 0 ? steps[currentIndex - 1] : null;
+  const centroidShift =
+    currentStep && previousStep
+      ? avgShift(previousStep.centroids, currentStep.centroids)
+      : 0;
+  const narration = currentStep
+    ? `Iteration ${currentStep.iteration}: assign points, then recenter centroids (avg shift ${centroidShift.toFixed(2)}).`
+    : "Ready to start k-Means.";
 
   const togglePlay = () => {
     if (!controllerRef.current) return;
@@ -158,7 +170,21 @@ export default function KMeansPage() {
             onClick={(p) => setPoints((prev) => [...prev, { x: p.x, y: p.y }])}
           />
           <div className="mt-2 text-xs text-white/60">
-            Click to add points. k controls the number of centroids.
+            Click to add points. k controls the number of centroids. {narration}
+          </div>
+          <div className="mt-3 flex flex-wrap gap-2 text-xs text-white/65">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-3 py-1">
+              <span className="h-3 w-3 rounded-sm bg-[#60a5fa]" /> Cluster 1
+            </span>
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-3 py-1">
+              <span className="h-3 w-3 rounded-sm bg-[#f472b6]" /> Cluster 2
+            </span>
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-3 py-1">
+              <span className="h-3 w-3 rounded-sm bg-[#34d399]" /> Cluster 3+
+            </span>
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-3 py-1">
+              <span className="h-3 w-3 rounded-sm bg-white/80" /> Centroids
+            </span>
           </div>
         </div>
 
@@ -166,7 +192,7 @@ export default function KMeansPage() {
           onPlay={togglePlay}
           onStepForward={() => controllerRef.current?.stepForward()}
           onStepBack={() => controllerRef.current?.stepBackward()}
-          statusText={`Iteration ${currentStep?.iteration ?? 0}`}
+          statusText={`Iteration ${currentStep?.iteration ?? 0} • Centroid shift ${centroidShift.toFixed(2)}`}
           onReset={() => {
             controllerRef.current?.reset();
             setProgress(0);
@@ -185,4 +211,16 @@ export default function KMeansPage() {
       </AlgorithmLayout>
     </>
   );
+}
+
+function avgShift(a: { x: number; y: number }[], b: { x: number; y: number }[]) {
+  if (!a.length || !b.length) return 0;
+  const count = Math.min(a.length, b.length);
+  let total = 0;
+  for (let i = 0; i < count; i++) {
+    const dx = a[i].x - b[i].x;
+    const dy = a[i].y - b[i].y;
+    total += Math.sqrt(dx * dx + dy * dy);
+  }
+  return total / count;
 }

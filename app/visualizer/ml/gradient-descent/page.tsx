@@ -24,6 +24,7 @@ export default function GradientDescentPage() {
   const [progress, setProgress] = useState(0);
   const [speed, setSpeed] = useState(450);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const controllerRef = useRef<StepController<GDStep> | null>(null);
   const initializedRef = useRef(false);
@@ -64,6 +65,7 @@ export default function GradientDescentPage() {
     if (!steps.length) return;
     controllerRef.current = new StepController(steps, (s) => {
       setStep(s);
+      setCurrentIndex(controllerRef.current?.currentStepIndex ?? 0);
       if (controllerRef.current) {
         setProgress(
           controllerRef.current.currentStepIndex /
@@ -72,9 +74,12 @@ export default function GradientDescentPage() {
       }
     });
     controllerRef.current.setSpeed(speed);
-    setStep(steps[0]);
-    setProgress(0);
-    setIsPlaying(false);
+    setTimeout(() => {
+      setCurrentIndex(0);
+      setStep(steps[0]);
+      setProgress(0);
+      setIsPlaying(false);
+    }, 0);
   };
 
   const togglePlay = () => {
@@ -162,6 +167,9 @@ export default function GradientDescentPage() {
       >
         <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
           <LossViz current={step} />
+          <div className="mt-2 text-xs text-white/60">
+            Step {currentIndex + 1} / {steps.length || "-"} • LR {lr.toFixed(2)}
+          </div>
         </div>
 
         <Controls

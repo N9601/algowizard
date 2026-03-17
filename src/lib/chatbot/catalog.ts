@@ -541,6 +541,45 @@ export const KNOWLEDGE_BASE: KnowledgeEntry[] = [
     ],
     related: ["gradient-descent", "k-means"],
   },
+  {
+    id: "minimax",
+    pathname: "/visualizer/decision/minimax",
+    kind: "algorithm",
+    title: "Minimax",
+    category: "Decision AI",
+    difficulty: "Easy",
+    summary:
+      "Minimax explores the full game tree to choose an optimal move assuming perfect play from both sides.",
+    aliases: ["minimax", "mini max"],
+    whenToUse: [
+      "Use it for small game trees where exhaustive search is feasible.",
+      "Use it to teach optimal play and adversarial reasoning.",
+    ],
+    watchOuts: [
+      "Grows exponentially with depth; needs pruning or heuristics for larger games.",
+    ],
+    related: ["alpha-beta"],
+  },
+  {
+    id: "alpha-beta",
+    pathname: "/visualizer/decision/alpha-beta",
+    kind: "algorithm",
+    title: "Alpha–Beta Pruning",
+    category: "Decision AI",
+    difficulty: "Medium",
+    summary:
+      "Alpha–Beta pruning reduces the number of nodes evaluated in Minimax by skipping branches that cannot affect the outcome.",
+    aliases: ["alpha beta", "alpha-beta pruning"],
+    whenToUse: [
+      "Use it to speed up Minimax without changing the optimal move.",
+      "Use it when branching factor is moderate and you have good move ordering.",
+    ],
+    watchOuts: [
+      "Pruning effectiveness depends on move ordering.",
+      "Still exponential in the worst case without heuristics.",
+    ],
+    related: ["minimax"],
+  },
 ];
 
 export const ROUTE_CONTEXT: Record<string, RouteContext> = {
@@ -643,6 +682,14 @@ export const ROUTE_CONTEXT: Record<string, RouteContext> = {
       "This section visualizes clustering, optimization, and a tiny neural network on 2D points.",
     category: "Machine Learning",
     relatedTopics: ["k-Means Clustering", "Gradient Descent", "Neural Network"],
+  },
+  "/visualizer/decision": {
+    pageType: "section",
+    title: "Decision AI",
+    description:
+      "This section demonstrates adversarial search on tic-tac-toe with Minimax and Alpha–Beta pruning.",
+    category: "Decision AI",
+    relatedTopics: ["Minimax", "Alpha–Beta Pruning"],
   },
 };
 
