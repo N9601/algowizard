@@ -72,6 +72,7 @@ export default function Navbar() {
             {navItem("Pathfinding", "/visualizer/pathfinding")}
             {navItem("Graph", "/visualizer/graph")}
             {navItem("Structures", "/visualizer/datastructures")}
+            {navItem("ML", "/visualizer/ml")}
           </div>
 
           <AuthNav />

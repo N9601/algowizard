@@ -477,6 +477,70 @@ export const KNOWLEDGE_BASE: KnowledgeEntry[] = [
     ],
     related: ["a-star", "dijkstra"],
   },
+  {
+    id: "k-means",
+    pathname: "/visualizer/ml/k-means",
+    kind: "algorithm",
+    title: "k-Means Clustering",
+    category: "Machine Learning",
+    difficulty: "Easy",
+    time: "O(n k T)",
+    space: "O(n + k)",
+    summary:
+      "k-Means alternates between assigning points to the nearest centroid and recomputing centroids until positions stabilize.",
+    aliases: ["kmeans", "k means", "clustering"],
+    whenToUse: [
+      "Use it to find spherical clusters in continuous data.",
+      "Use it when you want a fast, simple unsupervised baseline.",
+    ],
+    watchOuts: [
+      "Sensitive to initialization; can converge to local minima.",
+      "Assumes roughly equal-size clusters; not good for complex shapes.",
+    ],
+    related: ["gradient-descent", "neural-network"],
+  },
+  {
+    id: "gradient-descent",
+    pathname: "/visualizer/ml/gradient-descent",
+    kind: "algorithm",
+    title: "Gradient Descent",
+    category: "Machine Learning",
+    difficulty: "Easy",
+    time: "O(T)",
+    space: "O(1)",
+    summary:
+      "Gradient Descent steps downhill on a differentiable loss surface using the learning rate to scale each move.",
+    aliases: ["gd", "gradient descent"],
+    whenToUse: [
+      "Use it to optimize smooth losses in ML models.",
+      "Use it to illustrate how learning rate affects convergence.",
+    ],
+    watchOuts: [
+      "Too large learning rate can diverge; too small can stall.",
+      "Local minima and saddle points can slow or trap progress.",
+    ],
+    related: ["k-means", "neural-network"],
+  },
+  {
+    id: "neural-network",
+    pathname: "/visualizer/ml/neural-network",
+    kind: "algorithm",
+    title: "Neural Network (2-layer)",
+    category: "Machine Learning",
+    difficulty: "Medium",
+    summary:
+      "A small two-layer feedforward network that classifies 2D points; shows activations and how training shifts the decision boundary.",
+    aliases: ["nn", "mlp", "two-layer network"],
+    whenToUse: [
+      "Use it to demonstrate nonlinear decision boundaries.",
+      "Use it to connect gradient updates to classification changes.",
+    ],
+    watchOuts: [
+      "Random init plus tiny dataset can overfit or flip decisions quickly.",
+      "Learning rate still controls stability of updates.",
+    ],
+    related: ["gradient-descent", "k-means"],
+  },
 ];
 
 export const ROUTE_CONTEXT: Record<string, RouteContext> = {
@@ -571,6 +635,14 @@ export const ROUTE_CONTEXT: Record<string, RouteContext> = {
       "This section shows how grid-based searches explore frontiers and reconstruct shortest paths.",
     category: "Graph",
     relatedTopics: ["A* Pathfinding", "Breadth-First Search"],
+  },
+  "/visualizer/ml": {
+    pageType: "section",
+    title: "Machine Learning",
+    description:
+      "This section visualizes clustering, optimization, and a tiny neural network on 2D points.",
+    category: "Machine Learning",
+    relatedTopics: ["k-Means Clustering", "Gradient Descent", "Neural Network"],
   },
 };
 
