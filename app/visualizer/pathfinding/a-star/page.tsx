@@ -11,7 +11,6 @@ import SaveVisualizationButton from "components/visualizer/SaveVisualizationButt
 import { buildAStarSteps } from "src/lib/engine/algorithms/pathfinding";
 import { StepController } from "src/lib/engine/controller";
 import type { PathfindingStep } from "src/lib/engine/types";
-import { describeSearchStep } from "src/lib/education/stepNarration";
 import { useSavedVisualization } from "src/lib/saved-visualizations/useSavedVisualization";
 
 const ROWS = 12;

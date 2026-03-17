@@ -12,6 +12,7 @@ import AlgorithmLayout from "../../../../components/visualizer/AlgorithmLayout";
 import ArrayBars from "../../../../components/visualizer/ArrayBars";
 import Controls from "../../../../components/visualizer/Controls";
 import Pseudocode from "../../../../components/visualizer/Pseudocode";
+import UserArrayInput from "../../../../components/visualizer/UserArrayInput";
 import SaveVisualizationButton from "components/visualizer/SaveVisualizationButton";
 import { describeSearchStep } from "src/lib/education/stepNarration";
 import { useSavedVisualization } from "src/lib/saved-visualizations/useSavedVisualization";
@@ -101,6 +102,16 @@ export default function LinearSearchPage() {
     controllerRef.current.setSpeed(speed);
   }, [speed]);
 
+  const applyCustomArray = (values: number[]) => {
+    controllerRef.current?.pause();
+    controllerRef.current?.reset();
+    setStep(null);
+    setProgress(0);
+    setIsPlaying(false);
+    setArray(values);
+    setTarget(values[Math.floor(values.length / 2)] ?? 0);
+  };
+
   /* ======================
      Play / Pause
   ====================== */
@@ -154,14 +165,24 @@ export default function LinearSearchPage() {
           </div>
         }
       >
-        {/* Target */}
-        <div className="mb-4 flex items-center gap-4">
-          <span className="text-sm font-medium">Target:</span>
-          <input
-            type="number"
-            value={target}
-            onChange={(e) => setTarget(Number(e.target.value))}
-            className="w-24 rounded-md border px-2 py-1 bg-transparent"
+        <div className="mb-4">
+          <UserArrayInput
+            title="Custom array"
+            helper="Enter comma-separated numbers (3–30 values)."
+            defaultValues={array}
+            includeTarget
+            target={target}
+            onTargetChange={setTarget}
+            onApply={applyCustomArray}
+            onRandom={() => {
+              controllerRef.current?.reset();
+              const arr = randomArray();
+              setStep(null);
+              setProgress(0);
+              setIsPlaying(false);
+              setArray(arr);
+              setTarget(arr[Math.floor(arr.length * 0.5)]);
+            }}
           />
         </div>
 

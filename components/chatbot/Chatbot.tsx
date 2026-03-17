@@ -318,8 +318,13 @@ export default function Chatbot() {
                 className="h-[1.65rem] w-[1.65rem]"
               />
               <div>
-                <div className="text-sm font-semibold">AlgoBot</div>
-                <div className="text-xs text-white/45">{historyLabel}</div>
+                <div className="flex items-center gap-2">
+                  <span className="rounded-full border border-white/10 bg-white/[0.05] px-2 py-[2px] text-[10px] font-semibold uppercase tracking-[0.2em] text-white/65">
+                    Chatbot
+                  </span>
+                  <div className="text-sm font-semibold">AlgoBot</div>
+                </div>
+                <div className="text-xs text-white/50">{historyLabel}</div>
               </div>
             </div>
 
@@ -494,6 +499,9 @@ export default function Chatbot() {
           height={34}
           className="h-[2.1rem] w-[2.1rem]"
         />
+        <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 rounded-full border border-white/10 bg-white/[0.06] px-2 py-[2px] text-[10px] font-semibold uppercase tracking-[0.18em] text-white/70">
+          Chat
+        </span>
       </button>
     </div>,
     document.body

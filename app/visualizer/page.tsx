@@ -31,6 +31,18 @@ const tracks = [
     accent: "bg-fuchsia-400/12 text-fuchsia-100 border-fuchsia-300/15",
   },
   {
+    title: "Pathfinding",
+    description: "See how A* and BFS expand frontiers to reach a goal on a grid.",
+    href: "/visualizer/pathfinding",
+    accent: "bg-indigo-400/12 text-indigo-100 border-indigo-300/15",
+  },
+  {
+    title: "Machine Learning",
+    description: "Explore clustering, optimization, and a tiny neural net on 2D points.",
+    href: "/visualizer/ml",
+    accent: "bg-teal-400/12 text-teal-100 border-teal-300/15",
+  },
+  {
     title: "Data Structures",
     description: "Practice stacks, queues, trees, heaps, and linked lists with visual feedback.",
     href: "/visualizer/datastructures",
@@ -272,6 +284,55 @@ export default async function HomePage() {
               difficulty="Medium"
               tag="Data Structure"
               href="/visualizer/datastructures/linked-list"
+            />
+          </CategorySection>
+
+          <CategorySection
+            eyebrow="Explore"
+            title="Pathfinding"
+            href="/visualizer/pathfinding"
+          >
+            <AlgoCard
+              title="A* Pathfinding"
+              description="Heuristic-guided grid search that reconstructs the shortest path."
+              difficulty="Medium"
+              tag="Pathfinding"
+              href="/visualizer/pathfinding/a-star"
+            />
+            <AlgoCard
+              title="Breadth-First Search"
+              description="Unweighted shortest path by exploring the grid level by level."
+              difficulty="Easy"
+              tag="Pathfinding"
+              href="/visualizer/pathfinding/bfs"
+            />
+          </CategorySection>
+
+          <CategorySection
+            eyebrow="Explore"
+            title="Machine Learning"
+            href="/visualizer/ml"
+          >
+            <AlgoCard
+              title="k-Means"
+              description="Assign points to centroids and recenter until clusters settle."
+              difficulty="Easy"
+              tag="ML"
+              href="/visualizer/ml/k-means"
+            />
+            <AlgoCard
+              title="Gradient Descent"
+              description="Roll down a loss surface with adjustable learning rate."
+              difficulty="Easy"
+              tag="ML"
+              href="/visualizer/ml/gradient-descent"
+            />
+            <AlgoCard
+              title="Neural Network"
+              description="A tiny 2-layer net that separates 2D points with training steps."
+              difficulty="Medium"
+              tag="ML"
+              href="/visualizer/ml/neural-network"
             />
           </CategorySection>
         </div>

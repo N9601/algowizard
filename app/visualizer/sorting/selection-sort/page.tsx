@@ -13,6 +13,7 @@ import Controls from "../../../../components/visualizer/Controls";
 import ColorLegend from "../../../../components/visualizer/ColorLegend";
 import Pseudocode from "../../../../components/visualizer/Pseudocode";
 import Navbar from "../../../../components/visualizer/Navbar";
+import UserArrayInput from "../../../../components/visualizer/UserArrayInput";
 import SaveVisualizationButton from "components/visualizer/SaveVisualizationButton";
 import { describeSortingStep } from "src/lib/education/stepNarration";
 import { useSavedVisualization } from "src/lib/saved-visualizations/useSavedVisualization";
@@ -89,6 +90,15 @@ export default function SelectionSortPage() {
     controllerRef.current.setSpeed(speed);
   }, [speed]);
 
+  const applyCustomArray = (values: number[]) => {
+    controllerRef.current?.pause();
+    controllerRef.current?.reset();
+    setCurrentStep(null);
+    setProgress(0);
+    setIsPlaying(false);
+    setArray(values);
+  };
+
   const handlePlayPause = () => {
     if (!controllerRef.current) return;
 
@@ -139,6 +149,22 @@ export default function SelectionSortPage() {
           </div>
         }
       >
+        <div className="mb-4">
+          <UserArrayInput
+            title="Custom array"
+            helper="Enter comma-separated numbers (3–30 values)."
+            defaultValues={array}
+            onApply={applyCustomArray}
+            onRandom={() => {
+              controllerRef.current?.reset();
+              setCurrentStep(null);
+              setProgress(0);
+              setIsPlaying(false);
+              setArray(generateRandomArray());
+            }}
+          />
+        </div>
+
         <ArrayBars
           array={currentStep?.array ?? array}
           comparing={currentStep?.comparing}

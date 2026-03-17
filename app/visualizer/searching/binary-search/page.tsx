@@ -12,6 +12,7 @@ import AlgorithmLayout from "../../../../components/visualizer/AlgorithmLayout";
 import ArrayBars from "../../../../components/visualizer/ArrayBars";
 import Controls from "../../../../components/visualizer/Controls";
 import Pseudocode from "../../../../components/visualizer/Pseudocode";
+import UserArrayInput from "../../../../components/visualizer/UserArrayInput";
 import SaveVisualizationButton from "components/visualizer/SaveVisualizationButton";
 import { describeSearchStep } from "src/lib/education/stepNarration";
 import { useSavedVisualization } from "src/lib/saved-visualizations/useSavedVisualization";
@@ -88,6 +89,17 @@ export default function BinarySearchPage() {
     controllerRef.current.setSpeed(speed);
   }, [speed]);
 
+  const applyCustomArray = (values: number[]) => {
+    const sorted = [...values].sort((a, b) => a - b);
+    controllerRef.current?.pause();
+    controllerRef.current?.reset();
+    setStep(null);
+    setProgress(0);
+    setIsPlaying(false);
+    setArray(sorted);
+    setTarget(sorted[Math.floor(sorted.length / 2)] ?? 0);
+  };
+
   const togglePlay = () => {
     if (!controllerRef.current) return;
 
@@ -136,13 +148,24 @@ export default function BinarySearchPage() {
           </div>
         }
       >
-        <div className="mb-4 flex items-center gap-4">
-          <span className="text-sm font-medium">Target:</span>
-          <input
-            type="number"
-            value={target}
-            onChange={(e) => setTarget(Number(e.target.value))}
-            className="w-24 rounded-md border px-2 py-1"
+        <div className="mb-4">
+          <UserArrayInput
+            title="Custom array (sorted)"
+            helper="Enter comma-separated numbers (3–30 values). We will sort them for you."
+            defaultValues={array}
+            includeTarget
+            target={target}
+            onTargetChange={setTarget}
+            onApply={applyCustomArray}
+            onRandom={() => {
+              controllerRef.current?.reset();
+              const arr = randomSortedArray();
+              setStep(null);
+              setProgress(0);
+              setIsPlaying(false);
+              setArray(arr);
+              setTarget(arr[Math.floor(arr.length / 2)]);
+            }}
           />
         </div>
 
