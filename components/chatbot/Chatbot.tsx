@@ -486,23 +486,26 @@ export default function Chatbot() {
         </div>
       ) : null}
 
-      <button
-        type="button"
-        aria-label="Open AlgoBot"
-        onClick={() => setOpen((current) => !current)}
-        className="pointer-events-auto relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border border-white/10 bg-[#071019]/96 shadow-[0_12px_28px_rgba(0,0,0,0.24)] transition hover:scale-105 hover:border-white/20"
-      >
-        <Image
-          src="/algobot-badge.svg"
-          alt=""
-          width={34}
-          height={34}
-          className="h-[2.1rem] w-[2.1rem]"
-        />
-        <span className="absolute -bottom-2 left-1/2 -translate-x-1/2 rounded-full border border-white/10 bg-white/[0.06] px-2 py-[2px] text-[10px] font-semibold uppercase tracking-[0.18em] text-white/70">
+      <div className="relative">
+        <button
+          type="button"
+          aria-label="Open AlgoBot"
+          onClick={() => setOpen((current) => !current)}
+          className="pointer-events-auto relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-full border border-white/12 bg-[#071019]/96 shadow-[0_12px_28px_rgba(0,0,0,0.24)] transition hover:scale-105 hover:border-white/30 hover:shadow-[0_14px_32px_rgba(0,0,0,0.3)]"
+        >
+          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/6 to-transparent opacity-0 transition group-hover:opacity-100" />
+          <Image
+            src="/algobot-badge.svg"
+            alt=""
+            width={34}
+            height={34}
+            className="h-[2.1rem] w-[2.1rem]"
+          />
+        </button>
+        <div className="pointer-events-none absolute left-1/2 top-full mt-2 -translate-x-1/2 rounded-full border border-white/12 bg-white/[0.08] px-3 py-[6px] text-[10px] font-semibold uppercase tracking-[0.18em] text-white/80 opacity-0 transition group-hover:opacity-100">
           Chat
-        </span>
-      </button>
+        </div>
+      </div>
     </div>,
     document.body
   );
