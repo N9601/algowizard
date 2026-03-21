@@ -43,6 +43,12 @@ const tracks = [
     accent: "bg-teal-400/12 text-teal-100 border-teal-300/15",
   },
   {
+    title: "Decision AI",
+    description: "See Minimax and Alpha–Beta choose optimal moves on tic-tac-toe.",
+    href: "/visualizer/decision",
+    accent: "bg-rose-400/12 text-rose-100 border-rose-300/15",
+  },
+  {
     title: "Data Structures",
     description: "Practice stacks, queues, trees, heaps, and linked lists with visual feedback.",
     href: "/visualizer/datastructures",
@@ -333,6 +339,27 @@ export default async function HomePage() {
               difficulty="Medium"
               tag="ML"
               href="/visualizer/ml/neural-network"
+            />
+          </CategorySection>
+
+          <CategorySection
+            eyebrow="Explore"
+            title="Decision AI"
+            href="/visualizer/decision"
+          >
+            <AlgoCard
+              title="Minimax"
+              description="Explore the full game tree for optimal tic-tac-toe moves."
+              difficulty="Easy"
+              tag="Decision"
+              href="/visualizer/decision/minimax"
+            />
+            <AlgoCard
+              title="Alpha–Beta Pruning"
+              description="See how pruning skips branches while keeping the optimal move."
+              difficulty="Medium"
+              tag="Decision"
+              href="/visualizer/decision/alpha-beta"
             />
           </CategorySection>
         </div>
