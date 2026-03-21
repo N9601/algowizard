@@ -436,6 +436,28 @@ export const KNOWLEDGE_BASE: KnowledgeEntry[] = [
     related: ["heap-sort", "binary-tree"],
   },
   {
+    id: "recursion-call-stack",
+    pathname: "/visualizer/datastructures/recursion",
+    kind: "data-structure",
+    title: "Recursion (Call Stack)",
+    category: "Data Structure",
+    difficulty: "Easy",
+    time: "O(n)",
+    space: "O(n)",
+    summary:
+      "Trace how a recursive factorial function pushes frames onto the call stack and then unwinds them back to the base case.",
+    aliases: ["recursion", "call stack", "recursive factorial"],
+    whenToUse: [
+      "Use it to explain how recursion maps to stack frames.",
+      "Use it to illustrate base cases and unwinding with a concrete example.",
+    ],
+    watchOuts: [
+      "Deep recursion can overflow the call stack if no safeguards are present.",
+      "Every recursive path needs a base case to terminate.",
+    ],
+    related: ["stack"],
+  },
+  {
     id: "a-star",
     pathname: "/visualizer/pathfinding/a-star",
     kind: "algorithm",
@@ -666,6 +688,14 @@ export const ROUTE_CONTEXT: Record<string, RouteContext> = {
       "This section introduces foundational structures for storing, organizing, and traversing data efficiently.",
     category: "Data Structure",
     relatedTopics: ["Stack", "Queue", "Linked List", "Binary Tree", "Heap"],
+  },
+  "/visualizer/datastructures/recursion": {
+    pageType: "data-structure",
+    title: "Recursion (Call Stack)",
+    description:
+      "This page visualizes how recursion expands and unwinds the call stack using a factorial example.",
+    category: "Data Structure",
+    relatedTopics: ["Stack", "Binary Tree"],
   },
   "/visualizer/pathfinding": {
     pageType: "section",

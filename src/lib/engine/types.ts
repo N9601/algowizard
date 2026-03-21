@@ -135,6 +135,22 @@ export interface StackStep {
 }
 
 /* ================================
+   RECURSION TYPES
+================================ */
+
+export interface RecursionFrame {
+  n: number;
+  status: "call" | "returning";
+  result?: number;
+}
+
+export interface RecursionStep {
+  stack: RecursionFrame[];
+  message: string;
+  done?: boolean;
+}
+
+/* ================================
    GENERIC CONTROLLER
 ================================ */
 

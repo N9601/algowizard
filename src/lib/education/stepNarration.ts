@@ -5,6 +5,7 @@ import type {
   SearchStep,
   SortingStep,
   StackStep,
+  RecursionStep,
 } from "../engine/types";
 import type { BinaryTreeInsertStep } from "../engine/algorithms/binaryTreeInsert";
 import type { HeapStep } from "../engine/algorithms/heapInsertSteps";
@@ -231,4 +232,33 @@ export function describeHeapInsertStep(step: HeapStep | null) {
   }
 
   return `Inserted ${step.activeNode} and restored the heap property. Heap size is now ${step.nodes.length}.`;
+}
+
+export function describeRecursionStep(step: RecursionStep | null) {
+  if (!step) {
+    return "Ready to trace recursion. Press play to watch the call stack grow and unwind.";
+  }
+
+  if (step.done) {
+    return "The recursion finished and fully unwound to the caller.";
+  }
+
+  const top = step.stack[step.stack.length - 1];
+  const stackView =
+    step.stack
+      .map((frame) =>
+        frame.status === "returning" && frame.result !== undefined
+          ? `f(${frame.n})=${frame.result}`
+          : `f(${frame.n})`
+      )
+      .join(" → ") || "empty";
+
+  const active =
+    top && top.status === "returning" && top.result !== undefined
+      ? `Active frame: f(${top.n}) = ${top.result}.`
+      : top
+        ? `Active frame: f(${top.n}).`
+        : "";
+
+  return `${step.message}. ${active} Stack: ${stackView}.`;
 }

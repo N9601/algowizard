@@ -19,7 +19,7 @@ export default function Navbar() {
   const navItem = (label: string, href: string) => (
     <Link
       href={href}
-      className={`rounded-full px-3 py-2 transition ${
+      className={`rounded-full px-3 py-2 text-sm transition ${
         isActive(href)
           ? "bg-white/10 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]"
           : "text-white/56 hover:bg-white/[0.05] hover:text-white"
@@ -28,6 +28,21 @@ export default function Navbar() {
       <span>{label}</span>
     </Link>
   );
+
+  const mainLinks = [
+    { label: "Home", href: "/visualizer" },
+    { label: "Compare", href: "/visualizer/compare" },
+    { label: "Sorting", href: "/visualizer/sorting" },
+    { label: "Searching", href: "/visualizer/searching" },
+    { label: "Pathfinding", href: "/visualizer/pathfinding" },
+    { label: "ML", href: "/visualizer/ml" },
+  ];
+
+  const moreLinks = [
+    { label: "Decision", href: "/visualizer/decision" },
+    { label: "Graph", href: "/visualizer/graph" },
+    { label: "Structures", href: "/visualizer/datastructures" },
+  ];
 
   return (
     <nav className="sticky top-0 z-30 border-b border-white/10 bg-[#07101a]/78 px-4 py-3 backdrop-blur-xl md:px-6">
@@ -65,15 +80,34 @@ export default function Navbar() {
 
         <div className="flex flex-wrap items-center justify-end gap-3 text-sm">
           <div className="flex flex-wrap items-center gap-1 rounded-full border border-white/10 bg-white/[0.03] px-2 py-1">
-            {navItem("Home", "/visualizer")}
-            {navItem("Compare", "/visualizer/compare")}
-            {navItem("Sorting", "/visualizer/sorting")}
-            {navItem("Searching", "/visualizer/searching")}
-            {navItem("Pathfinding", "/visualizer/pathfinding")}
-            {navItem("Graph", "/visualizer/graph")}
-            {navItem("Structures", "/visualizer/datastructures")}
-            {navItem("ML", "/visualizer/ml")}
-            {navItem("Decision", "/visualizer/decision")}
+            {mainLinks.map((link) => navItem(link.label, link.href))}
+            <div className="relative group">
+              <button
+                type="button"
+                className={`rounded-full px-3 py-2 text-sm transition ${
+                  moreLinks.some((link) => isActive(link.href))
+                    ? "bg-white/10 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]"
+                    : "text-white/56 hover:bg-white/[0.05] hover:text-white"
+                }`}
+              >
+                More
+              </button>
+              <div className="pointer-events-none absolute right-0 top-full z-40 mt-2 w-44 opacity-0 transition group-hover:pointer-events-auto group-hover:opacity-100">
+                <div className="overflow-hidden rounded-[1rem] border border-white/10 bg-[#071019]/95 p-2 shadow-[0_16px_40px_rgba(0,0,0,0.35)] backdrop-blur-xl">
+                  {moreLinks.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className={`block rounded-[0.8rem] px-3 py-2 text-sm transition hover:bg-white/[0.06] ${
+                        isActive(link.href) ? "text-white" : "text-white/75"
+                      }`}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
           </div>
 
           <AuthNav />

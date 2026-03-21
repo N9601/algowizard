@@ -65,6 +65,14 @@ export default function DataStructuresPage() {
             href="/visualizer/datastructures/heap"
           />
 
+          <AlgoCard
+            title="Recursion (Call Stack)"
+            description="Watch how recursive calls build up and then unwind back to the base case."
+            difficulty="Easy"
+            tag="Data Structure"
+            href="/visualizer/datastructures/recursion"
+          />
+
         </div>
       </main>
     </div>
