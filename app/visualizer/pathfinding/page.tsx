@@ -17,6 +17,12 @@ const cards = [
     href: "/visualizer/pathfinding/bfs",
     tag: "Pathfinding",
   },
+  {
+    title: "Dijkstra (Grid)",
+    description: "Uniform-cost search expanding lowest-cost frontier first; optimal without a heuristic.",
+    href: "/visualizer/pathfinding/dijkstra",
+    tag: "Pathfinding",
+  },
 ];
 
 export default function PathfindingHub() {

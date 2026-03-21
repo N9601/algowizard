@@ -155,6 +155,74 @@ export function buildAStarSteps(config: GridConfig): PathfindingStep[] {
   return steps;
 }
 
+export function buildDijkstraSteps(config: GridConfig) {
+  // Dijkstra is A* with heuristic = 0
+  const zeroHeuristic = () => 0;
+  const { rows, cols, start, goal, walls } = config;
+  type Node = { coord: Coord; f: number; g: number };
+  const open: Node[] = [{ coord: start, f: 0, g: 0 }];
+  const visited = new Set<string>([key(start)]);
+  const parents = new Map<string, string>();
+  const gScore = new Map<string, number>([[key(start), 0]]);
+  const steps: PathfindingStep[] = [];
+
+  while (open.length) {
+    open.sort((a, b) => a.f - b.f);
+    const current = open.shift()!;
+    const currentKey = key(current.coord);
+
+    steps.push(
+      snapshot({
+        current: current.coord,
+        frontier: open.map((o) => o.coord),
+        visited,
+        parents,
+        start,
+        goal,
+        walls,
+      })
+    );
+
+    if (currentKey === key(goal)) break;
+
+    for (const [dr, dc] of DIRS) {
+      const next: Coord = [current.coord[0] + dr, current.coord[1] + dc];
+      const k = key(next);
+      if (!inBounds(next, rows, cols)) continue;
+      if (walls.has(k)) continue;
+
+      const tentativeG = (gScore.get(currentKey) ?? Infinity) + 1;
+      if (tentativeG < (gScore.get(k) ?? Infinity)) {
+        parents.set(k, currentKey);
+        gScore.set(k, tentativeG);
+        const f = tentativeG + zeroHeuristic();
+        const existing = open.find((n) => key(n.coord) === k);
+        if (existing) {
+          existing.g = tentativeG;
+          existing.f = f;
+        } else {
+          open.push({ coord: next, f, g: tentativeG });
+        }
+        visited.add(k);
+      }
+    }
+  }
+
+  steps.push(
+    snapshot({
+      current: goal,
+      frontier: [],
+      visited,
+      parents,
+      start,
+      goal,
+      walls,
+    })
+  );
+
+  return steps;
+}
+
 function heuristic([r, c]: Coord, [gr, gc]: Coord) {
   return Math.abs(r - gr) + Math.abs(c - gc);
 }

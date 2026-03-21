@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 
 import AlgorithmBackground from "components/visualizer/AlgorithmBackground";
 import ArrayBars from "components/visualizer/ArrayBars";
@@ -217,8 +218,23 @@ export default function ComparePage() {
               </h1>
               <p className="mt-4 text-sm leading-7 text-white/62">
                 Pick any two sorting algorithms, play them side by side, and use the
-                narration below each panel to see exactly how their strategies diverge.
+                narration below each panel to see exactly how their strategies diverge. Need
+                to compare searching or pathfinding instead? Visit the links below.
               </p>
+              <div className="mt-4 flex flex-wrap gap-3 text-sm text-white/75">
+                <Link
+                  href="/visualizer/compare/searching"
+                  className="rounded-full border border-white/12 bg-white/[0.05] px-4 py-2 transition hover:border-white/20 hover:text-white"
+                >
+                  Compare searching →
+                </Link>
+                <Link
+                  href="/visualizer/compare/pathfinding"
+                  className="rounded-full border border-white/12 bg-white/[0.05] px-4 py-2 transition hover:border-white/20 hover:text-white"
+                >
+                  Compare pathfinding →
+                </Link>
+              </div>
             </div>
 
             <div className="grid gap-3 sm:grid-cols-2">
