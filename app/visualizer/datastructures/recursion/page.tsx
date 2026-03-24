@@ -16,11 +16,13 @@ export default function RecursionPage() {
   const [progress, setProgress] = useState(0);
   const [speed, setSpeed] = useState(650);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [depth, setDepth] = useState(5);
+  const [pendingDepth, setPendingDepth] = useState(5);
 
   const controllerRef = useRef<StepController<RecursionStep> | null>(null);
 
-  const initialize = (depth = 5) => {
-    const steps = generateRecursionSteps(depth);
+  const initialize = (nextDepth = 5) => {
+    const steps = generateRecursionSteps(nextDepth);
 
     controllerRef.current = new StepController(steps, (newStep) => {
       setStep(newStep);
@@ -29,6 +31,9 @@ export default function RecursionPage() {
           controllerRef.current!.steps.length
       );
     });
+
+    setDepth(nextDepth);
+    setPendingDepth(nextDepth);
   };
 
   useEffect(() => {
@@ -50,8 +55,16 @@ export default function RecursionPage() {
   };
 
   const regenerate = () => {
-    const depth = Math.floor(Math.random() * 3) + 4; // 4–6
-    initialize(depth);
+    const randomDepth = Math.floor(Math.random() * 3) + 4; // 4–6
+    initialize(randomDepth);
+    setStep(null);
+    setProgress(0);
+    setIsPlaying(false);
+  };
+
+  const applyCustomDepth = () => {
+    const bounded = Math.min(10, Math.max(1, pendingDepth));
+    initialize(bounded);
     setStep(null);
     setProgress(0);
     setIsPlaying(false);
@@ -74,6 +87,38 @@ export default function RecursionPage() {
         progressPercent={Math.round(progress * 100)}
       >
         <div className="space-y-6">
+          <div className="flex flex-wrap items-center justify-center gap-3 rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-sm text-white/80">
+            <div className="font-medium text-white">
+              Visualizing factorial of <span className="text-sky-200">n</span>.
+            </div>
+            <div className="flex items-center gap-2">
+              <label className="text-white/60 text-xs uppercase tracking-[0.14em]">
+                n
+              </label>
+              <input
+                type="number"
+                min={1}
+                max={10}
+                value={pendingDepth}
+                onChange={(e) => setPendingDepth(Number(e.target.value))}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") applyCustomDepth();
+                }}
+                className="w-20 rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm text-white outline-none transition focus:border-sky-400 focus:ring-2 focus:ring-sky-500/40"
+              />
+              <button
+                type="button"
+                onClick={applyCustomDepth}
+                className="rounded-xl bg-sky-500 px-3 py-2 text-sm font-semibold text-white shadow hover:bg-sky-400 transition"
+              >
+                Update
+              </button>
+              <span className="text-xs text-white/50">
+                Current n = {depth} (1–10 recommended)
+              </span>
+            </div>
+          </div>
+
           <div className="text-center text-sm text-white/70">
             Newest frame appears on the right. Each frame shows the active call
             or the value being returned.
