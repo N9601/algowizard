@@ -10,6 +10,10 @@ import { StepController } from "src/lib/engine/controller";
 import { generateRecursionSteps } from "src/lib/engine/algorithms/recursion";
 import { RecursionStep } from "src/lib/engine/types";
 import { describeRecursionStep } from "src/lib/education/stepNarration";
+import SaveVisualizationButton from "components/visualizer/SaveVisualizationButton";
+import { useSavedVisualization } from "src/lib/saved-visualizations/useSavedVisualization";
+
+const ROUTE = "/visualizer/datastructures/recursion";
 
 export default function RecursionPage() {
   const [step, setStep] = useState<RecursionStep | null>(null);
@@ -69,6 +73,22 @@ export default function RecursionPage() {
     setProgress(0);
     setIsPlaying(false);
   };
+
+  const { isLoading, loadError, loadedTitle } = useSavedVisualization<{
+    n: number;
+  }>({
+    expectedRoute: ROUTE,
+    applyState: (config) => {
+      const candidate = Number((config as { n?: number }).n ?? 5);
+      const bounded = Number.isFinite(candidate)
+        ? Math.min(10, Math.max(1, Math.round(candidate)))
+        : 5;
+      initialize(bounded);
+      setStep(null);
+      setProgress(0);
+      setIsPlaying(false);
+    },
+  });
 
   const stackEmpty = !step?.stack.length;
 
@@ -173,6 +193,37 @@ export default function RecursionPage() {
           progress={progress}
           isPlaying={isPlaying}
         />
+
+        <div className="grid gap-4 md:grid-cols-2">
+          <SaveVisualizationButton
+            title={`Recursion n=${depth}`}
+            algorithmSlug="recursion-call-stack"
+            route={ROUTE}
+            disabled={isLoading}
+            getPayload={() => ({ n: depth })}
+          />
+
+          <div className="rounded-2xl border border-white/10 bg-white/[0.03] p-4 text-sm text-white/80">
+            <div className="font-semibold text-white">Saved states</div>
+            <p className="mt-2 text-white/65">
+              Open this page with <code className="rounded bg-white/10 px-1">?saved=ID</code>{" "}
+              to restore a saved recursion depth tied to your account.
+            </p>
+            {isLoading ? (
+              <p className="mt-2 text-xs text-white/60">Loading saved state…</p>
+            ) : null}
+            {loadedTitle ? (
+              <p className="mt-2 text-xs text-sky-200">
+                Loaded saved state: {loadedTitle}
+              </p>
+            ) : null}
+            {loadError ? (
+              <p className="mt-2 text-xs text-rose-200">
+                {loadError}
+              </p>
+            ) : null}
+          </div>
+        </div>
       </AlgorithmLayout>
     </>
   );
