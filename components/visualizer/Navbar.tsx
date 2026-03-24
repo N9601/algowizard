@@ -18,6 +18,7 @@ export default function Navbar() {
 
   const navItem = (label: string, href: string) => (
     <Link
+      key={href}
       href={href}
       className={`rounded-full px-3 py-2 text-sm transition ${
         isActive(href)
