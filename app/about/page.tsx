@@ -64,6 +64,10 @@ const builtBy = [
     name: "G Nandakishore Reddy",
     photo: "/team/nandakishore.png",
   },
+  {
+    name: "V Sai Vignesh",
+    photo: "/team/vignesh.png",
+  },
 ];
 
 export default function AboutPage() {
