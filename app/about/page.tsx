@@ -59,6 +59,13 @@ const infrastructure = [
   "A minimal component system tuned for both desktop and mobile learning",
 ];
 
+const builtBy = [
+  {
+    name: "G Nandakishore Reddy",
+    photo: "/team/nandakishore.png",
+  },
+];
+
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-[#050b14] text-white">
@@ -171,6 +178,30 @@ export default function AboutPage() {
             ))}
           </ul>
         </Section>
+
+        <section className="rounded-[1.9rem] border border-white/10 bg-[#08111d]/88 p-7">
+          <h2 className="text-3xl font-semibold text-white">Built By</h2>
+          <p className="mt-3 max-w-3xl text-sm leading-7 text-white/68">
+            The people keeping AlgoWizard calm, clear, and improving week by week.
+          </p>
+          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {builtBy.map((person) => (
+              <div
+                key={person.name}
+                className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-4"
+              >
+                <div className="h-14 w-14 overflow-hidden rounded-full border border-white/15 bg-white/10">
+                  <img
+                    src={person.photo}
+                    alt={person.name}
+                    className="h-full w-full object-cover"
+                  />
+                </div>
+                <div className="text-white font-semibold">{person.name}</div>
+              </div>
+            ))}
+          </div>
+        </section>
 
         <section className="rounded-[2rem] border border-blue-400/15 bg-[linear-gradient(145deg,rgba(14,38,72,0.44),rgba(7,15,28,0.82))] px-8 py-8 text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-blue-200/68">
