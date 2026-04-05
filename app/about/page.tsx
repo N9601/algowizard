@@ -183,24 +183,6 @@ export default function AboutPage() {
           </ul>
         </Section>
 
-        <section>
-          <h2 className="text-3xl font-semibold text-white">Built By</h2>
-          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {builtBy.map((person) => (
-              <div key={person.name} className="flex items-center gap-3">
-                <div className="h-12 w-12 overflow-hidden rounded-full border border-white/12 bg-white/8">
-                  <img
-                    src={person.photo}
-                    alt={person.name}
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-                <div className="text-white font-semibold">{person.name}</div>
-              </div>
-            ))}
-          </div>
-        </section>
-
         <section className="rounded-[2rem] border border-blue-400/15 bg-[linear-gradient(145deg,rgba(14,38,72,0.44),rgba(7,15,28,0.82))] px-8 py-8 text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.24em] text-blue-200/68">
             Built by G Nandakishore Reddy
