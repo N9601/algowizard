@@ -1,10 +1,21 @@
 "use client";
 
+import { useMemo, useState } from "react";
+
 import AlgoCard from "components/visualizer/AlgoCard";
 import AlgorithmBackground from "components/visualizer/AlgorithmBackground";
 import Navbar from "components/visualizer/Navbar";
 
-const allAlgorithms = [
+type AlgoEntry = {
+  title: string;
+  href: string;
+  tag: string;
+  difficulty: string;
+  description: string;
+  keywords?: string[];
+};
+
+const allAlgorithms: AlgoEntry[] = [
   { title: "Bubble Sort", href: "/visualizer/sorting/bubble-sort", tag: "Sorting", difficulty: "Easy", description: "Adjacent swaps to bubble larger values rightward." },
   { title: "Selection Sort", href: "/visualizer/sorting/selection-sort", tag: "Sorting", difficulty: "Easy", description: "Select the minimum and place it at the front." },
   { title: "Insertion Sort", href: "/visualizer/sorting/insertion-sort", tag: "Sorting", difficulty: "Easy", description: "Insert each value into a growing sorted prefix." },
@@ -40,6 +51,18 @@ const allAlgorithms = [
 ];
 
 export default function AllAlgorithmsPage() {
+  const [query, setQuery] = useState("");
+
+  const filtered = useMemo(() => {
+    const term = query.trim().toLowerCase();
+    if (!term) return allAlgorithms;
+    return allAlgorithms.filter((a) =>
+      `${a.title} ${a.tag} ${a.description}`
+        .toLowerCase()
+        .includes(term)
+    );
+  }, [query]);
+
   return (
     <div className="min-h-screen bg-[#050b14] text-white">
       <Navbar />
@@ -56,10 +79,37 @@ export default function AllAlgorithmsPage() {
           <p className="max-w-3xl text-sm leading-7 text-white/68">
             A flat list of every visualizer—no categories, just jump straight to what you need.
           </p>
+          <div className="mt-4 max-w-xl">
+            <label className="relative block">
+              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-white/50">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  className="h-4 w-4"
+                >
+                  <circle cx="11" cy="11" r="7" />
+                  <line x1="16.65" y1="16.65" x2="21" y2="21" />
+                </svg>
+              </span>
+              <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search any algorithm"
+                className="w-full rounded-xl border border-white/10 bg-white/[0.04] py-3 pl-10 pr-3 text-sm text-white placeholder:text-white/40 outline-none transition focus:border-white/20"
+              />
+            </label>
+            <p className="mt-2 text-xs text-white/50">
+              Showing {filtered.length} of {allAlgorithms.length}
+            </p>
+          </div>
         </header>
 
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {allAlgorithms.map((item) => (
+          {filtered.map((item) => (
             <AlgoCard
               key={item.href}
               title={item.title}
