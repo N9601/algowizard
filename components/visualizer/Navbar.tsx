@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 
 import AuthNav from "components/auth/AuthNav";
 
 export default function Navbar() {
   const pathname = usePathname();
+  const [showSearch, setShowSearch] = useState(false);
 
   const isActive = (path: string) => {
     if (path === "/visualizer") {
@@ -43,6 +45,35 @@ export default function Navbar() {
     { label: "Decision", href: "/visualizer/decision" },
     { label: "Graph", href: "/visualizer/graph" },
     { label: "Structures", href: "/visualizer/datastructures" },
+  ];
+
+  const algorithmLinks = [
+    { label: "Bubble Sort", href: "/visualizer/sorting/bubble-sort" },
+    { label: "Selection Sort", href: "/visualizer/sorting/selection-sort" },
+    { label: "Insertion Sort", href: "/visualizer/sorting/insertion-sort" },
+    { label: "Merge Sort", href: "/visualizer/sorting/merge-sort" },
+    { label: "Quick Sort", href: "/visualizer/sorting/quick-sort" },
+    { label: "Heap Sort", href: "/visualizer/sorting/heap-sort" },
+    { label: "Linear Search", href: "/visualizer/searching/linear-search" },
+    { label: "Binary Search", href: "/visualizer/searching/binary-search" },
+    { label: "A* Pathfinding", href: "/visualizer/pathfinding/a-star" },
+    { label: "BFS Pathfinding", href: "/visualizer/pathfinding/bfs" },
+    { label: "Dijkstra (Grid)", href: "/visualizer/pathfinding/dijkstra" },
+    { label: "DFS", href: "/visualizer/graph/dfs" },
+    { label: "BFS", href: "/visualizer/graph/bfs" },
+    { label: "Topological Sort", href: "/visualizer/graph/topological" },
+    { label: "Bellman-Ford", href: "/visualizer/graph/bellman-ford" },
+    { label: "Stack", href: "/visualizer/datastructures/stack" },
+    { label: "Queue", href: "/visualizer/datastructures/queue" },
+    { label: "Linked List", href: "/visualizer/datastructures/linked-list" },
+    { label: "Binary Tree", href: "/visualizer/datastructures/tree" },
+    { label: "Heap (Structure)", href: "/visualizer/datastructures/heap" },
+    { label: "Recursion", href: "/visualizer/datastructures/recursion" },
+    { label: "k-Means", href: "/visualizer/ml/k-means" },
+    { label: "Gradient Descent", href: "/visualizer/ml/gradient-descent" },
+    { label: "Neural Network", href: "/visualizer/ml/neural-network" },
+    { label: "Minimax", href: "/visualizer/decision/minimax" },
+    { label: "Alpha–Beta", href: "/visualizer/decision/alpha-beta" },
   ];
 
   return (
@@ -104,6 +135,53 @@ export default function Navbar() {
                       }`}
                     >
                       {link.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+            <div
+              className="relative"
+              onMouseEnter={() => setShowSearch(true)}
+              onMouseLeave={() => setShowSearch(false)}
+            >
+              <button
+                type="button"
+                aria-label="All algorithms"
+                className={`rounded-full p-2 text-sm transition ${
+                  showSearch
+                    ? "bg-white/10 text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.05)]"
+                    : "text-white/56 hover:bg-white/[0.05] hover:text-white"
+                }`}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  className="h-4 w-4"
+                >
+                  <circle cx="11" cy="11" r="7" />
+                  <line x1="16.65" y1="16.65" x2="21" y2="21" />
+                </svg>
+              </button>
+              <div
+                className={`absolute right-0 top-full z-40 mt-2 w-72 rounded-2xl border border-white/10 bg-[#071019]/95 p-3 shadow-[0_16px_40px_rgba(0,0,0,0.35)] backdrop-blur-xl transition ${
+                  showSearch ? "opacity-100" : "pointer-events-none opacity-0"
+                }`}
+              >
+                <p className="mb-2 text-xs font-semibold uppercase tracking-[0.2em] text-white/50">
+                  All Algorithms
+                </p>
+                <div className="flex flex-col gap-1 text-sm">
+                  {algorithmLinks.map((item) => (
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      className="rounded-xl px-3 py-2 text-white/80 transition hover:bg-white/[0.07] hover:text-white"
+                    >
+                      {item.label}
                     </Link>
                   ))}
                 </div>

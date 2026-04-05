@@ -183,18 +183,12 @@ export default function AboutPage() {
           </ul>
         </Section>
 
-        <section className="rounded-[1.9rem] border border-white/10 bg-[#08111d]/88 p-7">
+        <section>
           <h2 className="text-3xl font-semibold text-white">Built By</h2>
-          <p className="mt-3 max-w-3xl text-sm leading-7 text-white/68">
-            The people keeping AlgoWizard calm, clear, and improving week by week.
-          </p>
-          <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <div className="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {builtBy.map((person) => (
-              <div
-                key={person.name}
-                className="flex items-center gap-4 rounded-2xl border border-white/10 bg-white/[0.04] p-4"
-              >
-                <div className="h-14 w-14 overflow-hidden rounded-full border border-white/15 bg-white/10">
+              <div key={person.name} className="flex items-center gap-3">
+                <div className="h-12 w-12 overflow-hidden rounded-full border border-white/12 bg-white/8">
                   <img
                     src={person.photo}
                     alt={person.name}
