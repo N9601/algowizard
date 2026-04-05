@@ -6,11 +6,13 @@ import AlgoCard from "components/visualizer/AlgoCard";
 import AlgorithmBackground from "components/visualizer/AlgorithmBackground";
 import Navbar from "components/visualizer/Navbar";
 
+type Difficulty = "Easy" | "Medium" | "Hard";
+
 type AlgoEntry = {
   title: string;
   href: string;
   tag: string;
-  difficulty: string;
+  difficulty: Difficulty;
   description: string;
   keywords?: string[];
 };
