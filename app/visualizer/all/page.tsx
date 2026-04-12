@@ -49,7 +49,9 @@ const ALGORITHMS: AlgoEntry[] = [
 
   { title: "Minimax", href: "/visualizer/decision/minimax", tag: "Decision AI", difficulty: "Easy", description: "Game tree search for optimal play." },
   { title: "Alpha–Beta", href: "/visualizer/decision/alpha-beta", tag: "Decision AI", difficulty: "Medium", description: "Prune branches that cannot change the outcome." },
-].sort((a, b) => a.title.localeCompare(b.title));
+];
+
+ALGORITHMS.sort((a, b) => a.title.localeCompare(b.title));
 
 export default function AllAlgorithmsPage() {
   const [query, setQuery] = useState("");
