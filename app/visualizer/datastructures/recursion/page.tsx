@@ -41,6 +41,8 @@ export default function RecursionPage() {
   };
 
   useEffect(() => {
+    // Initial setup
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     initialize(5);
     return () => controllerRef.current?.pause();
   }, []);

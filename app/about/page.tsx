@@ -59,17 +59,6 @@ const infrastructure = [
   "A minimal component system tuned for both desktop and mobile learning",
 ];
 
-const builtBy = [
-  {
-    name: "G Nandakishore Reddy",
-    photo: "/team/nandakishore.png",
-  },
-  {
-    name: "V Sai Vignesh",
-    photo: "/team/vignesh.png",
-  },
-];
-
 export default function AboutPage() {
   return (
     <div className="min-h-screen bg-[#050b14] text-white">
