@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -46,12 +45,11 @@ export default function DFSPage() {
     },
   });
 
-  // 🔹 Generate tree ONLY on client (fixes hydration)
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setGraph(generateTree());
   }, []);
 
-  // 🔹 Rebuild DFS steps when graph or speed changes
   useEffect(() => {
     if (!graph) return;
 
@@ -74,18 +72,18 @@ export default function DFSPage() {
   }, [speed]);
 
   const togglePlay = () => {
-  if (!controllerRef.current) return;
+    if (!controllerRef.current) return;
 
-  if (isPlaying) {
-    controllerRef.current.pause();
-  } else {
-    controllerRef.current.play();
-  }
+    if (isPlaying) {
+      controllerRef.current.pause();
+    } else {
+      controllerRef.current.play();
+    }
 
-  setIsPlaying(!isPlaying);
-};
+    setIsPlaying(!isPlaying);
+  };
 
-  if (!graph) return null; // prevents SSR mismatch
+  if (!graph) return null;
 
   return (
     <>
@@ -134,8 +132,8 @@ export default function DFSPage() {
 
         <Controls
           onPlay={togglePlay}
-            onStepForward={() => controllerRef.current?.stepForward()}
-  onStepBack={() => controllerRef.current?.stepBackward()}
+          onStepForward={() => controllerRef.current?.stepForward()}
+          onStepBack={() => controllerRef.current?.stepBackward()}
           statusText={describeGraphStep("dfs", step)}
           onReset={() => {
             controllerRef.current?.reset();

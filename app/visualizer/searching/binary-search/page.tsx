@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -6,11 +5,11 @@ import { generateBinarySearchSteps } from "../../../../src/lib/engine/algorithms
 import { StepController } from "../../../../src/lib/engine/controller";
 import { SearchStep } from "../../../../src/lib/engine/types";
 
-import Navbar from "../../../../components/visualizer/Navbar";
 import AlgorithmBackground from "../../../../components/visualizer/AlgorithmBackground";
 import AlgorithmLayout from "../../../../components/visualizer/AlgorithmLayout";
 import ArrayBars from "../../../../components/visualizer/ArrayBars";
 import Controls from "../../../../components/visualizer/Controls";
+import Navbar from "../../../../components/visualizer/Navbar";
 import Pseudocode from "../../../../components/visualizer/Pseudocode";
 import UserArrayInput from "../../../../components/visualizer/UserArrayInput";
 import SaveVisualizationButton from "components/visualizer/SaveVisualizationButton";
@@ -18,8 +17,9 @@ import { describeSearchStep } from "src/lib/education/stepNarration";
 import { useSavedVisualization } from "src/lib/saved-visualizations/useSavedVisualization";
 
 function randomSortedArray(size = 15) {
-  return Array.from({ length: size }, () =>
-    Math.floor(Math.random() * 100) + 1
+  return Array.from(
+    { length: size },
+    () => Math.floor(Math.random() * 100) + 1
   ).sort((a, b) => a - b);
 }
 
@@ -60,6 +60,7 @@ export default function BinarySearchPage() {
     initializedRef.current = true;
 
     const arr = randomSortedArray();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setArray(arr);
     setTarget(arr[Math.floor(Math.random() * arr.length)]);
   }, []);
@@ -175,7 +176,6 @@ export default function BinarySearchPage() {
           foundIndex={step?.foundIndex}
           low={step?.low}
           high={step?.high}
-          
         />
 
         {step?.notFound && (
@@ -186,8 +186,8 @@ export default function BinarySearchPage() {
 
         <Controls
           onPlay={togglePlay}
-            onStepForward={() => controllerRef.current?.stepForward()}
-  onStepBack={() => controllerRef.current?.stepBackward()}
+          onStepForward={() => controllerRef.current?.stepForward()}
+          onStepBack={() => controllerRef.current?.stepBackward()}
           statusText={describeSearchStep("binary", step, array, target)}
           onReset={() => {
             controllerRef.current?.reset();

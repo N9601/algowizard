@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -6,23 +5,20 @@ import { generateLinearSearchSteps } from "../../../../src/lib/engine/algorithms
 import { StepController } from "../../../../src/lib/engine/controller";
 import { SearchStep } from "../../../../src/lib/engine/types";
 
-import Navbar from "../../../../components/visualizer/Navbar";
 import AlgorithmBackground from "../../../../components/visualizer/AlgorithmBackground";
 import AlgorithmLayout from "../../../../components/visualizer/AlgorithmLayout";
 import ArrayBars from "../../../../components/visualizer/ArrayBars";
 import Controls from "../../../../components/visualizer/Controls";
+import Navbar from "../../../../components/visualizer/Navbar";
 import Pseudocode from "../../../../components/visualizer/Pseudocode";
 import UserArrayInput from "../../../../components/visualizer/UserArrayInput";
 import SaveVisualizationButton from "components/visualizer/SaveVisualizationButton";
 import { describeSearchStep } from "src/lib/education/stepNarration";
 import { useSavedVisualization } from "src/lib/saved-visualizations/useSavedVisualization";
-
-/* ======================
-   Helpers
-====================== */
 function randomArray(size = 15) {
-  return Array.from({ length: size }, () =>
-    Math.floor(Math.random() * 100) + 1
+  return Array.from(
+    { length: size },
+    () => Math.floor(Math.random() * 100) + 1
   );
 }
 
@@ -33,7 +29,6 @@ type SavedLinearSearchState = {
 };
 
 export default function LinearSearchPage() {
-  const [mounted, setMounted] = useState(false);
   const [array, setArray] = useState<number[]>([]);
   const [target, setTarget] = useState<number>(0);
   const [step, setStep] = useState<SearchStep | null>(null);
@@ -59,28 +54,16 @@ export default function LinearSearchPage() {
     },
   });
 
-  /* ======================
-     Hydration guard
-  ====================== */
   useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  /* ======================
-     Init after mount
-  ====================== */
-  useEffect(() => {
-    if (!mounted || initializedRef.current) return;
+    if (initializedRef.current) return;
     initializedRef.current = true;
 
     const arr = randomArray();
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setArray(arr);
     setTarget(arr[Math.floor(Math.random() * arr.length)]);
-  }, [mounted]);
+  }, []);
 
-  /* ======================
-     Controller
-  ====================== */
   useEffect(() => {
     if (!array.length) return;
 
@@ -112,9 +95,6 @@ export default function LinearSearchPage() {
     setTarget(values[Math.floor(values.length / 2)] ?? 0);
   };
 
-  /* ======================
-     Play / Pause
-  ====================== */
   const togglePlay = () => {
     if (!controllerRef.current) return;
 
@@ -123,8 +103,6 @@ export default function LinearSearchPage() {
 
     setIsPlaying((p) => !p);
   };
-
-  if (!mounted) return null;
 
   return (
     <>
@@ -186,26 +164,22 @@ export default function LinearSearchPage() {
           />
         </div>
 
-        {/* Bars */}
         <ArrayBars
           array={step?.array ?? array}
           currentIndex={step?.currentIndex}
           foundIndex={step?.foundIndex}
-          
         />
 
-        {/* Not found message */}
         {step?.notFound && (
           <div className="mt-4 text-center text-red-400 font-semibold">
             Target not found in array
           </div>
         )}
 
-        {/* Controls */}
         <Controls
           onPlay={togglePlay}
-            onStepForward={() => controllerRef.current?.stepForward()}
-  onStepBack={() => controllerRef.current?.stepBackward()}
+          onStepForward={() => controllerRef.current?.stepForward()}
+          onStepBack={() => controllerRef.current?.stepBackward()}
           statusText={describeSearchStep("linear", step, array, target)}
           onReset={() => {
             controllerRef.current?.reset();

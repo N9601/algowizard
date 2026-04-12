@@ -19,8 +19,9 @@ import { describeSortingStep } from "src/lib/education/stepNarration";
 import { useSavedVisualization } from "src/lib/saved-visualizations/useSavedVisualization";
 
 function generateRandomArray(size = 15) {
-  return Array.from({ length: size }, () =>
-    Math.floor(Math.random() * 100) + 1
+  return Array.from(
+    { length: size },
+    () => Math.floor(Math.random() * 100) + 1
   );
 }
 
@@ -53,38 +54,33 @@ export default function SelectionSortPage() {
     },
   });
 
-  // Initialize array (client-only)
   useEffect(() => {
-  if (initializedRef.current) return;
-  initializedRef.current = true;
+    if (initializedRef.current) return;
+    initializedRef.current = true;
 
-  // eslint-disable-next-line react-hooks/set-state-in-effect
-  setArray(generateRandomArray());
-}, []);
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setArray(generateRandomArray());
+  }, []);
 
-
-  // Create controller when array changes
   useEffect(() => {
-  if (array.length === 0) return;
+    if (array.length === 0) return;
 
-  const steps = generateSelectionSortSteps(array);
+    const steps = generateSelectionSortSteps(array);
 
-  controllerRef.current = new StepController(steps, (step) => {
-    setCurrentStep(step);
+    controllerRef.current = new StepController(steps, (step) => {
+      setCurrentStep(step);
 
-    if (!controllerRef.current) return;
+      if (!controllerRef.current) return;
 
-    setProgress(
-      controllerRef.current.currentStepIndex /
-        controllerRef.current.steps.length
-    );
-  });
+      setProgress(
+        controllerRef.current.currentStepIndex /
+          controllerRef.current.steps.length
+      );
+    });
 
-  return () => controllerRef.current?.pause();
-}, [array]);
+    return () => controllerRef.current?.pause();
+  }, [array]);
 
-
-  // Sync speed
   useEffect(() => {
     if (!controllerRef.current) return;
     controllerRef.current.setSpeed(speed);
@@ -174,8 +170,8 @@ export default function SelectionSortPage() {
 
         <Controls
           onPlay={handlePlayPause}
-            onStepForward={() => controllerRef.current?.stepForward()}
-  onStepBack={() => controllerRef.current?.stepBackward()}
+          onStepForward={() => controllerRef.current?.stepForward()}
+          onStepBack={() => controllerRef.current?.stepBackward()}
           statusText={describeSortingStep("selection", currentStep, array)}
           onReset={() => {
             controllerRef.current?.reset();

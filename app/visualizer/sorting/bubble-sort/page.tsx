@@ -20,8 +20,9 @@ import { useSavedVisualization } from "src/lib/saved-visualizations/useSavedVisu
 
 
 function generateRandomArray(size = 15) {
-  return Array.from({ length: size }, () =>
-    Math.floor(Math.random() * 100) + 1
+  return Array.from(
+    { length: size },
+    () => Math.floor(Math.random() * 100) + 1
   );
 }
 
@@ -54,7 +55,6 @@ export default function BubbleSortPage() {
     },
   });
 
-  // Client-only array init (SSR safe)
   useEffect(() => {
     if (initializedRef.current) return;
     initializedRef.current = true;
@@ -63,7 +63,6 @@ export default function BubbleSortPage() {
     setArray(generateRandomArray());
   }, []);
 
-  // Create controller when array changes
   useEffect(() => {
     if (array.length === 0) return;
 
@@ -83,7 +82,6 @@ export default function BubbleSortPage() {
     return () => controllerRef.current?.pause();
   }, [array]);
 
-  // Keep speed synced
   useEffect(() => {
     if (!controllerRef.current) return;
     controllerRef.current.setSpeed(speed);
@@ -98,7 +96,6 @@ export default function BubbleSortPage() {
     setArray(values);
   };
 
-  // Play / Pause toggle
   const handlePlayPause = () => {
     if (!controllerRef.current) return;
 
@@ -114,7 +111,7 @@ export default function BubbleSortPage() {
 
   return (
     <>
-     <Navbar />
+      <Navbar />
       <AlgorithmBackground variant="sorting" />
 
       <AlgorithmLayout
@@ -175,8 +172,8 @@ export default function BubbleSortPage() {
 
         <Controls
           onPlay={handlePlayPause}
-           onStepForward={() => controllerRef.current?.stepForward()}
-  onStepBack={() => controllerRef.current?.stepBackward()}
+          onStepForward={() => controllerRef.current?.stepForward()}
+          onStepBack={() => controllerRef.current?.stepBackward()}
           statusText={describeSortingStep("bubble", currentStep, array)}
           onReset={() => {
             controllerRef.current?.reset();

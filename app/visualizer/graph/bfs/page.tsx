@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { useEffect, useRef, useState } from "react";
@@ -7,11 +6,11 @@ import { GraphStep } from "../../../../src/lib/engine/types";
 import { generateBFSSteps } from "../../../../src/lib/engine/algorithms/bfs";
 import { generateTree } from "../../../../src/lib/engine/graph/treeGenerator";
 
-import Navbar from "../../../../components/visualizer/Navbar";
 import AlgorithmBackground from "../../../../components/visualizer/AlgorithmBackground";
 import AlgorithmLayout from "../../../../components/visualizer/AlgorithmLayout";
 import Controls from "../../../../components/visualizer/Controls";
 import GraphCanvas from "../../../../components/visualizer/GraphCanvas";
+import Navbar from "../../../../components/visualizer/Navbar";
 import Pseudocode from "../../../../components/visualizer/Pseudocode";
 import SaveVisualizationButton from "components/visualizer/SaveVisualizationButton";
 import { describeGraphStep } from "src/lib/education/stepNarration";
@@ -46,8 +45,8 @@ export default function BFSPage() {
     },
   });
 
-  // client-only graph generation
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setGraph(generateTree());
   }, []);
 
@@ -72,17 +71,17 @@ export default function BFSPage() {
     controllerRef.current.setSpeed(speed);
   }, [speed]);
 
- const togglePlay = () => {
-  if (!controllerRef.current) return;
+  const togglePlay = () => {
+    if (!controllerRef.current) return;
 
-  if (isPlaying) {
-    controllerRef.current.pause();
-  } else {
-    controllerRef.current.play();
-  }
+    if (isPlaying) {
+      controllerRef.current.pause();
+    } else {
+      controllerRef.current.play();
+    }
 
-  setIsPlaying(!isPlaying);
-};
+    setIsPlaying(!isPlaying);
+  };
 
   if (!graph) return null;
 
@@ -133,8 +132,8 @@ export default function BFSPage() {
 
         <Controls
           onPlay={togglePlay}
-            onStepForward={() => controllerRef.current?.stepForward()}
-  onStepBack={() => controllerRef.current?.stepBackward()}
+          onStepForward={() => controllerRef.current?.stepForward()}
+          onStepBack={() => controllerRef.current?.stepBackward()}
           statusText={describeGraphStep("bfs", step)}
           onReset={() => {
             controllerRef.current?.reset();
