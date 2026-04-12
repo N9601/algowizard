@@ -14,10 +14,9 @@ type AlgoEntry = {
   tag: string;
   difficulty: Difficulty;
   description: string;
-  keywords?: string[];
 };
 
-const allAlgorithms: AlgoEntry[] = [
+const ALGORITHMS: AlgoEntry[] = [
   { title: "Bubble Sort", href: "/visualizer/sorting/bubble-sort", tag: "Sorting", difficulty: "Easy", description: "Adjacent swaps to bubble larger values rightward." },
   { title: "Selection Sort", href: "/visualizer/sorting/selection-sort", tag: "Sorting", difficulty: "Easy", description: "Select the minimum and place it at the front." },
   { title: "Insertion Sort", href: "/visualizer/sorting/insertion-sort", tag: "Sorting", difficulty: "Easy", description: "Insert each value into a growing sorted prefix." },
@@ -50,18 +49,16 @@ const allAlgorithms: AlgoEntry[] = [
 
   { title: "Minimax", href: "/visualizer/decision/minimax", tag: "Decision AI", difficulty: "Easy", description: "Game tree search for optimal play." },
   { title: "Alpha–Beta", href: "/visualizer/decision/alpha-beta", tag: "Decision AI", difficulty: "Medium", description: "Prune branches that cannot change the outcome." },
-];
+].sort((a, b) => a.title.localeCompare(b.title));
 
 export default function AllAlgorithmsPage() {
   const [query, setQuery] = useState("");
 
   const filtered = useMemo(() => {
     const term = query.trim().toLowerCase();
-    if (!term) return allAlgorithms;
-    return allAlgorithms.filter((a) =>
-      `${a.title} ${a.tag} ${a.description}`
-        .toLowerCase()
-        .includes(term)
+    if (!term) return ALGORITHMS;
+    return ALGORITHMS.filter((a) =>
+      `${a.title} ${a.tag} ${a.description}`.toLowerCase().includes(term)
     );
   }, [query]);
 
@@ -105,7 +102,7 @@ export default function AllAlgorithmsPage() {
               />
             </label>
             <p className="mt-2 text-xs text-white/50">
-              Showing {filtered.length} of {allAlgorithms.length}
+              Showing {filtered.length} of {ALGORITHMS.length}
             </p>
           </div>
         </header>
