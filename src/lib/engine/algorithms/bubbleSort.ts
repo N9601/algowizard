@@ -39,7 +39,16 @@ export function generateBubbleSortSteps(
       sortedIndices: [...sortedIndices],
     });
 
-    if (!swapped) break;
+    if (!swapped) {
+      // A pass with no swaps means the unsorted prefix is already in order.
+      if (sortedIndices.length < n) {
+        steps.push({
+          array: [...arr],
+          sortedIndices: Array.from({ length: n }, (_, k) => k),
+        });
+      }
+      break;
+    }
   }
 
   return steps;

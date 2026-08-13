@@ -52,6 +52,18 @@ describe.each(Object.entries(sorters))("%s sort", (_name, generate) => {
     expect(finalArray(steps, input)).toEqual(expected);
   });
 
+  it.each(Object.entries(cases).filter(([, input]) => input.length > 0))(
+    "marks every index sorted in the final step for %s input",
+    (_label, input) => {
+      const steps = generate(input);
+      const last = steps[steps.length - 1];
+
+      expect([...(last.sortedIndices ?? [])].sort((a, b) => a - b)).toEqual(
+        input.map((_, index) => index)
+      );
+    }
+  );
+
   it("does not mutate its input", () => {
     const input = [4, 2, 9, 1];
     generate(input);
