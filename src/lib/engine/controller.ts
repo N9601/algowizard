@@ -66,11 +66,12 @@ export class StepController<TStep>
     }
   }
 
-  
   stepBackward() {
-    if (this.currentStepIndex > 0) {
-      this.currentStepIndex--;
-      this.onUpdate(this.steps[this.currentStepIndex]);
+    // currentStepIndex points at the next step to show, so the step on
+    // screen is currentStepIndex - 1 and the previous one is two back.
+    if (this.currentStepIndex > 1) {
+      this.currentStepIndex -= 2;
+      this.stepForward();
     }
   }
 
