@@ -31,7 +31,7 @@ export function generateRecursionSteps(n = 4): RecursionStep[] {
     const partial = factorial(k - 1);
     const result = k * partial;
 
-    stack.push({ n: k, status: "returning", result });
+    stack[stack.length - 1] = { n: k, status: "returning", result };
     capture(`Compute ${k} × ${partial} = ${result}`);
     stack.pop();
     capture(`Return ${result} to caller`);
