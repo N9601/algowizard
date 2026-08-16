@@ -72,8 +72,10 @@ export class StepController<TStep>
     this.status = status;
   }
 
-  play() {
+  play(speed = this.speed) {
     if (this.status === "running") return;
+
+    this.speed = speed;
 
     if (this.steps.length === 0) {
       this.status = "completed";

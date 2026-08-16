@@ -100,8 +100,7 @@ export default function BubbleSortPage() {
       controllerRef.current.pause();
       setIsPlaying(false);
     } else {
-      controllerRef.current.setSpeed(speed);
-      controllerRef.current.play();
+      controllerRef.current.play(speed);
       setIsPlaying(true);
     }
   };

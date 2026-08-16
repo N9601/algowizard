@@ -86,7 +86,7 @@ export default function InsertionSortPage() {
   const togglePlay = () => {
     if (!controller.current) return;
     if (isPlaying) controller.current.pause();
-    else controller.current.play();
+    else controller.current.play(speed);
     setIsPlaying(!isPlaying);
   };
 

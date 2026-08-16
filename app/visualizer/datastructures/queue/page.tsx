@@ -50,7 +50,7 @@ export default function QueuePage() {
     if (!controllerRef.current) return;
 
     if (isPlaying) controllerRef.current.pause();
-    else controllerRef.current.play();
+    else controllerRef.current.play(speed);
 
     setIsPlaying(!isPlaying);
   };

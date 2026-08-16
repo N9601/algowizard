@@ -115,7 +115,7 @@ export default function NeuralNetPage() {
   const togglePlay = () => {
     if (!controllerRef.current) return;
     if (isPlaying) controllerRef.current.pause();
-    else controllerRef.current.play();
+    else controllerRef.current.play(speed);
     setIsPlaying((v) => !v);
   };
 

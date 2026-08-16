@@ -53,7 +53,7 @@ export default function BinaryTreePage() {
     if (isPlaying)
       controllerRef.current.pause();
     else
-      controllerRef.current.play();
+      controllerRef.current.play(speed);
 
     setIsPlaying(!isPlaying);
   };

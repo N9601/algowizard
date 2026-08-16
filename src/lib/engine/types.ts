@@ -160,7 +160,7 @@ export interface AlgorithmController<TStep> {
   currentStepIndex: number;
   speed: number;
 
-  play(): void;
+  play(speed?: number): void;
   pause(): void;
   stepForward(): void;
   stepBackward(): void;

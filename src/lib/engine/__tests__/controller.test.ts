@@ -115,6 +115,16 @@ describe("StepController playback", () => {
     expect(controller.status).toBe("completed");
   });
 
+  it("plays at the speed passed to play", () => {
+    const { controller, shown } = setup(10);
+
+    controller.play(200);
+    vi.advanceTimersByTime(450);
+
+    expect(controller.speed).toBe(200);
+    expect(shown).toEqual([0, 1]);
+  });
+
   it("reports completion as soon as the last step is shown", () => {
     const shown: number[] = [];
     let completed = 0;

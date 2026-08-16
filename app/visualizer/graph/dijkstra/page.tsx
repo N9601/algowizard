@@ -69,7 +69,7 @@ export default function DijkstraPage() {
   if (isPlaying) {
     controllerRef.current.pause();
   } else {
-    controllerRef.current.play();
+    controllerRef.current.play(speed);
   }
 
   setIsPlaying(!isPlaying);

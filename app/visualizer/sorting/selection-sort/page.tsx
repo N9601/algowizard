@@ -99,7 +99,7 @@ export default function SelectionSortPage() {
       controllerRef.current.pause();
       setIsPlaying(false);
     } else {
-      controllerRef.current.play();
+      controllerRef.current.play(speed);
       setIsPlaying(true);
     }
   };

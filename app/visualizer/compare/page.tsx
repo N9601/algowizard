@@ -171,8 +171,8 @@ export default function ComparePage() {
       return;
     }
 
-    leftControllerRef.current.play();
-    rightControllerRef.current.play();
+    leftControllerRef.current.play(speed);
+    rightControllerRef.current.play(speed);
     setIsPlaying(true);
   }
 

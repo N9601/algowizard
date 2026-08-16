@@ -102,8 +102,8 @@ export default function CompareSearching() {
       rightController.current.pause();
       setIsPlaying(false);
     } else {
-      leftController.current.play();
-      rightController.current.play();
+      leftController.current.play(speed);
+      rightController.current.play(speed);
       setIsPlaying(true);
     }
   };
