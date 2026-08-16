@@ -76,11 +76,7 @@ export default function BinarySearchPage() {
         controllerRef.current!.currentStepIndex /
           controllerRef.current!.steps.length
       );
-
-      if (s.done) {
-        setIsPlaying(false);
-      }
-    });
+    }, () => setIsPlaying(false));
 
     return () => controllerRef.current?.pause();
   }, [array, target]);

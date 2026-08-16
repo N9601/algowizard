@@ -66,7 +66,7 @@ export default function InsertionSortPage() {
       setProgress(
         controller.current!.currentStepIndex / controller.current!.steps.length
       );
-    });
+    }, () => setIsPlaying(false));
 
     return () => controller.current?.pause();
   }, [array]);

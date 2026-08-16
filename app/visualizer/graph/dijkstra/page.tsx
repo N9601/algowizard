@@ -56,7 +56,7 @@ export default function DijkstraPage() {
         controllerRef.current!.currentStepIndex /
           controllerRef.current!.steps.length
       );
-    });
+    }, () => setIsPlaying(false));
 
     return () => controllerRef.current?.pause();
   }, [graph]);
@@ -150,7 +150,7 @@ export default function DijkstraPage() {
                 controllerRef.current!.currentStepIndex /
                   controllerRef.current!.steps.length
               );
-            });
+            }, () => setIsPlaying(false));
 
             controllerRef.current.setSpeed(speed);
 

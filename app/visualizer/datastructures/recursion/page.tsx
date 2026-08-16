@@ -34,7 +34,7 @@ export default function RecursionPage() {
         controllerRef.current!.currentStepIndex /
           controllerRef.current!.steps.length
       );
-    });
+    }, () => setIsPlaying(false));
 
     setDepth(nextDepth);
     setPendingDepth(nextDepth);

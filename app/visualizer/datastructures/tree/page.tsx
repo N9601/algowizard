@@ -38,7 +38,7 @@ export default function BinaryTreePage() {
         controllerRef.current!.steps.length
       );
 
-    });
+    }, () => setIsPlaying(false));
 
     return () => controllerRef.current?.pause();
 

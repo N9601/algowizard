@@ -94,6 +94,39 @@ describe("StepController playback", () => {
     expect(controller.status).toBe("completed");
   });
 
+  it("reports completion as soon as the last step is shown", () => {
+    const shown: number[] = [];
+    let completed = 0;
+    const controller = new StepController(
+      [0, 1, 2],
+      (step) => shown.push(step),
+      () => completed++
+    );
+
+    controller.setSpeed(100);
+    controller.play();
+    vi.advanceTimersByTime(300);
+
+    expect(shown).toEqual([0, 1, 2]);
+    expect(controller.status).toBe("completed");
+    expect(completed).toBe(1);
+
+    vi.advanceTimersByTime(1000);
+    expect(completed).toBe(1);
+  });
+
+  it("replays from the first step when played after finishing", () => {
+    const { controller, shown } = setup(2);
+
+    controller.setSpeed(100);
+    controller.play();
+    vi.advanceTimersByTime(200);
+    controller.play();
+    vi.advanceTimersByTime(200);
+
+    expect(shown).toEqual([0, 1, 0, 1]);
+  });
+
   it("stops advancing while paused", () => {
     const { controller, shown } = setup(5);
 

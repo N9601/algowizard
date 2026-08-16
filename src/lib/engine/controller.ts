@@ -10,21 +10,36 @@ export class StepController<TStep>
 
   private interval: NodeJS.Timeout | null = null;
   private onUpdate: (step: TStep) => void;
+  private onComplete?: () => void;
 
-  constructor(steps: TStep[], onUpdate: (step: TStep) => void) {
+  constructor(
+    steps: TStep[],
+    onUpdate: (step: TStep) => void,
+    onComplete?: () => void
+  ) {
     this.steps = steps;
     this.onUpdate = onUpdate;
+    this.onComplete = onComplete;
   }
 
   private advanceStep = () => {
     if (this.currentStepIndex >= this.steps.length) {
-      this.stop("completed");
+      this.finish();
       return;
     }
 
     this.onUpdate(this.steps[this.currentStepIndex]);
     this.currentStepIndex++;
+
+    if (this.currentStepIndex >= this.steps.length) {
+      this.finish();
+    }
   };
+
+  private finish() {
+    this.stop("completed");
+    this.onComplete?.();
+  }
 
   private scheduleInterval() {
     if (this.interval) {
@@ -46,9 +61,14 @@ export class StepController<TStep>
   play() {
     if (this.status === "running") return;
 
-    if (this.currentStepIndex >= this.steps.length) {
+    if (this.steps.length === 0) {
       this.status = "completed";
       return;
+    }
+
+    // Pressing play after the last step replays the run from the start.
+    if (this.currentStepIndex >= this.steps.length) {
+      this.currentStepIndex = 0;
     }
 
     this.status = "running";

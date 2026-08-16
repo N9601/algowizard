@@ -57,7 +57,7 @@ export default function AlphaBetaPage() {
         controllerRef.current.currentStepIndex /
           controllerRef.current.steps.length
       );
-    });
+    }, () => setIsPlaying(false));
     controllerRef.current.setSpeed(speed);
     setTimeout(() => {
       setCurrentIndex(0);

@@ -105,7 +105,7 @@ export default function NeuralNetPage() {
           `Step ${controllerRef.current.currentStepIndex + 1}: boundary adapts to ${points.length} points.`
         );
       }
-    });
+    }, () => setIsPlaying(false));
     controllerRef.current.setSpeed(speed);
     setTimeout(() => setIsPlaying(false), 0);
   }, [states, speed, points.length]);

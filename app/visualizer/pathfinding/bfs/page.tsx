@@ -99,10 +99,7 @@ export default function BfsPathPage() {
             controllerRef.current.steps.length
         );
       }
-      if (s.found) {
-        setIsPlaying(false);
-      }
-    });
+    }, () => setIsPlaying(false));
     controllerRef.current.setSpeed(speed);
     setStep(steps[0] ?? null);
     setProgress(0);

@@ -82,7 +82,7 @@ export default function GradientDescentPage() {
           )}) with loss ${s.z.toFixed(3)}.`
         );
       }
-    });
+    }, () => setIsPlaying(false));
     controllerRef.current.setSpeed(speed);
     setTimeout(() => {
       setCurrentIndex(0);

@@ -67,6 +67,8 @@ export default function ComparePathfinding() {
               Math.max(leftController.current.steps.length, 1)
           : 0
       );
+    }, () => {
+      if (rightController.current?.status !== "running") setIsPlaying(false);
     });
     leftController.current.setSpeed(speed);
     setTimeout(() => {
@@ -85,6 +87,8 @@ export default function ComparePathfinding() {
               Math.max(rightController.current.steps.length, 1)
           : 0
       );
+    }, () => {
+      if (leftController.current?.status !== "running") setIsPlaying(false);
     });
     rightController.current.setSpeed(speed);
     setTimeout(() => {

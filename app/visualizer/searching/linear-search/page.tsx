@@ -75,7 +75,7 @@ export default function LinearSearchPage() {
         controllerRef.current!.currentStepIndex /
           controllerRef.current!.steps.length
       );
-    });
+    }, () => setIsPlaying(false));
 
     return () => controllerRef.current?.pause();
   }, [array, target]);

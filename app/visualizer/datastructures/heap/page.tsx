@@ -34,7 +34,7 @@ export default function HeapPage() {
         controllerRef.current!.currentStepIndex /
           controllerRef.current!.steps.length
       );
-    });
+    }, () => setIsPlaying(false));
 
     return () => controllerRef.current?.pause();
   }, []);

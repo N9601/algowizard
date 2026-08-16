@@ -61,7 +61,7 @@ export default function BFSPage() {
         controllerRef.current!.currentStepIndex /
           controllerRef.current!.steps.length
       );
-    });
+    }, () => setIsPlaying(false));
 
     return () => controllerRef.current?.pause();
   }, [graph]);
