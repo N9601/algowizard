@@ -94,10 +94,7 @@ export default function NeuralNetPage() {
     controllerRef.current = new StepController(states, () => {
       if (!controllerRef.current) return;
       setStepIdx(controllerRef.current.currentStepIndex);
-      setProgress(
-        controllerRef.current.currentStepIndex /
-          controllerRef.current.steps.length
-      );
+      setProgress(controllerRef.current.progress);
       const s =
         controllerRef.current.steps[controllerRef.current.currentStepIndex];
       if (s) {

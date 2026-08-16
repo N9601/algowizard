@@ -94,10 +94,7 @@ export default function AStarPage() {
     controllerRef.current = new StepController(steps, (s) => {
       setStep(s);
       if (controllerRef.current) {
-        setProgress(
-          controllerRef.current.currentStepIndex /
-            controllerRef.current.steps.length
-        );
+        setProgress(controllerRef.current.progress);
       }
     }, () => setIsPlaying(false));
     controllerRef.current.setSpeed(speed);

@@ -62,8 +62,7 @@ export default function CompareSearching() {
       setLeftStep(s);
       setLeftProgress(
         leftController.current
-          ? leftController.current.currentStepIndex /
-              Math.max(leftController.current.steps.length, 1)
+          ? leftController.current.progress
           : 0
       );
     }, () => {
@@ -82,8 +81,7 @@ export default function CompareSearching() {
       setRightStep(s);
       setRightProgress(
         rightController.current
-          ? rightController.current.currentStepIndex /
-              Math.max(rightController.current.steps.length, 1)
+          ? rightController.current.progress
           : 0
       );
     }, () => {

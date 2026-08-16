@@ -62,10 +62,7 @@ export default function KMeansPage() {
       setCurrentIndex((i) => controllerRef.current?.currentStepIndex ?? i);
       setCurrentStep(controllerRef.current?.steps[controllerRef.current.currentStepIndex] ?? null);
       if (controllerRef.current) {
-        setProgress(
-          controllerRef.current.currentStepIndex /
-            controllerRef.current.steps.length
-        );
+        setProgress(controllerRef.current.progress);
       }
     }, () => setIsPlaying(false));
     controllerRef.current.setSpeed(speed);

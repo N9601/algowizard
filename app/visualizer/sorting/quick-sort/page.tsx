@@ -63,9 +63,7 @@ export default function QuickSortPage() {
     const steps = generateQuickSortSteps(array);
     controller.current = new StepController(steps, (s) => {
       setStep(s);
-      setProgress(
-        controller.current!.currentStepIndex / controller.current!.steps.length
-      );
+      setProgress(controller.current!.progress);
     }, () => setIsPlaying(false));
 
     return () => controller.current?.pause();

@@ -53,6 +53,27 @@ describe("StepController stepping", () => {
     expect(shown).toEqual([0]);
   });
 
+  it("reaches full progress on the last step, also inside the callback", () => {
+    const seen: number[] = [];
+    const controller: StepController<string> = new StepController(
+      ["a", "b", "c", "d"],
+      () => seen.push(controller.progress)
+    );
+
+    expect(controller.progress).toBe(0);
+    controller.stepForward();
+    controller.stepForward();
+    controller.stepForward();
+    controller.stepForward();
+    controller.stepBackward();
+
+    expect(seen).toEqual([0.25, 0.5, 0.75, 1, 0.75]);
+    expect(controller.progress).toBe(0.75);
+
+    controller.reset();
+    expect(controller.progress).toBe(0);
+  });
+
   it("reports the displayed step index inside the update callback", () => {
     const indices: number[] = [];
     const controller: StepController<string> = new StepController(

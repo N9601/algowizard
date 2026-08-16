@@ -70,10 +70,7 @@ export default function GradientDescentPage() {
       setStep(s);
       setCurrentIndex(controllerRef.current?.currentStepIndex ?? 0);
       if (controllerRef.current) {
-        setProgress(
-          controllerRef.current.currentStepIndex /
-            controllerRef.current.steps.length
-        );
+        setProgress(controllerRef.current.progress);
       }
       if (s) {
         setNarration(

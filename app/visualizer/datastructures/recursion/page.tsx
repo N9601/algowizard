@@ -30,10 +30,7 @@ export default function RecursionPage() {
 
     controllerRef.current = new StepController(steps, (newStep) => {
       setStep(newStep);
-      setProgress(
-        controllerRef.current!.currentStepIndex /
-          controllerRef.current!.steps.length
-      );
+      setProgress(controllerRef.current!.progress);
     }, () => setIsPlaying(false));
 
     setDepth(nextDepth);

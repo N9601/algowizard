@@ -115,10 +115,7 @@ export default function ComparePage() {
     leftControllerRef.current = new StepController(steps, (step) => {
       setLeftStep(step);
       if (!leftControllerRef.current) return;
-      setLeftProgress(
-        leftControllerRef.current.currentStepIndex /
-          Math.max(leftControllerRef.current.steps.length, 1)
-      );
+      setLeftProgress(leftControllerRef.current.progress);
     });
 
     return () => leftControllerRef.current?.pause();
@@ -134,10 +131,7 @@ export default function ComparePage() {
     rightControllerRef.current = new StepController(steps, (step) => {
       setRightStep(step);
       if (!rightControllerRef.current) return;
-      setRightProgress(
-        rightControllerRef.current.currentStepIndex /
-          Math.max(rightControllerRef.current.steps.length, 1)
-      );
+      setRightProgress(rightControllerRef.current.progress);
     });
 
     return () => rightControllerRef.current?.pause();

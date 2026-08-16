@@ -33,10 +33,7 @@ export default function BinaryTreePage() {
 
       setStep(s);
 
-      setProgress(
-        controllerRef.current!.currentStepIndex /
-        controllerRef.current!.steps.length
-      );
+      setProgress(controllerRef.current!.progress);
 
     }, () => setIsPlaying(false));
 

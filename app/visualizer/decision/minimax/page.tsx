@@ -53,10 +53,7 @@ export default function MinimaxPage() {
     controllerRef.current = new StepController(steps, () => {
       if (!controllerRef.current) return;
       setCurrentIndex(controllerRef.current.currentStepIndex);
-      setProgress(
-        controllerRef.current.currentStepIndex /
-          controllerRef.current.steps.length
-      );
+      setProgress(controllerRef.current.progress);
     }, () => setIsPlaying(false));
     controllerRef.current.setSpeed(speed);
     setTimeout(() => {

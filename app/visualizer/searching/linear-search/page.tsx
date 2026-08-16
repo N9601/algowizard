@@ -71,10 +71,7 @@ export default function LinearSearchPage() {
 
     controllerRef.current = new StepController(steps, (s) => {
       setStep(s);
-      setProgress(
-        controllerRef.current!.currentStepIndex /
-          controllerRef.current!.steps.length
-      );
+      setProgress(controllerRef.current!.progress);
     }, () => setIsPlaying(false));
 
     return () => controllerRef.current?.pause();

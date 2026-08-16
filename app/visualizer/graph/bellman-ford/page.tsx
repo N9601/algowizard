@@ -58,10 +58,7 @@ export default function BellmanFordPage() {
 
     controllerRef.current = new StepController(steps, s => {
       setStep(s);
-      setProgress(
-        controllerRef.current!.currentStepIndex /
-          controllerRef.current!.steps.length
-      );
+      setProgress(controllerRef.current!.progress);
     }, () => setIsPlaying(false));
 
     return () => controllerRef.current?.pause();
@@ -103,10 +100,7 @@ export default function BellmanFordPage() {
     // Create NEW controller
     controllerRef.current = new StepController(steps, s => {
       setStep(s);
-      setProgress(
-        controllerRef.current!.currentStepIndex /
-          controllerRef.current!.steps.length
-      );
+      setProgress(controllerRef.current!.progress);
     }, () => setIsPlaying(false));
 
     controllerRef.current.setSpeed(speed);

@@ -8,6 +8,10 @@ export class StepController<TStep>
   currentStepIndex = 0;
   speed = 500;
 
+  // Number of steps shown so far, used for progress. Unlike currentStepIndex
+  // it does not change meaning inside the onUpdate callback.
+  private shownCount = 0;
+
   private interval: NodeJS.Timeout | null = null;
   private onUpdate: (step: TStep) => void;
   private onComplete?: () => void;
@@ -28,13 +32,23 @@ export class StepController<TStep>
       return;
     }
 
-    this.onUpdate(this.steps[this.currentStepIndex]);
-    this.currentStepIndex++;
+    this.showNextStep();
 
     if (this.currentStepIndex >= this.steps.length) {
       this.finish();
     }
   };
+
+  private showNextStep() {
+    this.shownCount = this.currentStepIndex + 1;
+    this.onUpdate(this.steps[this.currentStepIndex]);
+    this.currentStepIndex++;
+  }
+
+  /** Fraction of the steps shown so far, from 0 to 1. */
+  get progress() {
+    return this.steps.length === 0 ? 0 : this.shownCount / this.steps.length;
+  }
 
   private finish() {
     this.stop("completed");
@@ -81,8 +95,7 @@ export class StepController<TStep>
 
   stepForward() {
     if (this.currentStepIndex < this.steps.length) {
-      this.onUpdate(this.steps[this.currentStepIndex]);
-      this.currentStepIndex++;
+      this.showNextStep();
     }
   }
 
@@ -98,6 +111,7 @@ export class StepController<TStep>
   reset() {
     this.stop("idle");
     this.currentStepIndex = 0;
+    this.shownCount = 0;
   }
 
   setSpeed(speed: number) {

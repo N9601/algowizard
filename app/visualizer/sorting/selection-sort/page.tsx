@@ -72,10 +72,7 @@ export default function SelectionSortPage() {
 
       if (!controllerRef.current) return;
 
-      setProgress(
-        controllerRef.current.currentStepIndex /
-          controllerRef.current.steps.length
-      );
+      setProgress(controllerRef.current.progress);
     }, () => setIsPlaying(false));
 
     return () => controllerRef.current?.pause();

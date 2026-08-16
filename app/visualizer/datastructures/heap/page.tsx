@@ -30,10 +30,7 @@ export default function HeapPage() {
     controllerRef.current = new StepController(HEAP_STEPS, (s) => {
       setStep(s);
 
-      setProgress(
-        controllerRef.current!.currentStepIndex /
-          controllerRef.current!.steps.length
-      );
+      setProgress(controllerRef.current!.progress);
     }, () => setIsPlaying(false));
 
     return () => controllerRef.current?.pause();
