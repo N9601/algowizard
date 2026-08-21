@@ -65,14 +65,17 @@ export default function KMeansPage() {
         setProgress(controllerRef.current.progress);
       }
     }, () => setIsPlaying(false));
-    controllerRef.current.setSpeed(speed);
     setTimeout(() => {
       setCurrentIndex(0);
       setCurrentStep(steps[0] ?? null);
       setProgress(0);
       setIsPlaying(false);
     }, 0);
-  }, [steps, speed]);
+  }, [steps]);
+
+  useEffect(() => {
+    controllerRef.current?.setSpeed(speed);
+  }, [speed]);
 
   const previousStep =
     currentStep && currentIndex > 0 ? steps[currentIndex - 1] : null;

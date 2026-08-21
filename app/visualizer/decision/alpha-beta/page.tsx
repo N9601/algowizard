@@ -55,13 +55,16 @@ export default function AlphaBetaPage() {
       setCurrentIndex(controllerRef.current.currentStepIndex);
       setProgress(controllerRef.current.progress);
     }, () => setIsPlaying(false));
-    controllerRef.current.setSpeed(speed);
     setTimeout(() => {
       setCurrentIndex(0);
       setProgress(0);
       setIsPlaying(false);
     }, 0);
-  }, [steps, speed]);
+  }, [steps]);
+
+  useEffect(() => {
+    controllerRef.current?.setSpeed(speed);
+  }, [speed]);
 
   const currentStep = steps[currentIndex] ?? steps[0] ?? null;
 

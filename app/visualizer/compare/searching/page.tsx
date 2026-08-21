@@ -68,13 +68,12 @@ export default function CompareSearching() {
     }, () => {
       if (rightController.current?.status !== "running") setIsPlaying(false);
     });
-    leftController.current.setSpeed(speed);
     setTimeout(() => {
       setLeftStep(leftSteps[0] ?? null);
       setLeftProgress(0);
       setIsPlaying(false);
     }, 0);
-  }, [leftSteps, speed]);
+  }, [leftSteps]);
 
   useEffect(() => {
     rightController.current = new StepController(rightSteps, (s) => {
@@ -87,13 +86,17 @@ export default function CompareSearching() {
     }, () => {
       if (leftController.current?.status !== "running") setIsPlaying(false);
     });
-    rightController.current.setSpeed(speed);
     setTimeout(() => {
       setRightStep(rightSteps[0] ?? null);
       setRightProgress(0);
       setIsPlaying(false);
     }, 0);
-  }, [rightSteps, speed]);
+  }, [rightSteps]);
+
+  useEffect(() => {
+    leftController.current?.setSpeed(speed);
+    rightController.current?.setSpeed(speed);
+  }, [speed]);
 
   const togglePlay = () => {
     if (!leftController.current || !rightController.current) return;

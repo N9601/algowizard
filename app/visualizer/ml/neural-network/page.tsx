@@ -103,9 +103,12 @@ export default function NeuralNetPage() {
         );
       }
     }, () => setIsPlaying(false));
-    controllerRef.current.setSpeed(speed);
     setTimeout(() => setIsPlaying(false), 0);
-  }, [states, speed, points.length]);
+  }, [states, points.length]);
+
+  useEffect(() => {
+    controllerRef.current?.setSpeed(speed);
+  }, [speed]);
 
   useEffect(() => {
     if (!controllerRef.current) return;
