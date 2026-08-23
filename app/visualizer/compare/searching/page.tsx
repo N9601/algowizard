@@ -73,6 +73,7 @@ export default function CompareSearching() {
       setLeftProgress(0);
       setIsPlaying(false);
     }, 0);
+    return () => leftController.current?.pause();
   }, [leftSteps]);
 
   useEffect(() => {
@@ -91,6 +92,7 @@ export default function CompareSearching() {
       setRightProgress(0);
       setIsPlaying(false);
     }, 0);
+    return () => rightController.current?.pause();
   }, [rightSteps]);
 
   useEffect(() => {

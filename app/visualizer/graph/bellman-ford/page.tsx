@@ -87,26 +87,8 @@ export default function BellmanFordPage() {
       controllerRef.current.pause();
     }
 
-    // Generate new graph
-    const newGraph = generateWeightedGraph();
-
-    // Generate new steps
-    const steps = generateBellmanFordSteps(
-      newGraph.edges,
-      newGraph.nodes.map(n => n.id),
-      newGraph.start
-    );
-
-    // Create NEW controller
-    controllerRef.current = new StepController(steps, s => {
-      setStep(s);
-      setProgress(controllerRef.current!.progress);
-    }, () => setIsPlaying(false));
-
-    controllerRef.current.setSpeed(speed);
-
-    // Update graph state (triggers useEffect)
-    setGraph(newGraph);
+    // Update graph state (triggers useEffect, which builds the controller)
+    setGraph(generateWeightedGraph());
     setStep(null);
     setProgress(0);
     setIsPlaying(false);

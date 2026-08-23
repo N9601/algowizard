@@ -66,6 +66,7 @@ export default function DijkstraPage() {
 
   useEffect(() => {
     rebuildController();
+    return () => controllerRef.current?.pause();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gridConfig]);
 
@@ -74,6 +75,8 @@ export default function DijkstraPage() {
   }, [speed]);
 
   const rebuildController = () => {
+    controllerRef.current?.pause();
+
     const steps = buildDijkstraSteps({
       rows: ROWS,
       cols: COLS,

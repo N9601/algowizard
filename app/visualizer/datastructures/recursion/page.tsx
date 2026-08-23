@@ -28,6 +28,7 @@ export default function RecursionPage() {
   const initialize = (nextDepth = 5) => {
     const steps = generateRecursionSteps(nextDepth);
 
+    controllerRef.current?.pause();
     controllerRef.current = new StepController(steps, (newStep) => {
       setStep(newStep);
       setProgress(controllerRef.current!.progress);

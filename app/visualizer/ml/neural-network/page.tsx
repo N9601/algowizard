@@ -104,6 +104,7 @@ export default function NeuralNetPage() {
       }
     }, () => setIsPlaying(false));
     setTimeout(() => setIsPlaying(false), 0);
+    return () => controllerRef.current?.pause();
   }, [states, points.length]);
 
   useEffect(() => {

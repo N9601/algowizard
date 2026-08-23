@@ -60,6 +60,7 @@ export default function MinimaxPage() {
       setProgress(0);
       setIsPlaying(false);
     }, 0);
+    return () => controllerRef.current?.pause();
   }, [steps]);
 
   useEffect(() => {

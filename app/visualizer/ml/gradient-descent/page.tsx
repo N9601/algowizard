@@ -57,6 +57,7 @@ export default function GradientDescentPage() {
 
   useEffect(() => {
     rebuild();
+    return () => controllerRef.current?.pause();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [steps]);
 
@@ -66,6 +67,7 @@ export default function GradientDescentPage() {
 
   const rebuild = () => {
     if (!steps.length) return;
+    controllerRef.current?.pause();
     controllerRef.current = new StepController(steps, (s) => {
       setStep(s);
       setCurrentIndex(controllerRef.current?.currentStepIndex ?? 0);

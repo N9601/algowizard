@@ -134,21 +134,9 @@ export default function DijkstraPage() {
             setIsPlaying(false);
           }}
           onNew={() => {
-            const newGraph = generateWeightedGraph();
-
-            const steps = generateDijkstraSteps(
-              newGraph.adjacencyList,
-              newGraph.start
-            );
-
-            controllerRef.current = new StepController(steps, (s) => {
-              setStep(s);
-              setProgress(controllerRef.current!.progress);
-            }, () => setIsPlaying(false));
-
-            controllerRef.current.setSpeed(speed);
-
-            setGraph(newGraph);
+            // The graph effect builds the new controller.
+            controllerRef.current?.pause();
+            setGraph(generateWeightedGraph());
             setStep(null);
             setProgress(0);
             setIsPlaying(false);

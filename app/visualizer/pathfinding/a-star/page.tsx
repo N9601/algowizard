@@ -79,10 +79,13 @@ export default function AStarPage() {
 
   useEffect(() => {
     rebuildController();
+    return () => controllerRef.current?.pause();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [gridConfig]);
 
   const rebuildController = () => {
+    controllerRef.current?.pause();
+
     const steps = buildAStarSteps({
       rows: ROWS,
       cols: COLS,
