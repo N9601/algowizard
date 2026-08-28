@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState } from "react";
 
+import { safeRedirectPath } from "src/lib/auth/safeRedirect";
 import { createClient } from "src/lib/supabase/client";
 import { hasSupabaseEnv } from "src/lib/supabase/env";
 
@@ -24,7 +25,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    setNext(params.get("next") ?? "/saved");
+    setNext(safeRedirectPath(params.get("next")));
   }, []);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
