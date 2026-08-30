@@ -1,10 +1,8 @@
 import { NextResponse } from "next/server";
 
 import { generateGeminiReply } from "../../../src/lib/chatbot/gemini";
-import {
-  ChatConversationSummary,
-  ChatRequestBody,
-} from "../../../src/lib/chatbot/types";
+import { parseChatRequest } from "../../../src/lib/chatbot/requestValidation";
+import { ChatConversationSummary } from "../../../src/lib/chatbot/types";
 import { hasSupabaseEnv } from "../../../src/lib/supabase/env";
 import { createClient } from "../../../src/lib/supabase/server";
 
@@ -116,21 +114,28 @@ export async function GET(request: Request) {
 }
 
 export async function POST(req: Request) {
-  const body = (await req.json()) as ChatRequestBody;
-  const message = body.message?.trim();
+  let rawBody: unknown;
 
-  if (!message) {
+  try {
+    rawBody = await req.json();
+  } catch {
     return NextResponse.json(
-      { reply: "Ask me about the current page, an algorithm, or a data structure." },
+      { reply: "Invalid chat request." },
       { status: 400 }
     );
   }
 
+  const parsed = parseChatRequest(rawBody);
+
+  if (!parsed.ok) {
+    return NextResponse.json({ reply: parsed.reply }, { status: 400 });
+  }
+
+  const body = parsed.body;
+  const message = body.message;
+
   try {
-    const { reply, context, model } = await generateGeminiReply({
-      ...body,
-      message,
-    });
+    const { reply, context, model } = await generateGeminiReply(body);
 
     let conversationId = body.conversationId ?? null;
     let recentConversations: ChatConversationSummary[] = [];

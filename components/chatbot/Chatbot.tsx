@@ -12,6 +12,7 @@ import {
 import { createPortal } from "react-dom";
 
 import { resolveChatContext } from "../../src/lib/chatbot/catalog";
+import { MAX_MESSAGE_LENGTH } from "../../src/lib/chatbot/requestValidation";
 import {
   ChatConversationSummary,
   ChatHistoryResponse,
@@ -466,6 +467,7 @@ export default function Chatbot() {
             <div className="flex items-end gap-2">
               <textarea
                 rows={3}
+                maxLength={MAX_MESSAGE_LENGTH}
                 value={input}
                 onChange={(event) => setInput(event.target.value)}
                 onKeyDown={handleKeyDown}
