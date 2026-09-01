@@ -12,17 +12,11 @@ export async function GET() {
   }
 
   const supabase = await createClient();
+  // getUser() reports a missing session as an error, so check for the user
+  // first: signed-out visitors get a 401 rather than a server error.
   const {
     data: { user },
-    error: userError,
   } = await supabase.auth.getUser();
-
-  if (userError) {
-    return NextResponse.json(
-      { error: userError.message },
-      { status: 500 }
-    );
-  }
 
   if (!user) {
     return NextResponse.json(
