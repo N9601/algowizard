@@ -70,7 +70,7 @@ export default function SaveVisualizationButton({
       }
 
       setStatus(
-        savedId
+        savedId && savedId === String(data.visualization?.id)
           ? "Updated this saved state."
           : "Saved this state. This link now points to it."
       );

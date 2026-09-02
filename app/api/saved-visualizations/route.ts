@@ -4,6 +4,9 @@ import { createClient } from "src/lib/supabase/server";
 import { hasSupabaseEnv } from "src/lib/supabase/env";
 import type { Json } from "src/types/database";
 
+const UUID_PATTERN =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
 type CreateSavedVisualizationBody = {
   id?: string;
   title?: string;
@@ -94,32 +97,45 @@ export async function POST(request: Request) {
     );
   }
 
-  const query = body.id
-    ? supabase
-        .from("saved_visualizations")
-        .update({
-          title: body.title,
-          algorithm_slug: body.algorithmSlug,
-          route: body.route,
-          config: body.config,
-        })
-        .eq("id", body.id)
-        .eq("user_id", user.id)
-        .select("*")
-        .single()
-    : supabase
-        .from("saved_visualizations")
-        .insert({
-          user_id: user.id,
-          title: body.title,
-          algorithm_slug: body.algorithmSlug,
-          route: body.route,
-          config: body.config,
-        })
-        .select("*")
-        .single();
+  const fields = {
+    title: body.title,
+    algorithm_slug: body.algorithmSlug,
+    route: body.route,
+    config: body.config,
+  };
 
-  const { data, error } = await query;
+  if (typeof body.id === "string" && UUID_PATTERN.test(body.id)) {
+    const { data: updated, error: updateError } = await supabase
+      .from("saved_visualizations")
+      .update(fields)
+      .eq("id", body.id)
+      .eq("user_id", user.id)
+      .select("*")
+      .maybeSingle();
+
+    if (updateError) {
+      return NextResponse.json(
+        { error: updateError.message },
+        { status: 500 }
+      );
+    }
+
+    if (updated) {
+      return NextResponse.json({ visualization: updated });
+    }
+
+    // The loaded state belongs to someone else or was deleted, so save a
+    // new copy for this user below instead of failing.
+  }
+
+  const { data, error } = await supabase
+    .from("saved_visualizations")
+    .insert({
+      user_id: user.id,
+      ...fields,
+    })
+    .select("*")
+    .single();
 
   if (error) {
     return NextResponse.json(
