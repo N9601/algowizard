@@ -18,9 +18,21 @@ const VALID_TOPIC_TYPES = new Set([
 ]);
 
 export async function POST(request: Request) {
-  const body = (await request.json()) as ProgressRequestBody;
-  const topicSlug = body.topicSlug?.trim();
-  const topicType = body.topicType?.trim();
+  let body: ProgressRequestBody;
+
+  try {
+    body = (await request.json()) as ProgressRequestBody;
+  } catch {
+    return NextResponse.json(
+      { error: "Request body must be valid JSON." },
+      { status: 400 }
+    );
+  }
+
+  const topicSlug =
+    typeof body?.topicSlug === "string" ? body.topicSlug.trim() : undefined;
+  const topicType =
+    typeof body?.topicType === "string" ? body.topicType.trim() : undefined;
 
   if (!topicSlug || !topicType || !VALID_TOPIC_TYPES.has(topicType)) {
     return NextResponse.json(

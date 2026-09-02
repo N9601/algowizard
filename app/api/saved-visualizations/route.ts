@@ -68,9 +68,26 @@ export async function POST(request: Request) {
     );
   }
 
-  const body = (await request.json()) as CreateSavedVisualizationBody;
+  let body: CreateSavedVisualizationBody;
 
-  if (!body.title || !body.algorithmSlug || !body.route || body.config === undefined) {
+  try {
+    body = (await request.json()) as CreateSavedVisualizationBody;
+  } catch {
+    return NextResponse.json(
+      { error: "Request body must be valid JSON." },
+      { status: 400 }
+    );
+  }
+
+  if (
+    typeof body?.title !== "string" ||
+    typeof body.algorithmSlug !== "string" ||
+    typeof body.route !== "string" ||
+    !body.title ||
+    !body.algorithmSlug ||
+    !body.route ||
+    body.config === undefined
+  ) {
     return NextResponse.json(
       { error: "Missing required saved visualization fields." },
       { status: 400 }
