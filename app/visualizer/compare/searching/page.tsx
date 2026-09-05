@@ -26,10 +26,8 @@ function generateArray(size = 15) {
 }
 
 export default function CompareSearching() {
-  const [array, setArray] = useState<number[]>(() => generateArray());
-  const [target, setTarget] = useState<number>(() =>
-    Math.floor(Math.random() * 100)
-  );
+  const [array, setArray] = useState<number[]>([]);
+  const [target, setTarget] = useState<number>(0);
   const [leftAlgo, setLeftAlgo] = useState<Algo>("linear");
   const [rightAlgo, setRightAlgo] = useState<Algo>("binary");
   const [leftStep, setLeftStep] = useState<SearchStep | null>(null);
@@ -42,22 +40,34 @@ export default function CompareSearching() {
   const leftController = useRef<StepController<SearchStep> | null>(null);
   const rightController = useRef<StepController<SearchStep> | null>(null);
 
+  useEffect(() => {
+    // Generated after mount so the server and client render the same markup.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setArray(generateArray());
+    setTarget(Math.floor(Math.random() * 100));
+  }, []);
+
   const leftSteps = useMemo(
     () =>
-      leftAlgo === "binary"
-        ? generateBinarySearchSteps(array, target)
-        : generateLinearSearchSteps(array, target),
+      !array.length
+        ? []
+        : leftAlgo === "binary"
+          ? generateBinarySearchSteps(array, target)
+          : generateLinearSearchSteps(array, target),
     [array, target, leftAlgo]
   );
   const rightSteps = useMemo(
     () =>
-      rightAlgo === "binary"
-        ? generateBinarySearchSteps(array, target)
-        : generateLinearSearchSteps(array, target),
+      !array.length
+        ? []
+        : rightAlgo === "binary"
+          ? generateBinarySearchSteps(array, target)
+          : generateLinearSearchSteps(array, target),
     [array, target, rightAlgo]
   );
 
   useEffect(() => {
+    if (!leftSteps.length) return;
     leftController.current = new StepController(leftSteps, (s) => {
       setLeftStep(s);
       setLeftProgress(
@@ -77,6 +87,7 @@ export default function CompareSearching() {
   }, [leftSteps]);
 
   useEffect(() => {
+    if (!rightSteps.length) return;
     rightController.current = new StepController(rightSteps, (s) => {
       setRightStep(s);
       setRightProgress(

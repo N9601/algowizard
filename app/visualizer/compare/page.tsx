@@ -92,7 +92,7 @@ function getAlgorithmConfig(id: CompareAlgorithm) {
 }
 
 export default function ComparePage() {
-  const [baseArray, setBaseArray] = useState<number[]>(() => generateRandomArray());
+  const [baseArray, setBaseArray] = useState<number[]>([]);
   const [leftAlgorithm, setLeftAlgorithm] = useState<CompareAlgorithm>("bubble");
   const [rightAlgorithm, setRightAlgorithm] = useState<CompareAlgorithm>("quick");
   const [leftStep, setLeftStep] = useState<SortingStep | null>(null);
@@ -104,6 +104,12 @@ export default function ComparePage() {
 
   const leftControllerRef = useRef<StepController<SortingStep> | null>(null);
   const rightControllerRef = useRef<StepController<SortingStep> | null>(null);
+
+  useEffect(() => {
+    // Generated after mount so the server and client render the same markup.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setBaseArray(generateRandomArray());
+  }, []);
 
   useEffect(() => {
     if (!baseArray.length) return;

@@ -57,14 +57,14 @@ export default function TopologicalSortPage() {
   });
 
   /* ---------------------------------------------
-     INITIAL GRAPH (NO ESLINT VIOLATION)
-     ✔ happens only on client
-     ✔ no setState-in-effect warning
+     INITIAL GRAPH
+     Generated after mount so the server and client
+     render the same markup.
   --------------------------------------------- */
-  if (graph === null) {
-    const g = generateRandomDAG();
-    setGraph(g);
-  }
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setGraph(generateRandomDAG());
+  }, []);
 
   /* ---------------------------------------------
      BUILD STEPS + CONTROLLER
