@@ -89,9 +89,11 @@ const ScatterCanvas = memo(function ScatterCanvas({
       className="w-full cursor-crosshair rounded-2xl border border-white/10 bg-[#0a0f1b]"
       onClick={(e) => {
         if (!onClick) return;
+        // The canvas is stretched to fill its container with CSS, so map the
+        // click from CSS pixels back into the drawing coordinate space.
         const rect = (e.target as HTMLCanvasElement).getBoundingClientRect();
-        const x = clamp(e.clientX - rect.left, 0, rect.width);
-        const y = clamp(e.clientY - rect.top, 0, rect.height);
+        const x = clamp(((e.clientX - rect.left) / rect.width) * width, 0, width);
+        const y = clamp(((e.clientY - rect.top) / rect.height) * height, 0, height);
         onClick({ x, y });
       }}
     />
