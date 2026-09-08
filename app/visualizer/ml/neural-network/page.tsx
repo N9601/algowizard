@@ -36,6 +36,13 @@ function randomPoints(count = 40): NNPoint[] {
   }));
 }
 
+// The network trains on coordinates scaled to [-1, 1]. Raw pixel values (up
+// to 520) blow up the first gradient step and leave every ReLU unit dead,
+// which freezes the decision boundary.
+function toModelSpace<T extends { x: number; y: number }>(point: T): T {
+  return { ...point, x: (point.x / WIDTH) * 2 - 1, y: (point.y / HEIGHT) * 2 - 1 };
+}
+
 function randomWeights() {
   return Array.from({ length: 6 }, () => (Math.random() - 0.5) * 0.8);
 }
@@ -77,12 +84,16 @@ export default function NeuralNetPage() {
 
   const states = useMemo(() => {
     const steps: NNState[] = [];
+    const modelPoints = points.map(toModelSpace);
     let w1 = [...weights1];
     let w2 = [...weights2];
     const stepsCount = 40;
     for (let i = 0; i < stepsCount; i++) {
       steps.push({ points, weights1: [...w1], weights2: [...w2] });
-      const updated = trainStep({ points, weights1: w1, weights2: w2 }, lr);
+      const updated = trainStep(
+        { points: modelPoints, weights1: w1, weights2: w2 },
+        lr
+      );
       w1 = updated.weights1;
       w2 = updated.weights2;
     }
@@ -124,7 +135,11 @@ export default function NeuralNetPage() {
   };
 
   const current = states[stepIdx];
-  const forwardPoints = current ? forward(current) : [];
+  const forwardPoints = current
+    ? forward({ ...current, points: current.points.map(toModelSpace) }).map(
+        (p, i) => ({ ...p, x: current.points[i].x, y: current.points[i].y })
+      )
+    : [];
   const decisionImage = useMemo(
     () => (current ? buildDecisionImage(current) : undefined),
     [current]
@@ -273,7 +288,7 @@ function buildDecisionImage(state: NNState) {
   for (let y = 0; y < height; y++) {
     for (let x = 0; x < width; x++) {
       const prob = forward({
-        points: [{ x, y, label: 0 }],
+        points: [toModelSpace({ x, y, label: 0 })],
         weights1: state.weights1,
         weights2: state.weights2,
       })[0].prob;
