@@ -53,6 +53,13 @@ describe("Dijkstra", () => {
     expect(last.distances).toEqual({ 0: 0, 1: 5, 2: 7, 3: 11, 4: 14 });
   });
 
+  it("keeps every settled node visited in the final step", () => {
+    const graph = generateWeightedGraph();
+    const last = generateDijkstraSteps(graph.adjacencyList, graph.start).at(-1)!;
+
+    expect([...last.visited!].sort((a, b) => a - b)).toEqual([0, 1, 2, 3, 4]);
+  });
+
   it("leaves unreachable nodes at Infinity", () => {
     const last = generateDijkstraSteps(
       { 0: [{ to: 1, weight: 2 }], 1: [], 2: [] },

@@ -56,6 +56,7 @@ export function generateDijkstraSteps(
   }
 
   steps.push({
+    visited: [...visited],
     distances: { ...distances },
     done: true,
   });
