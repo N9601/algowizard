@@ -43,7 +43,7 @@ export function generateHeapInsertSteps(values: number[]): HeapStep[] {
       const pos = index - (2 ** level - 1);
       const nodesInLevel = 2 ** level;
 
-      const width = 600;
+      const width = 500; // GraphCanvas viewBox width
 
       return {
         id,

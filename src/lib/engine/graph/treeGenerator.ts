@@ -15,8 +15,10 @@ export function generateTree(nodeCount = 7) {
   const edges: Edge[] = [];
   const adjacencyList: Record<number, number[]> = {};
 
+  // Matches the GraphCanvas viewBox (500 x 340).
   const width = 500;
-  const levelGap = 80;
+  const top = 50;
+  const bottom = 300;
 
   // init adjacency list
   for (let i = 0; i < nodeCount; i++) {
@@ -54,13 +56,16 @@ export function generateTree(nodeCount = 7) {
     }
   }
 
+  // Deep trees get tighter rows so the last level stays on the canvas.
+  const levelGap = Math.min(80, (bottom - top) / Math.max(levels.length - 1, 1));
+
   levels.forEach((level, depth) => {
     const gap = width / (level.length + 1);
     level.forEach((id, index) => {
       nodes.push({
         id,
         x: gap * (index + 1),
-        y: 50 + depth * levelGap,
+        y: top + depth * levelGap,
       });
     });
   });

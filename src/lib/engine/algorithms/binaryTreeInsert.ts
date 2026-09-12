@@ -26,7 +26,7 @@ export function generateBinaryTreeInsertSteps(values: number[]): BinaryTreeInser
       const level = Math.floor(Math.log2(idx + 1));
       const pos = idx - (2 ** level - 1);
       const nodesInLevel = 2 ** level;
-      const width = 600;
+      const width = 500; // GraphCanvas viewBox width
 
       return {
         id,
