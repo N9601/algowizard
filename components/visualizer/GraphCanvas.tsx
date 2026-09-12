@@ -12,6 +12,13 @@ type Edge = {
   weight?: number;
 };
 
+function formatNodeLabel(id: number, distances?: Record<number, number>) {
+  const distance = distances?.[id];
+
+  if (distance === undefined) return id;
+  return Number.isFinite(distance) ? distance : "∞";
+}
+
 export default function GraphCanvas({
   nodes,
   edges,
@@ -43,15 +50,30 @@ export default function GraphCanvas({
         if (!from || !to) return null;
 
         return (
-          <line
-            key={i}
-            x1={from.x}
-            y1={from.y}
-            x2={to.x}
-            y2={to.y}
-            stroke="#64748b"
-            strokeWidth="2"
-          />
+          <g key={i}>
+            <line
+              x1={from.x}
+              y1={from.y}
+              x2={to.x}
+              y2={to.y}
+              stroke="#64748b"
+              strokeWidth="2"
+            />
+            {e.weight !== undefined ? (
+              <text
+                x={(from.x + to.x) / 2}
+                y={(from.y + to.y) / 2 - 6}
+                textAnchor="middle"
+                fontSize="12"
+                fill="#e2e8f0"
+                stroke="#07111b"
+                strokeWidth="4"
+                paintOrder="stroke"
+              >
+                {e.weight}
+              </text>
+            ) : null}
+          </g>
         );
       })}
 
@@ -67,7 +89,7 @@ export default function GraphCanvas({
             fill="white"
             fontWeight="bold"
           >
-            {distances?.[n.id] ?? n.id}
+            {formatNodeLabel(n.id, distances)}
           </text>
         </g>
       ))}
