@@ -86,10 +86,12 @@ const PathGrid = memo(function PathGrid({
                   bg
                 )}
                 onClick={(event) => {
+                  // Start and goal cannot sit on a wall, where they would be
+                  // hidden and unreachable. Remove the wall first.
                   if (event.shiftKey) {
-                    onSetStart?.([r, c]);
+                    if (!isWall) onSetStart?.([r, c]);
                   } else if (event.altKey) {
-                    onSetGoal?.([r, c]);
+                    if (!isWall) onSetGoal?.([r, c]);
                   } else {
                     onToggleWall?.([r, c]);
                   }
