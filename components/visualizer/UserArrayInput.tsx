@@ -34,6 +34,13 @@ export default function UserArrayInput({
   const parsedPreview = useMemo(() => parseNumbers(text), [text]);
 
   function handleApply() {
+    const invalid = findInvalidTokens(text);
+
+    if (invalid.length) {
+      setError(`Not a number: ${invalid.slice(0, 3).join(", ")}`);
+      return;
+    }
+
     const parsed = parseNumbers(text);
     const validationError = validateNumbers(parsed);
 
@@ -115,13 +122,21 @@ export default function UserArrayInput({
   );
 }
 
-function parseNumbers(input: string): number[] {
+function tokenize(input: string) {
   return input
     .split(/[,\s]+/)
     .map((part) => part.trim())
-    .filter(Boolean)
+    .filter(Boolean);
+}
+
+function parseNumbers(input: string): number[] {
+  return tokenize(input)
     .map((value) => Number(value))
     .filter((value) => Number.isFinite(value));
+}
+
+function findInvalidTokens(input: string) {
+  return tokenize(input).filter((token) => !Number.isFinite(Number(token)));
 }
 
 function validateNumbers(values: number[]) {
