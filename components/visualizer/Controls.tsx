@@ -42,6 +42,7 @@ export default function Controls({
           onClick={onStepBack}
           className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-black/20 text-white/78 transition hover:bg-white/[0.06]"
           title="Previous Step"
+          aria-label="Previous step"
         >
           ◀
         </button>
@@ -63,6 +64,7 @@ export default function Controls({
           onClick={onStepForward}
           className="flex h-11 w-11 items-center justify-center rounded-full border border-white/10 bg-black/20 text-white/78 transition hover:bg-white/[0.06]"
           title="Next Step"
+          aria-label="Next step"
         >
           ▶
         </button>
@@ -74,7 +76,14 @@ export default function Controls({
           <span>{Math.round(progress * 100)}%</span>
         </div>
 
-          <div className="h-2 overflow-hidden rounded-full bg-white/10">
+          <div
+            className="h-2 overflow-hidden rounded-full bg-white/10"
+            role="progressbar"
+            aria-label="Progress"
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={Math.round(progress * 100)}
+          >
           <div
             className="h-2 rounded-full bg-blue-400 transition-all"
             style={{ width: `${progress * 100}%` }}
@@ -98,6 +107,7 @@ export default function Controls({
           min={0}
           max={100}
           value={uiSpeed}
+          aria-label="Animation speed"
           onChange={(e) => {
             const ui = Number(e.target.value);
             const engineSpeed = 1000 - (ui / 100) * (1000 - 50);
