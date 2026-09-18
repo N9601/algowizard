@@ -9,33 +9,6 @@ export type AlgorithmStatus =
   | "completed";
 
 /* ================================
-   Algorithm type (USED BY PSEUDOCODE)
-================================ */
-
-export type AlgorithmType =
-  // Sorting
-  | "bubble"
-  | "selection"
-  | "insertion"
-  | "merge"
-  | "quick"
-  | "heap"
-
-  // Searching
-  | "linear"
-  | "binary"
-
-  // Graph
-  | "dfs"
-  | "bfs"
-  | "topological"
-  | "dijkstra"
-  | "bellman-ford"
-
-  // Data Structures
-  | "stack";
-
-/* ================================
    SORTING STEP
 ================================ */
 
@@ -198,27 +171,6 @@ export interface LinkedListStep {
   list: string[];
   operation: "insert" | "delete" | "reset";
   value?: string;
-  message?: string;
-  done?: boolean;
-}
-
-/* ================================
-   BINARY TREE TYPES
-================================ */
-
-export type BinaryTreeOperation =
-  | { type: "insert"; value: number }
-  | { type: "reset" };
-
-export interface BinaryTreeNode {
-  value: number;
-  left?: BinaryTreeNode | null;
-  right?: BinaryTreeNode | null;
-}
-
-export interface BinaryTreeStep {
-  nodes: BinaryTreeNode[];
-  active?: number;
   message?: string;
   done?: boolean;
 }
