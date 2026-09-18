@@ -468,6 +468,7 @@ export default function Chatbot() {
               <textarea
                 rows={3}
                 maxLength={MAX_MESSAGE_LENGTH}
+                aria-label="Message AlgoBot"
                 value={input}
                 onChange={(event) => setInput(event.target.value)}
                 onKeyDown={handleKeyDown}

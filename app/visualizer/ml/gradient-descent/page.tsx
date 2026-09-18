@@ -114,24 +114,27 @@ export default function GradientDescentPage() {
         actions={
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-3 text-sm">
-              <label className="text-white/70">Start x:</label>
+              <label htmlFor="gd-start-x" className="text-white/70">Start x:</label>
               <input
+                id="gd-start-x"
                 type="number"
                 step="0.2"
                 value={start.x}
                 onChange={(e) => setStart((s) => ({ ...s, x: Number(e.target.value) }))}
                 className="w-20 rounded-md border border-white/15 bg-white/[0.06] px-2 py-1 text-white"
               />
-              <label className="text-white/70">Start y:</label>
+              <label htmlFor="gd-start-y" className="text-white/70">Start y:</label>
               <input
+                id="gd-start-y"
                 type="number"
                 step="0.2"
                 value={start.y}
                 onChange={(e) => setStart((s) => ({ ...s, y: Number(e.target.value) }))}
                 className="w-20 rounded-md border border-white/15 bg-white/[0.06] px-2 py-1 text-white"
               />
-              <label className="text-white/70">Learning rate:</label>
+              <label htmlFor="gd-learning-rate" className="text-white/70">Learning rate:</label>
               <input
+                id="gd-learning-rate"
                 type="number"
                 step="0.01"
                 min="0.01"

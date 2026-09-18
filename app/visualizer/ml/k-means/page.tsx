@@ -111,8 +111,9 @@ export default function KMeansPage() {
         actions={
           <div className="space-y-3">
             <div className="flex items-center gap-3 text-sm">
-              <label className="text-white/70">k:</label>
+              <label htmlFor="kmeans-k" className="text-white/70">k:</label>
               <input
+                id="kmeans-k"
                 type="number"
                 min={1}
                 max={6}

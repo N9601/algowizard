@@ -1,7 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { useEffect } from "react";
+import { useEffect, useId, useMemo, useState } from "react";
 
 type UserArrayInputProps = {
   title?: string;
@@ -24,6 +23,7 @@ export default function UserArrayInput({
   target,
   onTargetChange,
 }: UserArrayInputProps) {
+  const inputId = useId();
   const [text, setText] = useState(defaultValues.join(", "));
   const [error, setError] = useState<string | null>(null);
 
@@ -73,10 +73,14 @@ export default function UserArrayInput({
 
       <div className="mt-3 flex flex-col gap-3 md:flex-row md:items-end">
         <div className="flex-1">
-          <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.16em] text-white/48">
+          <label
+            htmlFor={`${inputId}-numbers`}
+            className="mb-1 block text-xs font-semibold uppercase tracking-[0.16em] text-white/48"
+          >
             Numbers
           </label>
           <input
+            id={`${inputId}-numbers`}
             type="text"
             value={text}
             onChange={(e) => setText(e.target.value)}
@@ -88,10 +92,14 @@ export default function UserArrayInput({
 
         {includeTarget ? (
           <div className="w-full md:w-40">
-            <label className="mb-1 block text-xs font-semibold uppercase tracking-[0.16em] text-white/48">
+            <label
+              htmlFor={`${inputId}-target`}
+              className="mb-1 block text-xs font-semibold uppercase tracking-[0.16em] text-white/48"
+            >
               Target
             </label>
             <input
+              id={`${inputId}-target`}
               type="number"
               value={target ?? ""}
               onChange={(e) => onTargetChange?.(Number(e.target.value))}

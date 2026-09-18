@@ -161,8 +161,9 @@ export default function NeuralNetPage() {
         actions={
           <div className="space-y-3">
             <div className="flex flex-wrap items-center gap-3 text-sm">
-              <label className="text-white/70">Learning rate:</label>
+              <label htmlFor="nn-learning-rate" className="text-white/70">Learning rate:</label>
               <input
+                id="nn-learning-rate"
                 type="number"
                 step="0.01"
                 min="0.01"

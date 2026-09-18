@@ -42,7 +42,12 @@ export default function GraphCanvas({
   };
 
   return (
-    <svg viewBox="0 0 500 340" className="w-full h-72">
+    <svg
+      viewBox="0 0 500 340"
+      className="w-full h-72"
+      role="img"
+      aria-label={`Graph with ${nodes.length} nodes and ${edges.length} edges`}
+    >
       {/* edges */}
       {edges.map((e, i) => {
         const from = nodes.find((n) => n.id === e.from);

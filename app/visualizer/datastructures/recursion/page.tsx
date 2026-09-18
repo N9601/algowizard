@@ -112,10 +112,14 @@ export default function RecursionPage() {
               Visualizing factorial of <span className="text-sky-200">n</span>.
             </div>
             <div className="flex items-center gap-2">
-              <label className="text-white/60 text-xs uppercase tracking-[0.14em]">
+              <label
+                htmlFor="recursion-n"
+                className="text-white/60 text-xs uppercase tracking-[0.14em]"
+              >
                 n
               </label>
               <input
+                id="recursion-n"
                 type="number"
                 min={1}
                 max={10}

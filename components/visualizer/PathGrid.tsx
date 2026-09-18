@@ -96,6 +96,9 @@ const PathGrid = memo(function PathGrid({
                     onToggleWall?.([r, c]);
                   }
                 }}
+                aria-label={`Row ${r + 1}, column ${c + 1}: ${
+                  isStart ? "start" : isGoal ? "goal" : isWall ? "wall" : "open"
+                }`}
                 title={
                   isStart
                     ? "Start"
