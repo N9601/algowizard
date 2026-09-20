@@ -37,7 +37,6 @@ export default function AStarPage() {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const controllerRef = useRef<StepController<PathfindingStep> | null>(null);
-  const initializedRef = useRef(false);
 
   const savedState = useSavedVisualization<SavedPathState>({
     expectedRoute: "/visualizer/pathfinding/a-star",
@@ -64,13 +63,6 @@ export default function AStarPage() {
     }),
     [walls, start, goal]
   );
-
-  useEffect(() => {
-    if (initializedRef.current) return;
-    initializedRef.current = true;
-    rebuildController();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     if (!controllerRef.current) return;

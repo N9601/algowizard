@@ -30,7 +30,6 @@ export default function GradientDescentPage() {
   );
 
   const controllerRef = useRef<StepController<GDStep> | null>(null);
-  const initializedRef = useRef(false);
 
   const savedState = useSavedVisualization<SavedGD>({
     expectedRoute: "/visualizer/ml/gradient-descent",
@@ -47,13 +46,6 @@ export default function GradientDescentPage() {
   });
 
   const steps = useMemo(() => generateGDSteps(start, lr, 40), [start, lr]);
-
-  useEffect(() => {
-    if (initializedRef.current) return;
-    initializedRef.current = true;
-    rebuild();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     rebuild();

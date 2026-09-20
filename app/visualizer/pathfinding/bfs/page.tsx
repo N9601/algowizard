@@ -37,7 +37,6 @@ export default function BfsPathPage() {
   const [isPlaying, setIsPlaying] = useState(false);
 
   const controllerRef = useRef<StepController<PathfindingStep> | null>(null);
-  const initializedRef = useRef(false);
 
   const savedState = useSavedVisualization<SavedPathState>({
     expectedRoute: "/visualizer/pathfinding/bfs",
@@ -64,13 +63,6 @@ export default function BfsPathPage() {
     }),
     [walls, start, goal]
   );
-
-  useEffect(() => {
-    if (initializedRef.current) return;
-    initializedRef.current = true;
-    rebuildController();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     if (!controllerRef.current) return;
