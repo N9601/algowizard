@@ -119,7 +119,6 @@ export default function QueuePage() {
             setProgress(0);
             setIsPlaying(false);
           }}
-          onNew={() => {}}
           speed={speed}
           onSpeedChange={setSpeed}
           progress={progress}

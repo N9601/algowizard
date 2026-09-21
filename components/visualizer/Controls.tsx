@@ -3,7 +3,8 @@ interface ControlsProps {
   onStepForward: () => void;
   onStepBack: () => void;
   onReset: () => void;
-  onNew: () => void;
+  /** Omit on pages with a fixed example to hide the New Example button. */
+  onNew?: () => void;
   speed: number;
   onSpeedChange: (value: number) => void;
   progress: number;
@@ -117,7 +118,7 @@ export default function Controls({
         />
       </div>
 
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className={`grid gap-3 ${onNew ? "sm:grid-cols-2" : ""}`}>
         <button
           onClick={onReset}
           className="rounded-2xl border border-white/10 bg-black/20 py-3 text-sm font-medium text-white/78 transition hover:bg-white/[0.06]"
@@ -125,12 +126,14 @@ export default function Controls({
           Reset
         </button>
 
-        <button
-          onClick={onNew}
-          className="rounded-2xl border border-white/10 bg-white/[0.06] py-3 text-sm font-medium text-white transition hover:bg-white/[0.1]"
-        >
-          New Example
-        </button>
+        {onNew ? (
+          <button
+            onClick={onNew}
+            className="rounded-2xl border border-white/10 bg-white/[0.06] py-3 text-sm font-medium text-white transition hover:bg-white/[0.1]"
+          >
+            New Example
+          </button>
+        ) : null}
       </div>
     </div>
     </div>

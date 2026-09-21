@@ -124,7 +124,6 @@ export default function LinkedListPage() {
             setProgress(0);
             setIsPlaying(false);
           }}
-          onNew={() => {}}
           speed={speed}
           onSpeedChange={setSpeed}
           progress={progress}
