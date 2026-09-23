@@ -6,7 +6,7 @@ import Navbar from "components/visualizer/Navbar";
 import AlgorithmBackground from "components/visualizer/AlgorithmBackground";
 import AlgorithmLayout from "components/visualizer/AlgorithmLayout";
 import Controls from "components/visualizer/Controls";
-import ScatterCanvas from "components/visualizer/ScatterCanvas";
+import ScatterCanvas, { colorFor } from "components/visualizer/ScatterCanvas";
 import SaveVisualizationButton from "components/visualizer/SaveVisualizationButton";
 import { generateKMeansSteps, KMeansStep } from "src/lib/engine/algorithms/kmeans";
 import { StepController } from "src/lib/engine/controller";
@@ -175,17 +175,20 @@ export default function KMeansPage() {
             Click to add points. k controls the number of centroids. {narration}
           </div>
           <div className="mt-3 flex flex-wrap gap-2 text-xs text-white/65">
+            {Array.from({ length: k }, (_, cluster) => (
+              <span
+                key={cluster}
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-3 py-1"
+              >
+                <span
+                  className="h-3 w-3 rounded-sm"
+                  style={{ backgroundColor: colorFor(cluster) }}
+                />
+                Cluster {cluster + 1}
+              </span>
+            ))}
             <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-3 py-1">
-              <span className="h-3 w-3 rounded-sm bg-[#60a5fa]" /> Cluster 1
-            </span>
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-3 py-1">
-              <span className="h-3 w-3 rounded-sm bg-[#f472b6]" /> Cluster 2
-            </span>
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-3 py-1">
-              <span className="h-3 w-3 rounded-sm bg-[#34d399]" /> Cluster 3+
-            </span>
-            <span className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-3 py-1">
-              <span className="h-3 w-3 rounded-sm bg-white/80" /> Centroids
+              <span className="h-3.5 w-3.5 rounded-full border-2 border-slate-900 bg-white/80" /> Centroids (large outlined dots)
             </span>
           </div>
         </div>

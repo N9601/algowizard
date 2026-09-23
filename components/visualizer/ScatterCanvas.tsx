@@ -18,16 +18,17 @@ function clamp(value: number, min: number, max: number) {
   return Math.max(min, Math.min(max, value));
 }
 
-function colorFor(index: number) {
-  const palette = [
-    "#60a5fa",
-    "#f472b6",
-    "#34d399",
-    "#f59e0b",
-    "#a78bfa",
-    "#fb7185",
-  ];
-  return palette[index % palette.length];
+const CLUSTER_COLORS = [
+  "#60a5fa",
+  "#f472b6",
+  "#34d399",
+  "#f59e0b",
+  "#a78bfa",
+  "#fb7185",
+];
+
+export function colorFor(index: number) {
+  return CLUSTER_COLORS[index % CLUSTER_COLORS.length];
 }
 
 const ScatterCanvas = memo(function ScatterCanvas({
