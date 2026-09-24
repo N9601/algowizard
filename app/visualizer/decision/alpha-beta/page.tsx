@@ -92,7 +92,7 @@ export default function AlphaBetaPage() {
       <AlgorithmLayout
         title="Alpha–Beta Pruning (Tic-Tac-Toe)"
         description="Minimax with alpha–beta pruning skips branches that cannot improve the outcome."
-        time="O(b^d) best-case pruned"
+        time="O(b^(d/2)) best, O(b^d) worst"
         space="O(bd)"
         category="Decision AI"
         difficulty="Medium"
