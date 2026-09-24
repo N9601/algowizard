@@ -30,18 +30,20 @@ npm install
 Copy the example file and fill in the values you want to use:
 
 ```bash
-copy .env.example .env.local
+copy .env.example .env.local   # Windows
+cp .env.example .env.local     # macOS / Linux
 ```
 
-Required variables:
+Supabase variables used by the app:
 
 ```env
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY=
-SUPABASE_SERVICE_ROLE_KEY=
 ```
 
-This repo also already uses Gemini, so keep your Gemini variables in the same `.env.local`.
+`SUPABASE_SERVICE_ROLE_KEY` is optional. It is only read by the admin client in `src/lib/supabase/admin.ts`, which no route uses yet.
+
+The chatbot also reads `GEMINI_API_KEY` (and optionally `GEMINI_MODEL`) from the same `.env.local`.
 
 ## 4. Start Supabase locally
 
