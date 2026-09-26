@@ -2,6 +2,10 @@
   "name": "algowizard",
   "version": "0.1.0",
   "private": true,
+  "description": "Interactive algorithm and data structure visualizer with step playback, compare mode, and an AI study assistant.",
+  "engines": {
+    "node": ">=20.9.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
