@@ -33,6 +33,7 @@ const ALGORITHMS: AlgoEntry[] = [
 
   { title: "Depth-First Search", href: "/visualizer/graph/dfs", tag: "Graph", difficulty: "Medium", description: "Explore a branch fully before backtracking." },
   { title: "Breadth-First Search", href: "/visualizer/graph/bfs", tag: "Graph", difficulty: "Medium", description: "Visit nodes level by level with a queue." },
+  { title: "Dijkstra (Graph)", href: "/visualizer/graph/dijkstra", tag: "Graph", difficulty: "Hard", description: "Shortest paths from a source in a weighted graph." },
   { title: "Topological Sort", href: "/visualizer/graph/topological", tag: "Graph", difficulty: "Hard", description: "Order DAG nodes so prerequisites appear first." },
   { title: "Bellman-Ford", href: "/visualizer/graph/bellman-ford", tag: "Graph", difficulty: "Hard", description: "Relax all edges repeatedly; handles negatives." },
 
