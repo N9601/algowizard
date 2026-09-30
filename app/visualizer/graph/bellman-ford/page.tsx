@@ -140,7 +140,7 @@ export default function BellmanFordPage() {
           negativeCycleNodes={step?.negativeCycleNodes}
         />
 
-        <ColorLegend />
+        <ColorLegend variant="graph" />
 
         <Controls
           onPlay={togglePlay}

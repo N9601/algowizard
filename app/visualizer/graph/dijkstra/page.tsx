@@ -120,7 +120,7 @@ export default function DijkstraPage() {
           distances={step?.distances}
         />
 
-        <ColorLegend />
+        <ColorLegend variant="graph" />
 
         <Controls
           onPlay={togglePlay}

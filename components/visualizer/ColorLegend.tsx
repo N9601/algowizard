@@ -1,4 +1,23 @@
-export default function ColorLegend() {
+const LEGENDS = {
+  sorting: [
+    { color: "bg-blue-500", label: "Unsorted" },
+    { color: "bg-yellow-400", label: "Comparing" },
+    { color: "bg-red-500", label: "Swapping" },
+    { color: "bg-green-500", label: "Sorted" },
+  ],
+  // Matches the node fills in GraphCanvas.
+  graph: [
+    { color: "bg-green-500", label: "Active node" },
+    { color: "bg-blue-500", label: "Visited" },
+    { color: "bg-blue-400", label: "Not yet visited" },
+  ],
+};
+
+export default function ColorLegend({
+  variant = "sorting",
+}: {
+  variant?: keyof typeof LEGENDS;
+}) {
   return (
     <div className="bg-slate-900/70 rounded-xl p-5 shadow-md">
       <h3 className="font-semibold text-white mb-3">
@@ -6,10 +25,9 @@ export default function ColorLegend() {
       </h3>
 
       <div className="flex flex-wrap gap-4 text-sm">
-        <Legend color="bg-blue-500" label="Unsorted" />
-        <Legend color="bg-yellow-400" label="Comparing" />
-        <Legend color="bg-red-500" label="Swapping" />
-        <Legend color="bg-green-500" label="Sorted" />
+        {LEGENDS[variant].map((item) => (
+          <Legend key={item.label} color={item.color} label={item.label} />
+        ))}
       </div>
     </div>
   );
