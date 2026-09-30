@@ -11,7 +11,6 @@ export function generateDijkstraSteps(
   const distances: Record<number, number> = {};
   const visited = new Set<number>();
 
-  // ✅ const fixes ESLint prefer-const
   const pq: { node: number; priority: number }[] = [];
 
   for (const node in graph) {

@@ -22,7 +22,7 @@ export function generateLinearSearchSteps(
     }
   }
 
-  // ❌ NOT FOUND
+  // Not found
   steps.push({
     array: [...array],
     notFound: true,

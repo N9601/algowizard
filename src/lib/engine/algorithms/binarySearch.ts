@@ -39,7 +39,7 @@ export function generateBinarySearchSteps(
     }
   }
 
-  // ❌ NOT FOUND (IMPORTANT FIX)
+  // Not found
   steps.push({
     array: [...array],
     notFound: true,

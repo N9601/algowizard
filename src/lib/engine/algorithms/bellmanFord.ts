@@ -27,7 +27,7 @@ export function generateBellmanFordSteps(
     }
   }
 
-  // 🚨 NEGATIVE CYCLE DETECTION
+  // Negative cycle detection
   for (const e of edges) {
     if (dist[e.from] + e.weight < dist[e.to]) {
       steps.push({

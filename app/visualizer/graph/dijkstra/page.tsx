@@ -147,7 +147,6 @@ export default function DijkstraPage() {
           isPlaying={isPlaying}
         />
 
-        {/* ✅ THIS IS WHAT WAS MISSING */}
         <Pseudocode algorithm="dijkstra" />
       </AlgorithmLayout>
     </>
