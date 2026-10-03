@@ -67,7 +67,8 @@ export default function RecursionPage() {
   };
 
   const applyCustomDepth = () => {
-    const bounded = Math.min(10, Math.max(1, pendingDepth));
+    // factorial(n) only makes sense for whole numbers, so round before clamping.
+    const bounded = Math.min(10, Math.max(1, Math.round(pendingDepth) || 1));
     initialize(bounded);
     setStep(null);
     setProgress(0);
