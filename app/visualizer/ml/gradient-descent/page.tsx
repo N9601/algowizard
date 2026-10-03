@@ -45,7 +45,13 @@ export default function GradientDescentPage() {
     },
   });
 
-  const steps = useMemo(() => generateGDSteps(start, lr, 40), [start, lr]);
+  // The input keeps whatever the user is typing (for example "0." on the way
+  // to "0.05"); the clamped value is what the algorithm uses.
+  const effectiveLr = Math.min(0.6, Math.max(0.01, lr || 0));
+  const steps = useMemo(
+    () => generateGDSteps(start, effectiveLr, 40),
+    [start, effectiveLr]
+  );
 
   useEffect(() => {
     rebuild();
@@ -132,9 +138,8 @@ export default function GradientDescentPage() {
                 min="0.01"
                 max="0.6"
                 value={lr}
-                onChange={(e) =>
-                  setLr(Math.min(0.6, Math.max(0.01, Number(e.target.value))))
-                }
+                onChange={(e) => setLr(Number(e.target.value))}
+                onBlur={() => setLr(effectiveLr)}
                 className="w-24 rounded-md border border-white/15 bg-white/[0.06] px-2 py-1 text-white"
               />
               <button
@@ -152,7 +157,7 @@ export default function GradientDescentPage() {
               disabled={!step}
               getPayload={() => ({
                 start,
-                lr,
+                lr: effectiveLr,
                 speed,
               })}
             />
@@ -172,7 +177,7 @@ export default function GradientDescentPage() {
         <div className="rounded-2xl border border-white/10 bg-white/[0.04] p-4">
           <LossViz current={step} />
           <div className="mt-2 text-xs text-white/60">
-            Step {currentIndex + 1} / {steps.length || "-"} • LR {lr.toFixed(2)}
+            Step {currentIndex + 1} / {steps.length || "-"} • LR {effectiveLr.toFixed(2)}
           </div>
           <div className="mt-2 text-xs text-white/65">{narration}</div>
           <div className="mt-3 flex flex-wrap gap-2 text-xs text-white/65">

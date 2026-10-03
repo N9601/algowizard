@@ -82,6 +82,10 @@ export default function NeuralNetPage() {
     },
   });
 
+  // The input keeps whatever the user is typing (for example "0." on the way
+  // to "0.05"); the clamped value is what the algorithm uses.
+  const effectiveLr = Math.min(0.3, Math.max(0.01, lr || 0));
+
   const states = useMemo(() => {
     const steps: NNState[] = [];
     const modelPoints = points.map(toModelSpace);
@@ -92,13 +96,13 @@ export default function NeuralNetPage() {
       steps.push({ points, weights1: [...w1], weights2: [...w2] });
       const updated = trainStep(
         { points: modelPoints, weights1: w1, weights2: w2 },
-        lr
+        effectiveLr
       );
       w1 = updated.weights1;
       w2 = updated.weights2;
     }
     return steps;
-  }, [points, weights1, weights2, lr]);
+  }, [points, weights1, weights2, effectiveLr]);
 
   useEffect(() => {
     if (!states.length) return;
@@ -169,9 +173,8 @@ export default function NeuralNetPage() {
                 min="0.01"
                 max="0.3"
                 value={lr}
-                onChange={(e) =>
-                  setLr(Math.min(0.3, Math.max(0.01, Number(e.target.value))))
-                }
+                onChange={(e) => setLr(Number(e.target.value))}
+                onBlur={() => setLr(effectiveLr)}
                 className="w-24 rounded-md border border-white/15 bg-white/[0.06] px-2 py-1 text-white"
               />
               <button
@@ -202,7 +205,7 @@ export default function NeuralNetPage() {
                 points,
                 weights1,
                 weights2,
-                lr,
+                lr: effectiveLr,
                 speed,
               })}
             />

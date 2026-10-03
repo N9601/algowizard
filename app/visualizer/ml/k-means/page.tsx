@@ -54,7 +54,13 @@ export default function KMeansPage() {
     },
   });
 
-  const steps = useMemo(() => generateKMeansSteps(points, k), [points, k]);
+  // The input keeps whatever the user is typing; the clamped value is what
+  // the algorithm and legend use.
+  const clusterCount = Math.min(6, Math.max(1, Math.round(k) || 1));
+  const steps = useMemo(
+    () => generateKMeansSteps(points, clusterCount),
+    [points, clusterCount]
+  );
 
   useEffect(() => {
     if (!steps.length) return;
@@ -118,7 +124,8 @@ export default function KMeansPage() {
                 min={1}
                 max={6}
                 value={k}
-                onChange={(e) => setK(Math.min(6, Math.max(1, Number(e.target.value))))}
+                onChange={(e) => setK(Number(e.target.value))}
+                onBlur={() => setK(clusterCount)}
                 className="w-16 rounded-md border border-white/15 bg-white/[0.06] px-2 py-1 text-white"
               />
               <button
@@ -143,7 +150,7 @@ export default function KMeansPage() {
               disabled={!points.length}
               getPayload={() => ({
                 points,
-                k,
+                k: clusterCount,
                 speed,
               })}
             />
@@ -175,7 +182,7 @@ export default function KMeansPage() {
             Click to add points. k controls the number of centroids. {narration}
           </div>
           <div className="mt-3 flex flex-wrap gap-2 text-xs text-white/65">
-            {Array.from({ length: k }, (_, cluster) => (
+            {Array.from({ length: clusterCount }, (_, cluster) => (
               <span
                 key={cluster}
                 className="inline-flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.05] px-3 py-1"
