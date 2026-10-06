@@ -19,7 +19,7 @@ type SavedGD = {
 
 export default function GradientDescentPage() {
   const [start, setStart] = useState<{ x: number; y: number }>({ x: 3, y: 2 });
-  const [lr, setLr] = useState(0.15);
+  const [lrText, setLrText] = useState("0.15");
   const [step, setStep] = useState<GDStep | null>(null);
   const [progress, setProgress] = useState(0);
   const [speed, setSpeed] = useState(450);
@@ -37,7 +37,7 @@ export default function GradientDescentPage() {
       controllerRef.current?.pause();
       controllerRef.current?.reset();
       setStart(saved.start ?? { x: 3, y: 2 });
-      setLr(saved.lr ?? 0.15);
+      setLrText(String(saved.lr ?? 0.15));
       setSpeed(saved.speed ?? 450);
       setStep(null);
       setProgress(0);
@@ -47,7 +47,7 @@ export default function GradientDescentPage() {
 
   // The input keeps whatever the user is typing (for example "0." on the way
   // to "0.05"); the clamped value is what the algorithm uses.
-  const effectiveLr = Math.min(0.6, Math.max(0.01, lr || 0));
+  const effectiveLr = Math.min(0.6, Math.max(0.01, Number(lrText) || 0));
   const steps = useMemo(
     () => generateGDSteps(start, effectiveLr, 40),
     [start, effectiveLr]
@@ -137,9 +137,9 @@ export default function GradientDescentPage() {
                 step="0.01"
                 min="0.01"
                 max="0.6"
-                value={lr}
-                onChange={(e) => setLr(Number(e.target.value))}
-                onBlur={() => setLr(effectiveLr)}
+                value={lrText}
+                onChange={(e) => setLrText(e.target.value)}
+                onBlur={() => setLrText(String(effectiveLr))}
                 className="w-24 rounded-md border border-white/15 bg-white/[0.06] px-2 py-1 text-white"
               />
               <button

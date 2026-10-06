@@ -55,7 +55,7 @@ export default function NeuralNetPage() {
   const [points, setPoints] = useState<NNPoint[]>(() => randomPoints());
   const [weights1, setWeights1] = useState<number[]>(randomWeights());
   const [weights2, setWeights2] = useState<number[]>(randomWeights2());
-  const [lr, setLr] = useState(0.05);
+  const [lrText, setLrText] = useState("0.05");
   const [stepIdx, setStepIdx] = useState(0);
   const [progress, setProgress] = useState(0);
   const [speed, setSpeed] = useState(500);
@@ -74,7 +74,7 @@ export default function NeuralNetPage() {
       setPoints(saved.points ?? randomPoints());
       setWeights1(saved.weights1 ?? randomWeights());
       setWeights2(saved.weights2 ?? randomWeights2());
-      setLr(saved.lr ?? 0.05);
+      setLrText(String(saved.lr ?? 0.05));
       setSpeed(saved.speed ?? 500);
       setStepIdx(0);
       setProgress(0);
@@ -84,7 +84,7 @@ export default function NeuralNetPage() {
 
   // The input keeps whatever the user is typing (for example "0." on the way
   // to "0.05"); the clamped value is what the algorithm uses.
-  const effectiveLr = Math.min(0.3, Math.max(0.01, lr || 0));
+  const effectiveLr = Math.min(0.3, Math.max(0.01, Number(lrText) || 0));
 
   const states = useMemo(() => {
     const steps: NNState[] = [];
@@ -172,9 +172,9 @@ export default function NeuralNetPage() {
                 step="0.01"
                 min="0.01"
                 max="0.3"
-                value={lr}
-                onChange={(e) => setLr(Number(e.target.value))}
-                onBlur={() => setLr(effectiveLr)}
+                value={lrText}
+                onChange={(e) => setLrText(e.target.value)}
+                onBlur={() => setLrText(String(effectiveLr))}
                 className="w-24 rounded-md border border-white/15 bg-white/[0.06] px-2 py-1 text-white"
               />
               <button

@@ -31,7 +31,7 @@ function randomPoints(count = 40): Point[] {
 
 export default function KMeansPage() {
   const [points, setPoints] = useState<Point[]>(() => randomPoints());
-  const [k, setK] = useState(3);
+  const [kText, setKText] = useState("3");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [progress, setProgress] = useState(0);
   const [speed, setSpeed] = useState(400);
@@ -46,7 +46,7 @@ export default function KMeansPage() {
       controllerRef.current?.pause();
       controllerRef.current?.reset();
       setPoints(saved.points ?? randomPoints());
-      setK(saved.k ?? 3);
+      setKText(String(saved.k ?? 3));
       setSpeed(saved.speed ?? 400);
       setProgress(0);
       setIsPlaying(false);
@@ -56,7 +56,7 @@ export default function KMeansPage() {
 
   // The input keeps whatever the user is typing; the clamped value is what
   // the algorithm and legend use.
-  const clusterCount = Math.min(6, Math.max(1, Math.round(k) || 1));
+  const clusterCount = Math.min(6, Math.max(1, Math.round(Number(kText)) || 1));
   const steps = useMemo(
     () => generateKMeansSteps(points, clusterCount),
     [points, clusterCount]
@@ -123,9 +123,9 @@ export default function KMeansPage() {
                 type="number"
                 min={1}
                 max={6}
-                value={k}
-                onChange={(e) => setK(Number(e.target.value))}
-                onBlur={() => setK(clusterCount)}
+                value={kText}
+                onChange={(e) => setKText(e.target.value)}
+                onBlur={() => setKText(String(clusterCount))}
                 className="w-16 rounded-md border border-white/15 bg-white/[0.06] px-2 py-1 text-white"
               />
               <button
