@@ -172,6 +172,8 @@ export default function CompareSearching() {
                 value={leftAlgo}
                 options={ALGO_OPTIONS}
                 onChange={(value) => {
+                  leftController.current?.pause();
+                  rightController.current?.pause();
                   setIsPlaying(false);
                   setLeftAlgo(value as Algo);
                 }}
@@ -181,6 +183,8 @@ export default function CompareSearching() {
                 value={rightAlgo}
                 options={ALGO_OPTIONS}
                 onChange={(value) => {
+                  leftController.current?.pause();
+                  rightController.current?.pause();
                   setIsPlaying(false);
                   setRightAlgo(value as Algo);
                 }}

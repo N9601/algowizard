@@ -243,6 +243,7 @@ export default function ComparePage() {
                 value={leftAlgorithm}
                 onChange={(value) => {
                   leftControllerRef.current?.pause();
+                  rightControllerRef.current?.pause();
                   setIsPlaying(false);
                   setLeftStep(null);
                   setLeftProgress(0);
@@ -253,6 +254,7 @@ export default function ComparePage() {
                 label="Right algorithm"
                 value={rightAlgorithm}
                 onChange={(value) => {
+                  leftControllerRef.current?.pause();
                   rightControllerRef.current?.pause();
                   setIsPlaying(false);
                   setRightStep(null);

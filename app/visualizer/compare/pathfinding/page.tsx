@@ -165,6 +165,8 @@ export default function ComparePathfinding() {
                 label="Left algorithm"
                 value={leftAlgo}
                 onChange={(value) => {
+                  leftController.current?.pause();
+                  rightController.current?.pause();
                   setIsPlaying(false);
                   setLeftAlgo(value as Algo);
                 }}
@@ -173,6 +175,8 @@ export default function ComparePathfinding() {
                 label="Right algorithm"
                 value={rightAlgo}
                 onChange={(value) => {
+                  leftController.current?.pause();
+                  rightController.current?.pause();
                   setIsPlaying(false);
                   setRightAlgo(value as Algo);
                 }}
